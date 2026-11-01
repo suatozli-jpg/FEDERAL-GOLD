@@ -1,4 +1,4 @@
-name: Deploy demo to GitHub Pages
+name: Deploy Federal Gold to GitHub Pages
 on:
   push:
     branches: [main]
