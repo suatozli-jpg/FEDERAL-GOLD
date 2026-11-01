@@ -1,12 +1,338 @@
 <!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080808"><meta name="description" content="Federal Gold kuyumculuk web sitesi tasarım önizlemesi. Resmî olmayan demo."><title>Federal Gold | Kuyumculuk — Tasarım Demosu</title>
-<style>
-:root{--gold:#e6b950;--pale:#ffe4a0;--bg:#080808}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#fff;font:15px Arial,sans-serif}a{color:inherit;text-decoration:none}button{cursor:pointer;font:inherit}.wrap{max-width:1400px;margin:auto;padding:0 4%}.demo{background:#5d4319;text-align:center;padding:8px;font-size:12px;color:#fff1ce}.top{background:#101010;border-bottom:1px solid #35312b;font-size:12px}.top .wrap{display:flex;justify-content:space-between;padding-top:12px;padding-bottom:12px;gap:10px}.gold{color:var(--gold)}header{background:#050505;border-bottom:1px solid #3d301c;position:sticky;top:0;z-index:30}.nav{min-height:94px;display:flex;align-items:center;justify-content:space-between;gap:24px}.logo{display:flex;align-items:center;gap:15px;color:var(--gold)}.diamond{font-size:57px;line-height:1;text-shadow:0 0 22px #a9772780}.logo b{font:normal 32px Georgia,serif;white-space:nowrap}.logo small{display:block;text-align:center;letter-spacing:5px;font-size:11px;margin-top:3px}.links{display:flex;align-items:center;gap:28px}.links a{font-size:14px}.links a:hover{color:var(--gold)}.outline{border:1px solid var(--gold);border-radius:8px;padding:13px 20px;color:#fff;white-space:nowrap}.menu{display:none;background:none;border:1px solid var(--gold);color:var(--gold);padding:9px 13px;border-radius:5px;font-size:23px}.hero{min-height:570px;position:relative;background:linear-gradient(90deg,rgba(0,0,0,.94),rgba(0,0,0,.36) 48%,rgba(0,0,0,.02)),url('https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1800&q=85') center 48%/cover;display:flex;align-items:center}.hero .wrap{width:100%;position:relative;z-index:2}.hero h1{font:normal clamp(48px,6vw,82px)/1.04 Georgia,serif;max-width:550px;margin:0 0 22px}.hero h1 span{color:var(--gold)}.hero p{max-width:430px;font-size:17px;line-height:1.75;color:#f0ece6}.buttons{display:flex;gap:16px;margin-top:25px;flex-wrap:wrap}.btn{border:1px solid var(--gold);padding:16px 27px;border-radius:8px;background:#080808a9;color:white;font-weight:bold;display:inline-block}.btn.primary{background:linear-gradient(#ffe59c,#d4a03d);color:#171109;border:0}.trust{background:#111;border-top:1px solid #44351d;border-bottom:1px solid #44351d}.trust .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-top:25px;padding-bottom:25px}.trust article{display:flex;gap:14px;align-items:center}.trust i{font-style:normal;color:var(--gold);font-size:34px}.trust b{display:block;font-size:14px}.trust small{color:#bdb6ab;display:block;margin-top:6px;font-size:12px}.section{padding:54px 0 76px;background:radial-gradient(ellipse at 20% 20%,#271b0b,#080808 60%);border-top:1px solid #3b2c15}.section .kicker{text-align:center;color:var(--gold);letter-spacing:2px;font-size:12px}.section h2{text-align:center;font:normal 42px Georgia,serif;margin:12px 0 36px;color:#fff5e5}.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}.product{position:relative;border:1px solid #c49b48;border-radius:20px;overflow:hidden;min-height:230px;background:#1a130b;box-shadow:inset 0 0 0 1px #5b411a;display:flex;align-items:end;justify-content:center;transition:transform .2s}.product:hover{transform:translateY(-5px);box-shadow:0 8px 28px #a578263d}.product img{position:absolute;width:100%;height:100%;object-fit:cover;inset:0}.product:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#000e)}.product strong{position:relative;z-index:1;text-align:center;padding:18px 5px;font-size:15px}.about,.contact{padding:65px 0;background:#111;border-top:1px solid #392c19}.about h2,.contact h2{font:normal 36px Georgia,serif;color:var(--gold)}.about p,.contact p{color:#d3c9b8;line-height:1.9;max-width:800px}.contact .wrap{display:flex;justify-content:space-between;gap:30px;align-items:center}footer{padding:25px 4%;text-align:center;color:#9b958b;font-size:12px}.bottom{display:none}@media(max-width:1050px){.links{gap:13px}.nav .outline{display:none}.grid{grid-template-columns:repeat(3,1fr)}.logo b{font-size:26px}.trust .wrap{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.top{display:none}.nav{min-height:78px}.logo b{font-size:23px}.logo small{font-size:8px;letter-spacing:4px}.diamond{font-size:37px}.menu{display:block}.links{display:none;position:absolute;top:78px;left:0;right:0;background:#090909;padding:20px;flex-direction:column;align-items:stretch;border-bottom:1px solid var(--gold)}.links.open{display:flex}.links a{padding:9px}.hero{min-height:570px;align-items:end;padding-bottom:40px;background:linear-gradient(0deg,#080808 1%,#080808ab 43%,transparent 95%),url('https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=900&q=85') center top/cover}.hero h1{font-size:48px}.hero p{font-size:14px}.buttons{gap:10px}.btn{padding:14px 18px;font-size:13px}.trust{display:none}.section{padding:35px 0 80px}.section h2{font-size:34px}.grid{grid-template-columns:repeat(3,1fr);gap:10px}.product{min-height:135px;border-radius:13px}.product strong{font-size:12px;padding:12px 2px}.contact .wrap{display:block}.bottom{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:11px 4px 17px;background:#090909f7;border-top:1px solid #5b4520;z-index:35}.bottom a{font-size:11px;text-align:center}.bottom span{display:block;font-size:23px;color:var(--gold);margin-bottom:5px}footer{padding-bottom:90px}} 
-</style></head><body><div class="demo">TASARIM ÖNİZLEMESİ — Federal Gold'un resmî web sitesi değildir.</div><div class="top"><div class="wrap"><span>📍 Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul</span><a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp ile iletişime geç">WhatsApp: +90 542 390 59 67</a></div></div><header><div class="wrap nav"><a class="logo" href="#ana"><span class="diamond">◇</span><span><b>FEDERAL GOLD</b><small>— KUYUMCULUK —</small></span></a><nav class="links" id="navlinks"><a href="#ana">Ana Sayfa</a><a href="#hakkimizda">Hakkımızda</a><a href="#urunler">Ürünler</a><a href="#iletisim">İletişim</a></nav><a class="outline" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">✆ WhatsApp ile İletişim</a><button class="menu" id="toggle" aria-label="Menüyü aç" aria-expanded="false">☰</button></div></header><main><section class="hero" id="ana"><div class="wrap"><h1>Kapalıçarşı’dan<br><span>Dünyaya</span></h1><p>Federal Gold Kuyumculuk için altın ve mücevher dünyasını yansıtan zarif bir dijital vitrin.</p><div class="buttons"><a class="btn primary" href="#urunler">Ürünleri İncele ›</a><a class="btn" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">✆ WhatsApp’tan Yazın</a></div></div></section><div class="trust"><div class="wrap"><article><i>◇</i><div><b>Kapalıçarşı</b><small>Köklü kuyumculuk merkezi</small></div></article><article><i>✧</i><div><b>Zarif Tasarım</b><small>Seçkin koleksiyonlar</small></div></article><article><i>♢</i><div><b>Altın ve Mücevher</b><small>Ürün kategorileri</small></div></article><article><i>⌖</i><div><b>İstanbul</b><small>Kapalıçarşı konumu</small></div></article></div></div><section class="section" id="urunler"><div class="wrap"><div class="kicker">ÜRÜN GRUPLARIMIZ</div><h2>Koleksiyonlarımız</h2><div class="grid">
-<a class="product" href="#iletisim"><img alt="Altın bilezik" loading="lazy" src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=500&q=80"><strong>Bilezikler ›</strong></a>
-<a class="product" href="#iletisim"><img alt="Yüzük" loading="lazy" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=80"><strong>Yüzükler ›</strong></a>
-<a class="product" href="#iletisim"><img alt="Kolye" loading="lazy" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80"><strong>Kolyeler ›</strong></a>
-<a class="product" href="#iletisim"><img alt="Altın zincir" loading="lazy" src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=500&q=80"><strong>Zincirler ›</strong></a>
-<a class="product" href="#iletisim"><img alt="Küpe" loading="lazy" src="https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=500&q=80"><strong>Küpeler ›</strong></a>
-<a class="product" href="#iletisim"><img alt="Altın" loading="lazy" src="https://images.unsplash.com/photo-1610375461246-83df859d849d?auto=format&fit=crop&w=500&q=80"><strong>Altın & Yatırım ›</strong></a>
-</div></div></section><section class="about" id="hakkimizda"><div class="wrap"><h2>Federal Gold</h2><p>İstanbul Kapalıçarşı'da kuyumculuk alanında faaliyet gösteren Federal Gold için hazırlanan örnek kurumsal web sitesi tasarımıdır. Buradaki görseller temsilîdir; ürün stoğu, fiyat ve hizmet taahhüdü değildir.</p></div></section><section class="contact" id="iletisim"><div class="wrap"><div><h2>Bizimle İletişime Geçin</h2><p>Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul<br>WhatsApp: <a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">+90 542 390 59 67</a> · Telefon: <a href="tel:+905423905967">+90 542 390 59 67</a></p></div><a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Kapalicarsi+Muhafazacilar+Sokak+Istanbul" target="_blank" rel="noopener">📍 Haritada Gör</a></div></section></main><footer>© Federal Gold — Resmî olmayan tasarım demosu. Fotoğraflar temsilîdir.</footer><nav class="bottom"><a href="#ana"><span>⌂</span>Ana Sayfa</a><a href="#urunler"><span>▦</span>Ürünler</a><a href="#hakkimizda"><span>◇</span>Hakkımızda</a><a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><span>✆</span>WhatsApp</a></nav><script>const t=document.getElementById('toggle'),n=document.getElementById('navlinks');t.onclick=()=>{const o=n.classList.toggle('open');t.setAttribute('aria-expanded',String(o))};n.querySelectorAll('a').forEach(a=>a.onclick=()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false')});</script></body></html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Federal Gold Kuyumculuk — İstanbul Kapalıçarşı'da altın ve mücevher koleksiyonları. Bilezik, yüzük, kolye, zincir, küpe ve altın seçenekleri hakkında bilgi alın.">
+  <meta property="og:title" content="Federal Gold | Kapalıçarşı'dan Dünyaya">
+  <meta property="og:description" content="Altın ve mücevherin zarafeti Federal Gold'da. Koleksiyonları keşfedin, WhatsApp üzerinden bize ulaşın.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://federalgold.org/assets/hero.webp">
+  <meta property="og:url" content="https://federalgold.org/">
+  <title>Federal Gold Kuyumculuk | Kapalıçarşı'dan Dünyaya</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23090806'/%3E%3Cpath d='M5 22 17 9h30l12 13-27 32L5 22Zm0 0h54M17 9l9 13 6 32 6-32 9-13M26 22h12' fill='none' stroke='%23efc568' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #080807;
+      --panel: #10100f;
+      --gold: #e7bb58;
+      --gold-light: #ffe39b;
+      --gold-dark: #b88323;
+      --text: #faf6ed;
+      --muted: #bbb6ad;
+      --border: rgba(231,187,88,.39);
+      --serif: Georgia, 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+    body { margin: 0; background: var(--black); color: var(--text); font: 15px/1.5 var(--sans); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 4px; }
+    svg { display: block; }
+    .container { width: min(100% - 72px, 1440px); margin-inline: auto; }
+    .gold { color: var(--gold); }
+    .topbar { background: #10100f; border-bottom: 1px solid #373027; font-size: 12px; color: #efece5; }
+    .topbar-inner { min-height: 42px; display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+    .topbar-info, .topbar-actions { display: flex; align-items: center; gap: 26px; }
+    .topbar-info span, .topbar-actions a { display: inline-flex; align-items: center; gap: 8px; }
+    .topbar svg { width: 16px; height: 16px; color: var(--gold); }
+    .topbar a:hover { color: var(--gold-light); }
+    .site-header { background: rgba(5,5,5,.98); border-bottom: 1px solid #3a2b14; position: sticky; top: 0; z-index: 50; }
+    .header-inner { min-height: 94px; display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+    .brand { display: flex; align-items: center; flex: 0 0 auto; gap: 14px; color: var(--gold); }
+    .brand-icon { width: 73px; height: 60px; stroke: var(--gold); stroke-width: 2.3; fill: none; stroke-linejoin: round; }
+    .brand-title { font: normal clamp(22px,2.3vw,35px)/1 var(--serif); white-space: nowrap; letter-spacing: -.04em; }
+    .brand-subtitle { display: flex; align-items: center; gap: 10px; margin-top: 7px; font: 11px/1 var(--serif); letter-spacing: 5px; justify-content: center; }
+    .brand-subtitle:before, .brand-subtitle:after { content: ""; display: block; height: 1px; width: 26px; background: var(--gold); }
+    .desktop-nav { display: flex; align-items: center; gap: clamp(13px,2.15vw,32px); margin-left: auto; }
+    .desktop-nav a { position: relative; padding: 15px 0; font-size: 14px; white-space: nowrap; }
+    .desktop-nav a:hover { color: var(--gold-light); }
+    .desktop-nav a.current:after { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; height: 2px; background: var(--gold-light); }
+    .header-cta { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--gold); border-radius: 9px; padding: 12px 14px; font-size: 13px; white-space: nowrap; transition: background .2s; }
+    .header-cta:hover { background: #2c220f; }
+    .header-cta svg { width: 20px; height: 20px; color: var(--gold); }
+    .menu-button { display: none; border: 0; color: white; background: transparent; padding: 10px; }
+    .menu-button svg { width: 27px; height: 27px; }
+    .mobile-menu { display: none; }
+    .hero { min-height: clamp(465px,38vw,600px); background-image: linear-gradient(90deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.64) 28%,rgba(0,0,0,.10) 62%,rgba(0,0,0,.05) 100%), url('assets/hero.webp'); background-position: center; background-size: cover; border-bottom: 1px solid #5b3f17; display: flex; align-items: center; }
+    .hero-content { padding-block: 85px; }
+    .hero h1 { font: normal clamp(52px,5.1vw,82px)/1.04 var(--serif); letter-spacing: -.035em; margin: 0 0 19px; text-shadow: 0 3px 24px #000; }
+    .hero h1 span { color: var(--gold-light); }
+    .hero p { max-width: 405px; font-size: clamp(15px,1.35vw,19px); line-height: 1.7; margin: 0; color: #f2f0ea; text-shadow: 0 2px 10px #000; }
+    .hero-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 27px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 51px; padding: 12px 23px; font-weight: 600; font-size: 14px; border-radius: 8px; transition: transform .18s, background .18s; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: linear-gradient(180deg,#ffe59e 0%,#efc364 45%,#c58b29 100%); color: #171005; border: 1px solid #f5cf71; }
+    .button-secondary { color: #fff; border: 1px solid var(--gold); background: rgba(8,8,8,.68); }
+    .button svg { width: 19px; height: 19px; }
+    .trust-strip { background: linear-gradient(100deg,#10100f,#171613 55%,#10100f); border-bottom: 1px solid #41341e; }
+    .trust-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); padding-block: 23px; }
+    .trust-item { display: flex; align-items: center; gap: 15px; padding-inline: 23px; border-right: 1px solid #393631; }
+    .trust-item:first-child { padding-left: 0; }
+    .trust-item:last-child { border: none; padding-right: 0; }
+    .trust-icon { width: 47px; height: 47px; color: var(--gold); flex: 0 0 auto; }
+    .trust-item b { display: block; font-size: 15px; font-weight: 500; line-height: 1.25; }
+    .trust-item small { display: block; color: #c3bdb2; margin-top: 6px; font-size: 12px; }
+    .collections { background: radial-gradient(ellipse 90% 80% at 52% 12%,#21180d 0%,#10100e 43%,#080807 100%); padding: 42px 0 75px; position: relative; overflow: hidden; }
+    .collections:before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(123deg,transparent 0 150px,rgba(164,107,25,.055) 151px 152px,transparent 153px 340px); pointer-events: none; }
+    .section-label { text-align: center; font-size: 13px; color: var(--gold-light); letter-spacing: 1.5px; font-weight: 600; }
+    .section-heading { text-align: center; font: normal clamp(33px,3.35vw,49px)/1.15 var(--serif); letter-spacing: -.025em; margin: 9px 0 36px; }
+    .section-heading:before, .section-heading:after { content: ""; display: inline-block; vertical-align: middle; width: clamp(25px,8vw,90px); height: 1px; background: linear-gradient(90deg,transparent,var(--gold)); margin: 0 22px 9px 0; }
+    .section-heading:after { margin: 0 0 9px 22px; transform: rotate(180deg); }
+    .category-grid { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 17px; position: relative; }
+    .category-card { display: block; overflow: hidden; border: 1px solid #c6a054; border-radius: 21px; background: #0d0b09; min-width: 0; transition: transform .18s, box-shadow .18s; }
+    .category-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(208,151,40,.2); }
+    .category-photo { display: block; width: 100%; aspect-ratio: 1 / 1; background-image: url('assets/collections.webp'); background-size: 300% 200%; background-repeat: no-repeat; }
+    .cat-1 { background-position: 0 0; } .cat-2 { background-position: 50% 0; } .cat-3 { background-position: 100% 0; }
+    .cat-4 { background-position: 0 100%; } .cat-5 { background-position: 50% 100%; } .cat-6 { background-position: 100% 100%; }
+    .category-name { min-height: 47px; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 14px; background: linear-gradient(#1b140b,#100d08); }
+    .category-name span { color: var(--gold); }
+    .story { border-top: 1px solid #47361d; background: #10100f; padding: 76px 0; }
+    .story-grid { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: clamp(35px,6vw,90px); }
+    .story-photo { min-height: 350px; border: 1px solid #735328; border-radius: 16px; background: linear-gradient(90deg,transparent,rgba(0,0,0,.2)),url('assets/hero.webp') 78% center/cover; box-shadow: 0 20px 80px #0009; }
+    .story .section-label { text-align: left; }
+    .story h2, .contact h2 { font: normal clamp(35px,3vw,45px)/1.17 var(--serif); margin: 14px 0 22px; }
+    .story h2 em { color: var(--gold-light); font-style: normal; }
+    .story p { line-height: 1.85; font-size: 16px; color: #cdc7bd; margin: 0 0 16px; }
+    .story .button { margin-top: 10px; }
+    .contact { background: radial-gradient(ellipse at 95% 0%,#241809,#10100f 55%); border-top: 1px solid #47361d; padding: 72px 0 86px; }
+    .contact-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+    .contact .section-label { text-align: left; }
+    .contact h2 { margin-bottom: 14px; }
+    .contact p { color: #c8c1b6; line-height: 1.8; margin: 0 0 30px; }
+    .contact-detail { display: flex; align-items: flex-start; gap: 13px; margin: 18px 0; }
+    .contact-detail svg { color: var(--gold); width: 21px; height: 21px; flex: 0 0 auto; margin-top: 2px; }
+    .contact-detail a:hover { color: var(--gold); }
+    .contact-panel { border: 1px solid var(--border); background: linear-gradient(138deg,#241b0e,#11100e 55%,#17120a); border-radius: 20px; padding: clamp(24px,4vw,43px); }
+    .contact-panel h3 { font: normal 30px var(--serif); color: var(--gold-light); margin: 0 0 13px; }
+    .contact-panel p { margin-bottom: 23px; }
+    .contact-panel .button { width: 100%; margin-top: 12px; }
+    .note { font-size: 12px; color: #989083; margin-top: 22px; }
+    .footer { border-top: 1px solid #352b1e; background: #080807; padding: 29px 0; color: #aaa397; font-size: 12px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+    .footer a { color: var(--gold); }
+    .mobile-bottom-nav { display: none; }
+    @media (max-width: 1160px) {
+      .header-inner { gap: 16px; }
+      .brand-icon { width: 58px; height: 51px; }
+      .brand-title { font-size: 27px; }
+      .desktop-nav { gap: 16px; }
+      .header-cta { padding: 11px; }
+      .category-grid { gap: 12px; }
+      .trust-item { padding-inline: 12px; gap: 10px; }
+      .trust-icon { width: 38px; height: 38px; }
+    }
+    @media (max-width: 980px) {
+      .desktop-nav, .header-cta { display: none; }
+      .menu-button { display: block; margin-left: auto; }
+      .mobile-menu { display: none; background: #0d0c0b; border-top: 1px solid #47361d; }
+      .mobile-menu.open { display: block; }
+      .mobile-menu a { display: block; padding: 15px 32px; border-bottom: 1px solid #2e261a; }
+      .mobile-menu a:hover { background: #251a0e; }
+      .trust-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+      .trust-item:nth-child(2) { border: none; }
+      .category-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .story-grid, .contact-layout { gap: 30px; }
+    }
+    @media (max-width: 640px) {
+      html { scroll-padding-top: 79px; }
+      body { padding-bottom: 73px; }
+      .container { width: min(100% - 30px,540px); }
+      .topbar { display: none; }
+      .header-inner { min-height: 77px; }
+      .brand { gap: 8px; }
+      .brand-icon { width: 48px; height: 42px; }
+      .brand-title { font-size: 23px; }
+      .brand-subtitle { font-size: 8px; letter-spacing: 3.6px; gap: 6px; margin-top: 5px; }
+      .brand-subtitle:before,.brand-subtitle:after { width: 14px; }
+      .hero { min-height: 595px; align-items: flex-end; background-image: linear-gradient(0deg,#070706 0%,rgba(6,6,6,.95) 7%,rgba(4,4,4,.65) 47%,rgba(4,4,4,.04) 80%),url('assets/hero.webp'); background-size: auto 60%,auto 60%; background-position: center top; background-repeat: no-repeat; background-color: #070706; }
+      .hero-content { padding-block: 0 31px; }
+      .hero h1 { font-size: clamp(39px,10.2vw,53px); margin-bottom: 10px; }
+      .hero p { font-size: 14px; line-height: 1.6; max-width: 340px; }
+      .hero-buttons { gap: 10px; margin-top: 18px; }
+      .button { min-height: 44px; font-size: 13px; padding: 9px 15px; gap: 7px; }
+      .button svg { width: 17px; height: 17px; }
+      .trust-grid { display: none; }
+      .collections { padding: 30px 0 46px; }
+      .section-heading { font-size: 35px; margin: 9px 0 26px; }
+      .section-heading:before,.section-heading:after { width: 21px; margin-inline: 8px; }
+      .category-grid { gap: 11px; }
+      .category-card { border-radius: 13px; }
+      .category-name { font-size: 12px; min-height: 37px; gap: 3px; }
+      .story, .contact { padding: 48px 0; }
+      .story-grid, .contact-layout { grid-template-columns: 1fr; gap: 25px; }
+      .story-photo { min-height: 260px; }
+      .story h2,.contact h2 { font-size: 35px; }
+      .story p { font-size: 14px; }
+      .contact-panel h3 { font-size: 26px; }
+      .footer { padding: 24px 0 28px; }
+      .footer-inner { display: block; }
+      .footer-inner span { display: block; margin: 6px 0; }
+      .mobile-bottom-nav { position: fixed; z-index: 65; display: grid; grid-template-columns: repeat(4,1fr); bottom: 0; left: 0; right: 0; min-height: 73px; padding: 9px 4px max(11px,env(safe-area-inset-bottom)); background: #070707f5; border-top: 1px solid #45351b; backdrop-filter: blur(12px); }
+      .mobile-bottom-nav a { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; color: #f2eee6; }
+      .mobile-bottom-nav a:first-child { color: var(--gold); }
+      .mobile-bottom-nav svg { width: 23px; height: 23px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .category-card,.button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-diamond" viewBox="0 0 70 60"><path d="M5 18 18 4h34l13 14-30 35L5 18Zm0 0h60M18 4l10 14 7 35 7-35L52 4M28 18h14"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6 3 3 6c-.8 7.1 7.9 15.8 15 15l3-3-5.4-4-2.5 2c-2.3-1.1-4.2-3-5.3-5.3l2-2.5L6 3Z" stroke="currentColor" fill="none" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4.6 19.5 2.5 22l.9-5A9 9 0 1 1 7 20.5l-2.4-1Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 9.2c1.8 4 4.2 5.6 8 6l1.4-1.5-2.7-2-1.2 1c-1-.5-1.7-1.2-2.2-2.2l1-1.2-2-2.7L8 9.2Z" fill="currentColor"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 21 6v6c0 5-3.7 8.6-9 10-5.3-1.4-9-5-9-10V6l9-4Z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="m8 12 3 3 5-6" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 2.9 6.5L22 9.4l-5.2 4.8 1.4 7-6.2-3.5-6.2 3.5 1.4-7L2 9.4l7.1-.9L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol>
+    <symbol id="i-gem" viewBox="0 0 24 24"><path d="m2 9 5-6h10l5 6-10 13L2 9Zm0 0h20M7 3l4 6 1 13 1-13 4-6" stroke="currentColor" stroke-width="1.4" fill="none"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m2 11 10-9 10 9M5 10v12h14V10M9 22v-8h6v8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="2" y="2" width="8" height="8" rx="1" stroke="currentColor" fill="none" stroke-width="1.6"/><rect x="14" y="2" width="8" height="8" rx="1" stroke="currentColor" fill="none" stroke-width="1.6"/><rect x="2" y="14" width="8" height="8" rx="1" stroke="currentColor" fill="none" stroke-width="1.6"/><rect x="14" y="14" width="8" height="8" rx="1" stroke="currentColor" fill="none" stroke-width="1.6"/></symbol>
+  </svg>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div class="topbar-info"><span><svg><use href="#i-pin"/></svg>Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul</span></div>
+      <div class="topbar-actions">
+        <a href="tel:+905423905967"><svg><use href="#i-phone"/></svg>+90 542 390 59 67</a>
+        <a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg><use href="#i-chat"/></svg>WhatsApp</a>
+        <span>TR</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#ana" aria-label="Federal Gold ana sayfa">
+        <svg class="brand-icon"><use href="#i-diamond"/></svg>
+        <span><span class="brand-title">FEDERAL GOLD</span><span class="brand-subtitle">KUYUMCULUK</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Ana menü">
+        <a class="current" href="#ana">Ana Sayfa</a>
+        <a href="#hakkimizda">Hakkımızda</a>
+        <a href="#urunler">Ürünler</a>
+        <a href="#hizmetler">Hizmetler</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
+      <a class="header-cta" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg><use href="#i-chat"/></svg>Hemen İletişime Geç</a>
+      <button class="menu-button" id="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menüyü aç"><svg><use href="#i-menu"/></svg></button>
+    </div>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobil menü">
+      <a href="#ana">Ana Sayfa</a>
+      <a href="#hakkimizda">Hakkımızda</a>
+      <a href="#urunler">Ürünler</a>
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#iletisim">İletişim</a>
+      <a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">WhatsApp'tan Yazın</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="ana" aria-label="Federal Gold koleksiyonları">
+      <div class="container hero-content">
+        <h1>Kapalıçarşı’dan<br><span>Dünyaya</span></h1>
+        <p>Federal Gold Kuyumculuk, Kapalıçarşı’nın eşsiz atmosferini altın ve mücevherin zarafetiyle buluşturuyor.</p>
+        <div class="hero-buttons">
+          <a class="button button-primary" href="#urunler">Ürünleri İncele <span aria-hidden="true">›</span></a>
+          <a class="button button-secondary" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg><use href="#i-phone"/></svg>Bize Ulaşın</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" id="hizmetler" aria-label="Federal Gold">
+      <div class="container trust-grid">
+        <div class="trust-item"><svg class="trust-icon"><use href="#i-diamond"/></svg><div><b>Kapalıçarşı</b><small>İstanbul'un tarihi çarşısında</small></div></div>
+        <div class="trust-item"><svg class="trust-icon"><use href="#i-star"/></svg><div><b>Seçkin Tasarımlar</b><small>Altın ve mücevher koleksiyonları</small></div></div>
+        <div class="trust-item"><svg class="trust-icon"><use href="#i-shield"/></svg><div><b>Ürün Bilgilendirme</b><small>Modeller hakkında detaylı bilgi</small></div></div>
+        <div class="trust-item"><svg class="trust-icon"><use href="#i-chat"/></svg><div><b>Doğrudan İletişim</b><small>WhatsApp üzerinden bize ulaşın</small></div></div>
+      </div>
+    </section>
+
+    <section class="collections" id="urunler">
+      <div class="container">
+        <div class="section-label">ÜRÜN GRUPLARIMIZ</div>
+        <h2 class="section-heading">Koleksiyonlarımız</h2>
+        <div class="category-grid">
+          <a class="category-card" href="https://wa.me/905423905967?text=Merhaba%2C%20bilezik%20modelleriniz%20hakk%C4%B1nda%20bilgi%20alabilir%20miyim%3F" target="_blank" rel="noopener noreferrer" aria-label="Bilezik modellerini WhatsApp'tan sorun"><span class="category-photo cat-1" role="img" aria-label="Altın bilezik görseli"></span><span class="category-name">Bilezikler <span>›</span></span></a>
+          <a class="category-card" href="https://wa.me/905423905967?text=Merhaba%2C%20y%C3%BCz%C3%BCk%20modelleriniz%20hakk%C4%B1nda%20bilgi%20alabilir%20miyim%3F" target="_blank" rel="noopener noreferrer" aria-label="Yüzük modellerini WhatsApp'tan sorun"><span class="category-photo cat-2" role="img" aria-label="Altın yüzük görseli"></span><span class="category-name">Yüzükler <span>›</span></span></a>
+          <a class="category-card" href="https://wa.me/905423905967?text=Merhaba%2C%20kolye%20modelleriniz%20hakk%C4%B1nda%20bilgi%20alabilir%20miyim%3F" target="_blank" rel="noopener noreferrer" aria-label="Kolye modellerini WhatsApp'tan sorun"><span class="category-photo cat-3" role="img" aria-label="Altın kolye görseli"></span><span class="category-name">Kolyeler <span>›</span></span></a>
+          <a class="category-card" href="https://wa.me/905423905967?text=Merhaba%2C%20zincir%20modelleriniz%20hakk%C4%B1nda%20bilgi%20alabilir%20miyim%3F" target="_blank" rel="noopener noreferrer" aria-label="Zincir modellerini WhatsApp'tan sorun"><span class="category-photo cat-4" role="img" aria-label="Altın zincir görseli"></span><span class="category-name">Zincirler <span>›</span></span></a>
+          <a class="category-card" href="https://wa.me/905423905967?text=Merhaba%2C%20k%C3%BCpe%20modelleriniz%20hakk%C4%B1nda%20bilgi%20alabilir%20miyim%3F" target="_blank" rel="noopener noreferrer" aria-label="Küpe modellerini WhatsApp'tan sorun"><span class="category-photo cat-5" role="img" aria-label="Altın küpe görseli"></span><span class="category-name">Küpeler <span>›</span></span></a>
+          <a class="category-card" href="https://wa.me/905423905967?text=Merhaba%2C%20alt%C4%B1n%20%C3%BCr%C3%BCnleriniz%20hakk%C4%B1nda%20bilgi%20alabilir%20miyim%3F" target="_blank" rel="noopener noreferrer" aria-label="Altın hakkında WhatsApp'tan bilgi alın"><span class="category-photo cat-6" role="img" aria-label="Altın sikke temsili görseli"></span><span class="category-name">Altın &amp; Yatırım <span>›</span></span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="story" id="hakkimizda">
+      <div class="container story-grid">
+        <div class="story-photo" role="img" aria-label="Altın takı ve mücevher vitrini"></div>
+        <div>
+          <div class="section-label">HAKKIMIZDA</div>
+          <h2>Altının ışıltısı,<br><em>Kapalıçarşı’nın ruhu.</em></h2>
+          <p>Federal Gold Kuyumculuk, İstanbul Kapalıçarşı’da altın ve mücevher dünyasına ilgi duyan ziyaretçileri ağırlıyor.</p>
+          <p>Bileziklerden yüzüklere, kolyelerden zincirlere farklı ürün gruplarımızı inceleyebilir, merak ettiğiniz modeller için bizimle doğrudan iletişime geçebilirsiniz.</p>
+          <a class="button button-secondary" href="#iletisim">Bize Ulaşın <span aria-hidden="true">›</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="iletisim">
+      <div class="container contact-layout">
+        <div>
+          <div class="section-label">İLETİŞİM</div>
+          <h2>Bizimle İletişime Geçin</h2>
+          <p>Modeller, ürün bilgileri ve ziyaretiniz hakkında sorularınız için bize ulaşabilirsiniz.</p>
+          <div class="contact-detail"><svg><use href="#i-pin"/></svg><span>Kapalıçarşı, Muhafazacılar Sokak,<br>Fatih / İstanbul</span></div>
+          <div class="contact-detail"><svg><use href="#i-phone"/></svg><a href="tel:+905423905967">+90 542 390 59 67</a></div>
+          <div class="contact-detail"><svg><use href="#i-chat"/></svg><a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">WhatsApp ile mesaj gönder</a></div>
+        </div>
+        <div class="contact-panel">
+          <h3>Federal Gold’a Ulaşın</h3>
+          <p>Bir ürünle mi ilgileniyorsunuz? WhatsApp üzerinden bize yazın, size yardımcı olalım.</p>
+          <a class="button button-primary" href="https://wa.me/905423905967?text=Merhaba%20Federal%20Gold%2C%20%C3%BCr%C3%BCnleriniz%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" rel="noopener noreferrer"><svg><use href="#i-chat"/></svg>WhatsApp'tan Yazın</a>
+          <a class="button button-secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Kapalicarsi%20Muhafazacilar%20Sokak%20Fatih%20Istanbul" target="_blank" rel="noopener noreferrer"><svg><use href="#i-pin"/></svg>Haritada Gör</a>
+          <div class="note">Ürün görselleri temsilîdir. Güncel ürün, stok ve fiyat bilgisi için iletişime geçiniz.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner"><span>© <span id="year">2026</span> Federal Gold Kuyumculuk. Tüm hakları saklıdır.</span><span>Kapalıçarşı · Fatih / İstanbul</span><a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
+  </footer>
+  <nav class="mobile-bottom-nav" aria-label="Hızlı erişim">
+    <a href="#ana"><svg><use href="#i-home"/></svg>Ana Sayfa</a>
+    <a href="#urunler"><svg><use href="#i-grid"/></svg>Ürünler</a>
+    <a href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg><use href="#i-chat"/></svg>WhatsApp</a>
+    <a href="tel:+905423905967"><svg><use href="#i-phone"/></svg>İletişim</a>
+  </nav>
+  <script>
+    (() => {
+      const toggle = document.getElementById('menu-toggle');
+      const menu = document.getElementById('mobile-menu');
+      const close = () => {
+        menu.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Menüyü aç');
+      };
+      toggle.addEventListener('click', () => {
+        const isOpen = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.setAttribute('aria-label', isOpen ? 'Menüyü kapat' : 'Menüyü aç');
+      });
+      menu.querySelectorAll('a').forEach(link => link.addEventListener('click', close));
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') close();
+      });
+      document.getElementById('year').textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>
