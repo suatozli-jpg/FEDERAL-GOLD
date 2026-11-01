@@ -316,7 +316,22 @@ body { background:#0c0b0a; }
 
 .category-name > span:first-child { color:#f7f3ec; font-size:15px; font-weight:500; }
 @media (max-width:640px) { .category-name > span:first-child { font-size:12px; } }
-  </style>
+  
+/* Approved minimal storefront updates */
+.trust-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.visit-layout h2 { text-align:center; white-space:normal; color:var(--gold-light); margin:0 0 24px; }
+.visit-details { display:grid; grid-template-columns:1.3fr 1fr auto; gap:28px; align-items:center; }
+.visit-details .contact-detail { margin:0; min-width:0; }
+.visit-details .button { white-space:nowrap; }
+.contact .visit-hours { text-align:center; margin:24px 0 0; color:var(--muted); }
+@media(max-width:980px) { .visit-details { grid-template-columns:1fr 1fr; } .visit-details>.button { justify-self:start; } }
+@media(max-width:640px) {
+ .visit-details { grid-template-columns:1fr; gap:18px; }
+ .visit-layout h2 { font-size:27px; }
+ .mobile-bottom-nav { grid-template-columns:repeat(3,1fr); }
+ .floating-whatsapp { bottom:calc(90px + env(safe-area-inset-bottom)); }
+}
+</style>
 </head>
 <body>
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg">
@@ -349,7 +364,6 @@ body { background:#0c0b0a; }
         <a class="current" href="#ana" data-i18n="navHome">Ana Sayfa</a>
         <a href="#hakkimizda" data-i18n="navAbout">Hakkımızda</a>
         <a href="#urunler" data-i18n="navCollections">Koleksiyonlar</a>
-        <a href="#hizmetler" data-i18n="navServices">Hizmetler</a>
         <a href="#iletisim" data-i18n="navContact">İletişim</a>
       </nav>
       <div class="lang-switch" role="group" aria-label="Language / Dil">
@@ -362,7 +376,6 @@ body { background:#0c0b0a; }
       <a href="#ana" data-i18n="navHome">Ana Sayfa</a>
       <a href="#hakkimizda" data-i18n="navAbout">Hakkımızda</a>
       <a href="#urunler" data-i18n="navCollections">Koleksiyonlar</a>
-      <a href="#hizmetler" data-i18n="navServices">Hizmetler</a>
       <a href="#iletisim" data-i18n="navContact">İletişim</a>
     </nav>
   </header>
@@ -374,7 +387,6 @@ body { background:#0c0b0a; }
         <p data-i18n="heroIntro">Federal Gold Kuyumculuk, Kapalıçarşı’nın atmosferini özenle seçilmiş altın ve mücevher tasarımlarıyla buluşturuyor.</p>
         <div class="hero-buttons">
           <a class="button button-primary" href="#urunler"><span data-i18n="explore">Koleksiyonları İncele</span> <span aria-hidden="true">›</span></a>
-          <a class="button button-secondary wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg><use href="#i-chat"/></svg><span data-i18n="waContact">WhatsApp ile İletişim</span></a>
         </div>
       </div>
     </section>
@@ -382,8 +394,7 @@ body { background:#0c0b0a; }
     <section class="trust-strip" id="hizmetler">
       <div class="container trust-grid">
         <div class="trust-item"><svg class="trust-icon"><use href="#i-home"/></svg><div><b data-i18n="trust1">Kapalıçarşı</b><small data-i18n="trust1Sub">İstanbul'un tarihi çarşısında</small></div></div>
-        <div class="trust-item"><svg class="trust-icon"><use href="#i-diamond"/></svg><div><b data-i18n="trust2">Seçkin Tasarımlar</b><small data-i18n="trust2Sub">Altın ve mücevher koleksiyonları</small></div></div>
-        <div class="trust-item"><svg class="trust-icon"><use href="#i-chat"/></svg><div><b data-i18n="trust3">Doğrudan İletişim</b><small data-i18n="trust3Sub">WhatsApp üzerinden iletişim</small></div></div>
+        <div class="trust-item"><svg class="trust-icon" aria-hidden="true"><use href="#i-gem"/></svg><div><b data-i18n="trust2">Seçkin Tasarımlar</b><small data-i18n="trust2Sub">Altın ve mücevher koleksiyonları</small></div></div>
       </div>
     </section>
 
@@ -408,10 +419,14 @@ body { background:#0c0b0a; }
     </section>
 
     <section class="contact" id="iletisim">
-      <div class="container contact-layout">
-        <h2 data-i18n="contactTitle">Bizimle İletişime Geçin</h2>
-        <p data-i18n="contactText">Ürünlerimiz, modellerimiz veya sorularınız için bize doğrudan ulaşabilirsiniz.</p>
-        <div class="contact-action"><a class="button button-primary wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg><use href="#i-chat"/></svg><span data-i18n="waContact">WhatsApp ile İletişim</span></a></div>
+      <div class="container visit-layout">
+        <h2 data-i18n="visitTitle">Mağazamızı ziyaret edin</h2>
+        <div class="visit-details">
+          <div class="contact-detail"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="location">Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul</span></div>
+          <div class="contact-detail"><svg aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+905423905967">+90 542 390 59 67</a></div>
+          <a class="button button-secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%20Muhafazac%C4%B1lar%20Sokak%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%20Fatih%20Istanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol Tarifi</span></a>
+        </div>
+        <p class="visit-hours" data-i18n="visitHours">Çalışma saatleri için ziyaret öncesi arayınız.</p>
       </div>
     </section>
   </main>
@@ -427,7 +442,6 @@ body { background:#0c0b0a; }
   <nav class="mobile-bottom-nav" aria-label="Quick navigation">
     <a href="#ana"><svg><use href="#i-home"/></svg><span data-i18n="navHome">Ana Sayfa</span></a>
     <a href="#urunler"><svg><use href="#i-grid"/></svg><span data-i18n="navCollections">Koleksiyonlar</span></a>
-    <a class="wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg><use href="#i-chat"/></svg>WhatsApp</a>
     <a href="tel:+905423905967"><svg><use href="#i-phone"/></svg><span data-i18n="navContact">İletişim</span></a>
   </nav>
   <a class="floating-whatsapp wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp üzerinden iletişime geç">
@@ -437,6 +451,7 @@ body { background:#0c0b0a; }
     (() => {
       const dictionary = {
         tr: {
+          visitTitle:"Mağazamızı ziyaret edin",directions:"Yol Tarifi",visitHours:"Çalışma saatleri için ziyaret öncesi arayınız.",
           location:"Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul", navHome:"Ana Sayfa", navAbout:"Hakkımızda", navCollections:"Koleksiyonlar", navServices:"Hizmetler", navContact:"İletişim",
           heroFirst:"Kapalıçarşı’dan",heroSecond:"Dünyaya",heroIntro:"Federal Gold Kuyumculuk, Kapalıçarşı’nın atmosferini özenle seçilmiş altın ve mücevher tasarımlarıyla buluşturuyor.",
           explore:"Koleksiyonları İncele",waContact:"WhatsApp ile İletişim",
@@ -448,6 +463,7 @@ body { background:#0c0b0a; }
           meta:"Federal Gold Kuyumculuk: Kapalıçarşı'da bilezik, yüzük, kolye ve küpe koleksiyonları. Modeller hakkında bilgi için bize ulaşın."
         },
         en: {
+          visitTitle:"Visit our store",directions:"Get Directions",visitHours:"Please call ahead to confirm opening hours.",
           location:"Grand Bazaar, Muhafazacılar Street, Fatih / Istanbul",navHome:"Home",navAbout:"About Us",navCollections:"Collections",navServices:"Our Approach",navContact:"Contact",
           heroFirst:"From the Grand Bazaar",heroSecond:"to the World",heroIntro:"At Federal Gold, discover carefully selected gold and jewelry designs inspired by the atmosphere of Istanbul's Grand Bazaar.",
           explore:"Explore Collections",waContact:"Contact on WhatsApp",
