@@ -180,6 +180,16 @@
     .category-cta { font-size: 13px; color: var(--gold-light); font-weight: 600; white-space: nowrap; }
     .disclaimer { margin: 20px 0 0; font-size: 13px; color: var(--muted); }
 
+    /* Services */
+    .services { padding-block: 0 96px; }
+    .services .title { margin-bottom: 36px; }
+    .service-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+    .service-card { border: 1px solid var(--line-strong); border-radius: 14px; background: var(--surface); padding: 28px 24px; }
+    .service-icon { width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; background: #221b10; border: 1px solid #4a3d27; margin-bottom: 20px; }
+    .service-icon svg { width: 26px; height: 26px; color: var(--gold); }
+    .service-card h3 { margin: 0 0 8px; font: 600 24px/1.2 var(--serif); }
+    .service-card p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+
     /* About */
     .about { background: var(--surface); border-block: 1px solid var(--line); padding-block: 96px; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
@@ -227,6 +237,7 @@
       .header-cta { display: none; }
     }
     @media (max-width: 1100px) {
+      .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .header-inner { gap: 16px; }
       .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
@@ -282,6 +293,13 @@
       .category-sub { display: none; }
       .category-cta { display: block; margin-top: 4px; }
       .about, .visit { padding-block: 48px; }
+      .services { padding-block: 0 48px; }
+      .services .title { margin-bottom: 22px; }
+      .service-grid { grid-template-columns: 1fr; gap: 12px; }
+      .service-card { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; padding: 18px; }
+      .service-icon { grid-row: span 2; margin: 0; width: 46px; height: 46px; }
+      .service-card h3 { font-size: 21px; margin: 0; align-self: end; }
+      .service-card p { font-size: 14px; }
       .about-photo { min-height: 220px; }
       .about p { font-size: 16px; }
       .facts { gap: 8px; margin-top: 20px; }
@@ -320,6 +338,10 @@
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4.6 19.5 2.5 22l.9-5A9 9 0 1 1 7 20.5l-2.4-1Z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h11v10H2zM13 9h4.5l3.5 3.5V16h-8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="6" cy="17.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="17.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="m4 20 1-4L16 5l3 3L8 19l-4 1ZM14 7l3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20h18M5 16l4-5 4 3 6-8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h4v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 9.5h19M6 15h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
     <symbol id="i-home" viewBox="0 0 24 24"><path d="m2 11 10-9 10 9M5 10v12h14V10M9 22v-8h6v8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/></symbol>
     <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor"/></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m3.5 6 8.5 7 8.5-7" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
@@ -444,6 +466,35 @@
       </div>
     </section>
 
+    <section class="services" id="hizmetler" aria-labelledby="services-title">
+      <div class="container">
+        <p class="eyebrow" data-i18n="servicesEyebrow">Hizmetlerimiz</p>
+        <h2 class="title" id="services-title" data-i18n="servicesTitle">Kapalıçarşı’dan kapınıza</h2>
+        <div class="service-grid">
+          <div class="service-card">
+            <span class="service-icon"><svg aria-hidden="true"><use href="#i-truck"/></svg></span>
+            <h3 data-i18n="svc1">Sigortalı Gönderim</h3>
+            <p data-i18n="svc1Text">Siparişleriniz sigortalı olarak, güvenle adresinize ulaştırılır.</p>
+          </div>
+          <div class="service-card">
+            <span class="service-icon"><svg aria-hidden="true"><use href="#i-pen"/></svg></span>
+            <h3 data-i18n="svc2">Özel Sipariş</h3>
+            <p data-i18n="svc2Text">İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.</p>
+          </div>
+          <div class="service-card">
+            <span class="service-icon"><svg aria-hidden="true"><use href="#i-chart"/></svg></span>
+            <h3 data-i18n="svc3">Anlık Fiyat</h3>
+            <p data-i18n="svc3Text">LBMA bazlı, güne ve ana göre güncel altın fiyatı.</p>
+          </div>
+          <div class="service-card">
+            <span class="service-icon"><svg aria-hidden="true"><use href="#i-card"/></svg></span>
+            <h3 data-i18n="svc4">Ödeme Kolaylığı</h3>
+            <p data-i18n="svc4Text">Kredi kartı veya havale / EFT (T/T) ile ödeme.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="about" id="hakkimizda">
       <div class="container about-grid">
         <div class="about-photo" role="img" aria-label="Altın kolye ve bilezikler" data-i18n-aria="aboutImg"></div>
@@ -530,6 +581,11 @@
           collectionsEyebrow:"Koleksiyonlar", collectionsTitle:"Her an için bir parça", collectionsText:"Bir kategoriye dokunun; WhatsApp’ta o ürün için hazır mesajla yazışma açılsın.",
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
           askShort:"Fiyat sor →", imageDisclaimer:"Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.",
+          servicesEyebrow:"Hizmetlerimiz", servicesTitle:"Kapalıçarşı’dan kapınıza",
+          svc1:"Sigortalı Gönderim", svc1Text:"Siparişleriniz sigortalı olarak, güvenle adresinize ulaştırılır.",
+          svc2:"Özel Sipariş", svc2Text:"İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.",
+          svc3:"Anlık Fiyat", svc3Text:"LBMA bazlı, güne ve ana göre güncel altın fiyatı.",
+          svc4:"Ödeme Kolaylığı", svc4Text:"Kredi kartı veya havale / EFT (T/T) ile ödeme.",
           aboutEyebrow:"Hakkımızda", aboutTitle1:"Altın ve mücevherin", aboutTitle2:"zarif dünyası", aboutImg:"Altın kolye ve bilezikler",
           aboutText1:"Federal Gold, İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.",
           aboutText2:"Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazamızda görebilir, WhatsApp üzerinden fotoğraf ve fiyat isteyebilirsiniz.",
@@ -561,6 +617,11 @@
           collectionsEyebrow:"Collections", collectionsTitle:"A piece for every moment", collectionsText:"Tap a category to open a WhatsApp chat with a ready-made message about it.",
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
           askShort:"Ask price →", imageDisclaimer:"Images are illustrative. Contact us for stock, weights and current prices.",
+          servicesEyebrow:"Our Services", servicesTitle:"From the Grand Bazaar to your door",
+          svc1:"Insured Delivery", svc1Text:"Your order is insured and delivered safely to your address.",
+          svc2:"Special Orders", svc2Text:"Pieces made to order in the model, karat and weight you want.",
+          svc3:"Instant Pricing", svc3Text:"Up-to-the-minute gold prices based on LBMA.",
+          svc4:"Easy Payment", svc4Text:"Pay by credit card or bank transfer (T/T).",
           aboutEyebrow:"About us", aboutTitle1:"The elegant world of", aboutTitle2:"gold and jewellery", aboutImg:"Gold necklace and bracelets",
           aboutText1:"Federal Gold is located on Muhafazacılar Street in Istanbul's historic Grand Bazaar, bringing the bazaar's long jewellery tradition together with carefully selected designs.",
           aboutText2:"From bracelets to wedding bands, everyday pieces to special-occasion jewellery, see our pieces in store or ask for photos and prices on WhatsApp.",
