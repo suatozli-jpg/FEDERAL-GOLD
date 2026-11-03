@@ -37,7 +37,13 @@
       "addressLocality": "Fatih",
       "addressRegion": "İstanbul",
       "addressCountry": "TR"
-    }
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    }]
   }
   </script>
   <style>
@@ -311,7 +317,7 @@
   <div class="topbar">
     <div class="container topbar-inner">
       <span data-i18n="location">Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul</span>
-      <span class="topbar-right"><a href="#piyasa" class="topbar-rate" id="topbar-rate" hidden></a><span data-i18n="hoursShort">Pzt – Cmt açık · Pazar kapalı</span><a href="tel:+905423905967">+90 542 390 59 67</a></span>
+      <span class="topbar-right"><a href="#piyasa" class="topbar-rate" id="topbar-rate" hidden></a><span data-i18n="hoursShort">Pzt – Cmt 09:00 – 18:00 · Pazar kapalı</span><a href="tel:+905423905967">+90 542 390 59 67</a></span>
     </div>
   </div>
 
@@ -455,10 +461,10 @@
             <span class="visit-value"><a href="tel:+905423905967">+90 542 390 59 67</a></span>
             <span class="visit-label" data-i18n="hoursLabel">Çalışma saatleri</span>
             <div class="hours">
-              <span data-i18n="weekdays">Pazartesi – Cumartesi</span><span data-i18n="open">Açık</span>
+              <span data-i18n="weekdays">Pazartesi – Cumartesi</span><span data-i18n="open">09:00 – 18:00</span>
               <span data-i18n="sunday">Pazar</span><span data-i18n="closed">Kapalı</span>
             </div>
-            <p class="hours-note" data-i18n="hoursNote">Saatleri teyit etmek için ziyaret öncesi arayınız.</p>
+            <p class="hours-note" data-i18n="hoursNote">Resmi ve dini bayramlarda çalışma saatleri değişebilir.</p>
             <div class="visit-actions">
               <a class="btn btn-primary maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%20Muhafazac%C4%B1lar%20Sokak%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%20Fatih%20Istanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol Tarifi Al</span></a>
               <a class="btn btn-outline" href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="callNow">Hemen Ara</span></a>
@@ -495,7 +501,7 @@
     (() => {
       const dictionary = {
         tr: {
-          skip:"İçeriğe geç", location:"Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul", hoursShort:"Pzt – Cmt açık · Pazar kapalı", brandSub:"KUYUMCULUK",
+          skip:"İçeriğe geç", location:"Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul", hoursShort:"Pzt – Cmt 09:00 – 18:00 · Pazar kapalı", brandSub:"KUYUMCULUK",
           navHome:"Ana Sayfa", navCollections:"Koleksiyonlar", navAbout:"Hakkımızda", navContact:"Ziyaret & İletişim", waWrite:"WhatsApp ile Yazın",
           heroEyebrow:"Kapalıçarşı · İstanbul", heroFirst:"Kapalıçarşı’dan", heroSecond:"Dünyaya",
           heroIntro:"Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.",
@@ -509,7 +515,7 @@
           aboutText2:"Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazamızda görebilir, WhatsApp üzerinden fotoğraf ve fiyat isteyebilirsiniz.",
           fact1:"Kapalıçarşı", fact1Sub:"Fatih / İstanbul", fact2Sub:"Koleksiyon", fact3Sub:"Hizmet dili",
           visitEyebrow:"Ziyaret & İletişim", visitTitle:"Mağazamızı ziyaret edin", addressLabel:"Adres", phoneLabel:"Telefon", hoursLabel:"Çalışma saatleri",
-          weekdays:"Pazartesi – Cumartesi", open:"Açık", sunday:"Pazar", closed:"Kapalı", hoursNote:"Saatleri teyit etmek için ziyaret öncesi arayınız.",
+          weekdays:"Pazartesi – Cumartesi", open:"09:00 – 18:00", sunday:"Pazar", closed:"Kapalı", hoursNote:"Resmi ve dini bayramlarda çalışma saatleri değişebilir.",
           directions:"Yol Tarifi Al", callNow:"Hemen Ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sokak · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
           barCall:"Ara", barDirections:"Yol Tarifi", navMarket:"Canlı Kur",
           marketEyebrow:"Canlı Piyasa", marketTitle:"Güncel altın ve döviz kurları", marketLoading:"Kurlar yükleniyor…", marketGold:"Altın", marketFx:"Döviz & Gümüş",
@@ -526,7 +532,7 @@
           ogTitle:"Federal Gold | Kapalıçarşı’dan Dünyaya", ogDesc:"Altın ve mücevherin zarafeti Federal Gold'da. Koleksiyonları keşfedin, WhatsApp üzerinden bize ulaşın."
         },
         en: {
-          skip:"Skip to content", location:"Grand Bazaar, Muhafazacılar Street, Fatih / Istanbul", hoursShort:"Open Mon – Sat · Closed Sunday", brandSub:"JEWELLERY",
+          skip:"Skip to content", location:"Grand Bazaar, Muhafazacılar Street, Fatih / Istanbul", hoursShort:"Mon – Sat 09:00 – 18:00 · Closed Sunday", brandSub:"JEWELLERY",
           navHome:"Home", navCollections:"Collections", navAbout:"About", navContact:"Visit & Contact", waWrite:"Message on WhatsApp",
           heroEyebrow:"Grand Bazaar · Istanbul", heroFirst:"From the Grand Bazaar", heroSecond:"to the World",
           heroIntro:"Carefully selected gold and jewellery designs — bracelets, rings, necklaces and earrings. Contact us directly for models, weights and current prices.",
@@ -540,7 +546,7 @@
           aboutText2:"From bracelets to wedding bands, everyday pieces to special-occasion jewellery, see our pieces in store or ask for photos and prices on WhatsApp.",
           fact1:"Grand Bazaar", fact1Sub:"Fatih / Istanbul", fact2Sub:"Collections", fact3Sub:"Languages",
           visitEyebrow:"Visit & Contact", visitTitle:"Visit our store", addressLabel:"Address", phoneLabel:"Phone", hoursLabel:"Opening hours",
-          weekdays:"Monday – Saturday", open:"Open", sunday:"Sunday", closed:"Closed", hoursNote:"Please call ahead to confirm opening hours.",
+          weekdays:"Monday – Saturday", open:"09:00 – 18:00", sunday:"Sunday", closed:"Closed", hoursNote:"Opening hours may vary on public and religious holidays.",
           directions:"Get Directions", callNow:"Call Now", footerLoc:"Grand Bazaar, Muhafazacılar Street · Fatih / Istanbul", rights:"All rights reserved.",
           barCall:"Call", barDirections:"Directions", navMarket:"Live Rates",
           marketEyebrow:"Live Market", marketTitle:"Current gold and currency rates", marketLoading:"Loading rates…", marketGold:"Gold", marketFx:"Currency & Silver",
