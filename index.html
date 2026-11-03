@@ -599,7 +599,7 @@
           marketError:"Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.",
           marketNote:"Piyasa verileri bilgi amaçlıdır, dakikada bir yenilenir. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.", marketAsk:"WhatsApp’tan fiyat al",
           topbarGram:"Gram Altın {price}",
-          rGRA:"Gram Altın", rHAS:"Has Altın (24 ayar)", rYIA:"22 Ayar Bilezik (gr)", r18:"18 Ayar (gr)", r14:"14 Ayar (gr)", rCEYREK:"Çeyrek Altın", rYARIM:"Yarım Altın", rTAM:"Tam Altın", rCUMHURIYET:"Cumhuriyet Altını", rATA:"Ata Altın",
+          rGRA:"Gram Altın", rYIA:"22 Ayar Bilezik (gr)", r18:"18 Ayar (gr)", r14:"14 Ayar (gr)", rCEYREK:"Çeyrek Altın", rYARIM:"Yarım Altın", rTAM:"Tam Altın", rCUMHURIYET:"Cumhuriyet Altını", rATA:"Ata Altın",
           rUSD:"Amerikan Doları", rEUR:"Euro", rGBP:"İngiliz Sterlini", rGUMUS:"Gümüş (gr)",
           waMessage:"Merhaba Federal Gold, ürünleriniz hakkında bilgi almak istiyorum.", productRequest:"Merhaba Federal Gold, {product} hakkında bilgi alabilir miyim?",
           productLabel:"{product} — WhatsApp’tan fiyat sor", whatsappLabel:"WhatsApp üzerinden iletişime geç", menuOpen:"Menüyü aç", menuClose:"Menüyü kapat",
@@ -635,7 +635,7 @@
           marketError:"Rates are unavailable right now. Message us on WhatsApp for current prices.",
           marketNote:"Market data is for information only and refreshes every minute. In-store buying/selling prices and craftsmanship fees may differ; contact us for an exact price.", marketAsk:"Get a price on WhatsApp",
           topbarGram:"Gram Gold {price}",
-          rGRA:"Gram Gold", rHAS:"Pure Gold (24K)", rYIA:"22K Bracelet Gold (g)", r18:"18K Gold (g)", r14:"14K Gold (g)", rCEYREK:"Quarter Gold Coin", rYARIM:"Half Gold Coin", rTAM:"Full Gold Coin", rCUMHURIYET:"Republic Gold Coin", rATA:"Ata Gold Coin",
+          rGRA:"Gram Gold", rYIA:"22K Bracelet Gold (g)", r18:"18K Gold (g)", r14:"14K Gold (g)", rCEYREK:"Quarter Gold Coin", rYARIM:"Half Gold Coin", rTAM:"Full Gold Coin", rCUMHURIYET:"Republic Gold Coin", rATA:"Ata Gold Coin",
           rUSD:"US Dollar", rEUR:"Euro", rGBP:"British Pound", rGUMUS:"Silver (g)",
           waMessage:"Hello Federal Gold, I would like to know more about your jewellery.", productRequest:"Hello Federal Gold, could you tell me more about your {product}?",
           productLabel:"{product} — ask for a price on WhatsApp", whatsappLabel:"Contact Federal Gold on WhatsApp", menuOpen:"Open menu", menuClose:"Close menu",
@@ -694,7 +694,7 @@
       // Live market rates (source: finans.truncgil.com, CORS-enabled public JSON)
       const RATES_URL = 'https://finans.truncgil.com/v4/today.json';
       const RATE_GROUPS = {
-        'rates-gold': [['GRA','rGRA'],['HAS','rHAS'],['YIA','rYIA'],['18AYARALTIN','r18'],['14AYARALTIN','r14'],['CEYREKALTIN','rCEYREK'],['YARIMALTIN','rYARIM'],['TAMALTIN','rTAM'],['CUMHURIYETALTINI','rCUMHURIYET'],['ATAALTIN','rATA']],
+        'rates-gold': [['GRA','rGRA'],['YIA','rYIA'],['18AYARALTIN','r18'],['14AYARALTIN','r14'],['CEYREKALTIN','rCEYREK'],['YARIMALTIN','rYARIM'],['TAMALTIN','rTAM'],['CUMHURIYETALTINI','rCUMHURIYET'],['ATAALTIN','rATA']],
         'rates-fx': [['USD','rUSD'],['EUR','rEUR'],['GBP','rGBP'],['GUMUS','rGUMUS']]
       };
       const marketEl = $('#piyasa');
