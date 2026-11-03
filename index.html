@@ -125,6 +125,37 @@
     .trust-item b { display: block; font-weight: 600; }
     .trust-item small { display: block; font-size: 14px; color: var(--muted); }
 
+    /* Live market rates */
+    .market { padding-block: 72px 0; }
+    .market-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; margin-bottom: 28px; }
+    .market-status { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+    .live-dot { width: 9px; height: 9px; border-radius: 50%; background: #6fcf8e; box-shadow: 0 0 0 0 rgba(111,207,142,.6); animation: pulse 2s infinite; }
+    .market.is-error .live-dot { background: #8a8174; animation: none; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,207,142,.55); } 70% { box-shadow: 0 0 0 8px rgba(111,207,142,0); } 100% { box-shadow: 0 0 0 0 rgba(111,207,142,0); } }
+    .market-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+    .rate-card { border: 1px solid var(--line-strong); border-radius: 16px; background: var(--surface); overflow: hidden; }
+    .rate-card h3 { margin: 0; padding: 18px 22px; font: 600 22px/1.2 var(--serif); color: var(--gold-light); border-bottom: 1px solid var(--line-strong); }
+    .rate-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    .rate-table th { text-align: right; padding: 10px 22px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .rate-table th:first-child, .rate-table td:first-child { text-align: left; }
+    .rate-table td { text-align: right; padding: 13px 22px; border-top: 1px solid #241f17; font-size: 15px; white-space: nowrap; }
+    .rate-table td:first-child { font-weight: 600; white-space: normal; }
+    .rate-table tbody tr:hover { background: #1a1712; }
+    .rate-table .sell { color: var(--text); font-weight: 600; }
+    .rate-table .buy { color: var(--text-soft); }
+    .chg { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; }
+    .chg.up { color: #6fcf8e; } .chg.down { color: #f08a7a; } .chg.flat { color: var(--muted); }
+    .chg-inline { display: none; }
+    .rate-table tr.flash td { animation: flash 1.2s ease-out; }
+    @keyframes flash { from { background: rgba(217,176,98,.18); } to { background: transparent; } }
+    .rate-placeholder td { color: var(--muted); font-weight: 400 !important; }
+    .market-note { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
+    .market-note a { color: var(--gold-light); text-decoration: underline; text-underline-offset: 3px; }
+    .market-error { display: none; margin-top: 16px; padding: 14px 18px; border: 1px solid #5a4a2e; border-radius: 10px; color: var(--text-soft); font-size: 14px; }
+    .market.is-error .market-error { display: block; }
+    .market.is-error .market-grid { display: none; }
+    .topbar-rate { color: var(--gold-light); font-variant-numeric: tabular-nums; }
+
     /* Collections */
     .collections { padding-block: 96px; }
     .section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 40px; }
@@ -176,12 +207,14 @@
 
     .action-bar { display: none; }
 
+    @media (max-width: 1260px) {
+      .header-cta { display: none; }
+    }
     @media (max-width: 1100px) {
       .header-inner { gap: 16px; }
-      .header-cta { display: none; }
       .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) {
       :root { --header-h: 68px; }
       .container { width: min(100% - 32px, 720px); }
       .topbar { display: none; }
@@ -197,6 +230,7 @@
       .mobile-menu a { display: flex; align-items: center; min-height: 54px; padding: 0 24px; border-top: 1px solid #2a2318; font-size: 16px; }
       .mobile-menu a:hover { background: #1d170e; }
       .about-grid, .visit-grid { grid-template-columns: 1fr; gap: 32px; }
+      .market-grid { grid-template-columns: 1fr; }
       .about-photo { min-height: 300px; }
       .floating-whatsapp { display: none; }
       body { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
@@ -215,6 +249,13 @@
       .hero-buttons { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 22px; }
       .trust-grid { grid-template-columns: 1fr; gap: 14px; padding-block: 22px; }
       .trust-item svg { width: 28px; height: 28px; }
+      .market { padding-block: 44px 0; }
+      .market-head { margin-bottom: 20px; }
+      .rate-card h3 { padding: 14px 16px; font-size: 20px; }
+      .rate-table th { padding: 8px 12px; font-size: 11px; letter-spacing: .08em; }
+      .rate-table td { padding: 11px 12px; font-size: 14px; }
+      .rate-table .col-chg { display: none; }
+      .chg-inline { display: flex; margin-top: 2px; font-size: 12px; }
       .collections { padding-block: 48px; }
       .section-head { margin-bottom: 24px; }
       .title { font-size: 36px; }
@@ -249,6 +290,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .btn, .category-card, .floating-whatsapp { transition: none; }
+      .live-dot, .rate-table tr.flash td { animation: none; }
     }
   </style>
 </head>
@@ -269,7 +311,7 @@
   <div class="topbar">
     <div class="container topbar-inner">
       <span data-i18n="location">Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul</span>
-      <span class="topbar-right"><span data-i18n="hoursShort">Pzt – Cmt açık · Pazar kapalı</span><a href="tel:+905423905967">+90 542 390 59 67</a></span>
+      <span class="topbar-right"><a href="#piyasa" class="topbar-rate" id="topbar-rate" hidden></a><span data-i18n="hoursShort">Pzt – Cmt açık · Pazar kapalı</span><a href="tel:+905423905967">+90 542 390 59 67</a></span>
     </div>
   </div>
 
@@ -281,6 +323,7 @@
       </a>
       <nav class="desktop-nav" aria-label="Ana menü">
         <a href="#ana" data-i18n="navHome">Ana Sayfa</a>
+        <a href="#piyasa" data-i18n="navMarket">Canlı Kur</a>
         <a href="#koleksiyonlar" data-i18n="navCollections">Koleksiyonlar</a>
         <a href="#hakkimizda" data-i18n="navAbout">Hakkımızda</a>
         <a href="#iletisim" data-i18n="navContact">Ziyaret &amp; İletişim</a>
@@ -294,6 +337,7 @@
     </div>
     <nav class="mobile-menu" id="mobile-menu" aria-label="Mobil menü">
       <a href="#ana" data-i18n="navHome">Ana Sayfa</a>
+      <a href="#piyasa" data-i18n="navMarket">Canlı Kur</a>
       <a href="#koleksiyonlar" data-i18n="navCollections">Koleksiyonlar</a>
       <a href="#hakkimizda" data-i18n="navAbout">Hakkımızda</a>
       <a href="#iletisim" data-i18n="navContact">Ziyaret &amp; İletişim</a>
@@ -318,6 +362,36 @@
         <div class="trust-item"><svg aria-hidden="true"><use href="#i-home"/></svg><div><b data-i18n="trust1">Kapalıçarşı’da mağaza</b><small data-i18n="trust1Sub">Gelin, görün, deneyin</small></div></div>
         <div class="trust-item"><svg aria-hidden="true"><use href="#i-gem"/></svg><div><b data-i18n="trust2">Seçkin tasarımlar</b><small data-i18n="trust2Sub">Altın ve mücevher koleksiyonları</small></div></div>
         <div class="trust-item"><svg aria-hidden="true"><use href="#i-chat"/></svg><div><b data-i18n="trust3">WhatsApp’tan bilgi</b><small data-i18n="trust3Sub">Fotoğraf, gram ve fiyat</small></div></div>
+      </div>
+    </section>
+
+    <section class="market" id="piyasa" aria-labelledby="market-title">
+      <div class="container">
+        <div class="market-head">
+          <div>
+            <p class="eyebrow" data-i18n="marketEyebrow">Canlı Piyasa</p>
+            <h2 class="title" id="market-title" data-i18n="marketTitle">Güncel altın ve döviz kurları</h2>
+          </div>
+          <p class="market-status" aria-live="polite"><span class="live-dot" aria-hidden="true"></span><span id="market-updated" data-i18n="marketLoading">Kurlar yükleniyor…</span></p>
+        </div>
+        <div class="market-grid">
+          <div class="rate-card">
+            <h3 data-i18n="marketGold">Altın</h3>
+            <table class="rate-table">
+              <thead><tr><th scope="col" data-i18n="colItem">Cins</th><th scope="col" data-i18n="colBuy">Alış</th><th scope="col" data-i18n="colSell">Satış</th><th scope="col" class="col-chg" data-i18n="colChange">Değişim</th></tr></thead>
+              <tbody id="rates-gold"><tr class="rate-placeholder"><td colspan="4" data-i18n="marketLoading">Kurlar yükleniyor…</td></tr></tbody>
+            </table>
+          </div>
+          <div class="rate-card">
+            <h3 data-i18n="marketFx">Döviz &amp; Gümüş</h3>
+            <table class="rate-table">
+              <thead><tr><th scope="col" data-i18n="colItem">Cins</th><th scope="col" data-i18n="colBuy">Alış</th><th scope="col" data-i18n="colSell">Satış</th><th scope="col" class="col-chg" data-i18n="colChange">Değişim</th></tr></thead>
+              <tbody id="rates-fx"><tr class="rate-placeholder"><td colspan="4" data-i18n="marketLoading">Kurlar yükleniyor…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <p class="market-error" role="status" data-i18n="marketError">Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.</p>
+        <p class="market-note"><span data-i18n="marketNote">Piyasa verileri bilgi amaçlıdır, dakikada bir yenilenir. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.</span> <a class="wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" data-i18n="marketAsk">WhatsApp’tan fiyat al</a></p>
       </div>
     </section>
 
@@ -437,7 +511,14 @@
           visitEyebrow:"Ziyaret & İletişim", visitTitle:"Mağazamızı ziyaret edin", addressLabel:"Adres", phoneLabel:"Telefon", hoursLabel:"Çalışma saatleri",
           weekdays:"Pazartesi – Cumartesi", open:"Açık", sunday:"Pazar", closed:"Kapalı", hoursNote:"Saatleri teyit etmek için ziyaret öncesi arayınız.",
           directions:"Yol Tarifi Al", callNow:"Hemen Ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sokak · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
-          barCall:"Ara", barDirections:"Yol Tarifi",
+          barCall:"Ara", barDirections:"Yol Tarifi", navMarket:"Canlı Kur",
+          marketEyebrow:"Canlı Piyasa", marketTitle:"Güncel altın ve döviz kurları", marketLoading:"Kurlar yükleniyor…", marketGold:"Altın", marketFx:"Döviz & Gümüş",
+          colItem:"Cins", colBuy:"Alış", colSell:"Satış", colChange:"Değişim", marketUpdated:"Son güncelleme: {time}", marketStale:"Bağlantı yok · son veri: {time}", marketOffline:"Kurlar alınamadı",
+          marketError:"Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.",
+          marketNote:"Piyasa verileri bilgi amaçlıdır, dakikada bir yenilenir. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.", marketAsk:"WhatsApp’tan fiyat al",
+          topbarGram:"Gram Altın {price}",
+          rGRA:"Gram Altın", rHAS:"Has Altın (24 ayar)", rYIA:"22 Ayar Bilezik (gr)", r18:"18 Ayar (gr)", r14:"14 Ayar (gr)", rCEYREK:"Çeyrek Altın", rYARIM:"Yarım Altın", rTAM:"Tam Altın", rCUMHURIYET:"Cumhuriyet Altını", rATA:"Ata Altın",
+          rUSD:"Amerikan Doları", rEUR:"Euro", rGBP:"İngiliz Sterlini", rGUMUS:"Gümüş (gr)",
           waMessage:"Merhaba Federal Gold, ürünleriniz hakkında bilgi almak istiyorum.", productRequest:"Merhaba Federal Gold, {product} hakkında bilgi alabilir miyim?",
           productLabel:"{product} — WhatsApp’tan fiyat sor", whatsappLabel:"WhatsApp üzerinden iletişime geç", menuOpen:"Menüyü aç", menuClose:"Menüyü kapat",
           title:"Federal Gold Kuyumculuk | Kapalıçarşı’dan Dünyaya",
@@ -461,7 +542,14 @@
           visitEyebrow:"Visit & Contact", visitTitle:"Visit our store", addressLabel:"Address", phoneLabel:"Phone", hoursLabel:"Opening hours",
           weekdays:"Monday – Saturday", open:"Open", sunday:"Sunday", closed:"Closed", hoursNote:"Please call ahead to confirm opening hours.",
           directions:"Get Directions", callNow:"Call Now", footerLoc:"Grand Bazaar, Muhafazacılar Street · Fatih / Istanbul", rights:"All rights reserved.",
-          barCall:"Call", barDirections:"Directions",
+          barCall:"Call", barDirections:"Directions", navMarket:"Live Rates",
+          marketEyebrow:"Live Market", marketTitle:"Current gold and currency rates", marketLoading:"Loading rates…", marketGold:"Gold", marketFx:"Currency & Silver",
+          colItem:"Item", colBuy:"Buy", colSell:"Sell", colChange:"Change", marketUpdated:"Last updated: {time}", marketStale:"Offline · last data: {time}", marketOffline:"Rates unavailable",
+          marketError:"Rates are unavailable right now. Message us on WhatsApp for current prices.",
+          marketNote:"Market data is for information only and refreshes every minute. In-store buying/selling prices and craftsmanship fees may differ; contact us for an exact price.", marketAsk:"Get a price on WhatsApp",
+          topbarGram:"Gram Gold {price}",
+          rGRA:"Gram Gold", rHAS:"Pure Gold (24K)", rYIA:"22K Bracelet Gold (g)", r18:"18K Gold (g)", r14:"14K Gold (g)", rCEYREK:"Quarter Gold Coin", rYARIM:"Half Gold Coin", rTAM:"Full Gold Coin", rCUMHURIYET:"Republic Gold Coin", rATA:"Ata Gold Coin",
+          rUSD:"US Dollar", rEUR:"Euro", rGBP:"British Pound", rGUMUS:"Silver (g)",
           waMessage:"Hello Federal Gold, I would like to know more about your jewellery.", productRequest:"Hello Federal Gold, could you tell me more about your {product}?",
           productLabel:"{product} — ask for a price on WhatsApp", whatsappLabel:"Contact Federal Gold on WhatsApp", menuOpen:"Open menu", menuClose:"Close menu",
           title:"Federal Gold Jewellery | From the Grand Bazaar to the World",
@@ -486,6 +574,7 @@
       document.addEventListener('click', e => { if (mobileMenu.classList.contains('open') && !e.target.closest('.site-header')) setMenu(false); });
 
       const whatsappBase = 'https://wa.me/905423905967?text=';
+      let renderRates = () => {};
       const applyLanguage = (lang) => {
         const code = lang === 'en' ? 'en' : 'tr';
         const d = dictionary[code];
@@ -505,6 +594,7 @@
         $('meta[property="og:title"]').setAttribute('content', d.ogTitle);
         $('meta[property="og:description"]').setAttribute('content', d.ogDesc);
         toggle.setAttribute('aria-label', mobileMenu.classList.contains('open') ? d.menuClose : d.menuOpen);
+        renderRates();
         try { localStorage.setItem('federalgold-language', code); } catch (e) {}
       };
       $$('[data-lang]').forEach(b => b.addEventListener('click', () => applyLanguage(b.dataset.lang)));
@@ -513,6 +603,82 @@
       if (!initial) initial = (navigator.language || 'tr').toLowerCase().startsWith('tr') ? 'tr' : 'en';
       applyLanguage(initial);
       $('#year').textContent = String(new Date().getFullYear());
+
+      // Live market rates (source: finans.truncgil.com, CORS-enabled public JSON)
+      const RATES_URL = 'https://finans.truncgil.com/v4/today.json';
+      const RATE_GROUPS = {
+        'rates-gold': [['GRA','rGRA'],['HAS','rHAS'],['YIA','rYIA'],['18AYARALTIN','r18'],['14AYARALTIN','r14'],['CEYREKALTIN','rCEYREK'],['YARIMALTIN','rYARIM'],['TAMALTIN','rTAM'],['CUMHURIYETALTINI','rCUMHURIYET'],['ATAALTIN','rATA']],
+        'rates-fx': [['USD','rUSD'],['EUR','rEUR'],['GBP','rGBP'],['GUMUS','rGUMUS']]
+      };
+      const marketEl = $('#piyasa');
+      let rates = null, prevSell = {}, ratesTime = '', failed = false;
+      const num = (v) => { const n = typeof v === 'number' ? v : parseFloat(String(v).replace(/\./g, '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
+      const locale = () => document.documentElement.lang === 'en' ? 'en-GB' : 'tr-TR';
+      const money = (n) => n == null || n <= 0 ? '—' : new Intl.NumberFormat(locale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' ₺';
+      const changeHtml = (c) => {
+        if (c == null) return '<span class="chg flat">—</span>';
+        const cls = c > 0 ? 'up' : c < 0 ? 'down' : 'flat';
+        const arrow = c > 0 ? '▲' : c < 0 ? '▼' : '•';
+        const txt = '%' + new Intl.NumberFormat(locale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.abs(c));
+        return `<span class="chg ${cls}"><span aria-hidden="true">${arrow}</span>${c < 0 ? '−' : c > 0 ? '+' : ''}${txt}</span>`;
+      };
+      const fmtTime = (str) => {
+        const m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(str || '');
+        return m ? `${m[3]}.${m[2]}.${m[1]} ${m[4]}:${m[5]}` : '';
+      };
+      renderRates = () => {
+        const d = t();
+        const status = $('#market-updated');
+        if (!rates) {
+          if (failed) { status.textContent = d.marketOffline; }
+          return;
+        }
+        Object.entries(RATE_GROUPS).forEach(([id, items]) => {
+          const rows = items.map(([key, label]) => {
+            const r = rates[key];
+            if (!r) return '';
+            const sell = num(r.Selling), buy = num(r.Buying), chg = num(r.Change);
+            if (!sell) return '';
+            const changed = prevSell[key] != null && prevSell[key] !== sell;
+            return `<tr${changed ? ' class="flash"' : ''}><td>${d[label]}<span class="chg-inline">${changeHtml(chg)}</span></td><td class="buy">${money(buy)}</td><td class="sell">${money(sell)}</td><td class="col-chg">${changeHtml(chg)}</td></tr>`;
+          }).join('');
+          if (rows) $('#' + id).innerHTML = rows;
+        });
+        const time = fmtTime(ratesTime);
+        status.textContent = (failed ? d.marketStale : d.marketUpdated).replace('{time}', time);
+        const gram = num(rates.GRA && rates.GRA.Selling);
+        const tb = $('#topbar-rate');
+        if (gram) { tb.textContent = d.topbarGram.replace('{price}', money(gram)); tb.hidden = false; }
+      };
+      const loadRates = async (attempt = 0) => {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 10000);
+        try {
+          const res = await fetch(RATES_URL + '?t=' + Date.now(), { cache: 'no-store', signal: ctrl.signal });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          if (!data || !data.GRA) throw new Error('Unexpected data');
+          if (rates) Object.keys(rates).forEach(k => { const v = num(rates[k] && rates[k].Selling); if (v) prevSell[k] = v; });
+          rates = data; ratesTime = data.Update_Date; failed = false;
+          marketEl.classList.remove('is-error');
+          try { localStorage.setItem('federalgold-rates', JSON.stringify(data)); } catch (e) {}
+        } catch (e) {
+          if (attempt < 2) { clearTimeout(timer); setTimeout(() => loadRates(attempt + 1), 3000 * (attempt + 1)); return; }
+          failed = true;
+          if (!rates) marketEl.classList.add('is-error');
+        } finally {
+          clearTimeout(timer);
+          renderRates();
+          prevSell = {};
+        }
+      };
+      try {
+        const cached = JSON.parse(localStorage.getItem('federalgold-rates') || 'null');
+        if (cached && cached.GRA) { rates = cached; ratesTime = cached.Update_Date; renderRates(); }
+      } catch (e) {}
+      loadRates();
+      setInterval(() => { if (document.visibilityState === 'visible') loadRates(); }, 60000);
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') loadRates(); });
 
       // Highlight the nav link of the section in view
       const navLinks = $$('.desktop-nav a');
