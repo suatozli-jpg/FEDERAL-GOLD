@@ -30,10 +30,14 @@
     "name": "Federal Gold Kuyumculuk",
     "url": "https://federalgold.org/",
     "image": "https://federalgold.org/assets/hero.webp",
-    "telephone": "+905423905967",
+    "legalName": "Federal Gold Sarrafiye ve Kuyumculuk Tic. San. Ltd. Şti.",
+    "telephone": "+902125117428",
+    "email": "federalgold@hotmail.com",
+    "sameAs": ["https://www.instagram.com/federalgoldd/"],
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Kapalıçarşı, Muhafazacılar Sokak",
+      "streetAddress": "Beyazıt Mah. Muhafazacılar Sk. No:12/1, Kılıççılar Kapısı, Kapalıçarşı",
+      "postalCode": "34126",
       "addressLocality": "Fatih",
       "addressRegion": "İstanbul",
       "addressCountry": "TR"
@@ -194,6 +198,12 @@
     .visit-label { font-size: 13px; letter-spacing: .14em; color: var(--gold); font-weight: 700; text-transform: uppercase; }
     .visit-value { font-size: 18px; margin: 4px 0 22px; }
     .visit-value a:hover { color: var(--gold-light); }
+    .visit-lines { display: flex; flex-direction: column; gap: 6px; }
+    .visit-lines small { font-size: 13px; color: var(--muted); margin-left: 6px; }
+    .icon-link { display: inline-flex; align-items: center; gap: 10px; min-height: 32px; }
+    .icon-link svg { width: 20px; height: 20px; color: var(--gold); }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; }
+    .footer-links .icon-link svg { width: 16px; height: 16px; }
     .hours { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; color: var(--text-soft); margin: 6px 0 4px; }
     .hours-note { font-size: 14px; color: var(--muted); margin: 0 0 26px; }
     .visit-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; }
@@ -311,12 +321,14 @@
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-home" viewBox="0 0 24 24"><path d="m2 11 10-9 10 9M5 10v12h14V10M9 22v-8h6v8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m3.5 6 8.5 7 8.5-7" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
     <symbol id="i-gem" viewBox="0 0 24 24"><path d="m2 9 5-6h10l5 6-10 13L2 9Zm0 0h20M7 3l4 6 1 13 1-13 4-6" stroke="currentColor" stroke-width="1.4" fill="none"/></symbol>
   </svg>
 
   <div class="topbar">
     <div class="container topbar-inner">
-      <span data-i18n="location">Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul</span>
+      <span data-i18n="location">Kapalıçarşı, Muhafazacılar Sk. No:12/1, Fatih / İstanbul</span>
       <span class="topbar-right"><a href="#piyasa" class="topbar-rate" id="topbar-rate" hidden></a><span data-i18n="hoursShort">Pzt – Cmt 09:00 – 18:00 · Pazar kapalı</span><a href="tel:+905423905967">+90 542 390 59 67</a></span>
     </div>
   </div>
@@ -456,9 +468,17 @@
         <div class="visit-grid">
           <div class="visit-card">
             <span class="visit-label" data-i18n="addressLabel">Adres</span>
-            <span class="visit-value" data-i18n="location">Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul</span>
+            <span class="visit-value" data-i18n="addressFull">Beyazıt Mah. Muhafazacılar Sk. No:12/1 (Kılıççılar Kapısı), Kapalıçarşı, 34126 Fatih / İstanbul</span>
             <span class="visit-label" data-i18n="phoneLabel">Telefon</span>
-            <span class="visit-value"><a href="tel:+905423905967">+90 542 390 59 67</a></span>
+            <span class="visit-value visit-lines">
+              <span><a href="tel:+902125117428">+90 212 511 74 28</a> <small data-i18n="phoneStore">Mağaza</small></span>
+              <span><a href="tel:+905423905967">+90 542 390 59 67</a> <small data-i18n="phoneMobile">Cep · WhatsApp</small></span>
+            </span>
+            <span class="visit-label" data-i18n="onlineLabel">E-posta &amp; Instagram</span>
+            <span class="visit-value visit-lines">
+              <a class="icon-link" href="mailto:federalgold@hotmail.com"><svg aria-hidden="true"><use href="#i-mail"/></svg>federalgold@hotmail.com</a>
+              <a class="icon-link" href="https://www.instagram.com/federalgoldd/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-instagram"/></svg>@federalgoldd</a>
+            </span>
             <span class="visit-label" data-i18n="hoursLabel">Çalışma saatleri</span>
             <div class="hours">
               <span data-i18n="weekdays">Pazartesi – Cumartesi</span><span data-i18n="open">09:00 – 18:00</span>
@@ -466,12 +486,12 @@
             </div>
             <p class="hours-note" data-i18n="hoursNote">Resmi ve dini bayramlarda çalışma saatleri değişebilir.</p>
             <div class="visit-actions">
-              <a class="btn btn-primary maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%20Muhafazac%C4%B1lar%20Sokak%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%20Fatih%20Istanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol Tarifi Al</span></a>
+              <a class="btn btn-primary maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%2C%20Muhafazac%C4%B1lar%20Sk.%20No%3A12/1%2C%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%2C%20Fatih%2C%20%C4%B0stanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol Tarifi Al</span></a>
               <a class="btn btn-outline" href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="callNow">Hemen Ara</span></a>
             </div>
           </div>
           <div class="map">
-            <iframe title="Federal Gold konumu — Kapalıçarşı" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Muhafazac%C4%B1lar%20Sokak%2C%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%2C%20Fatih%2C%20%C4%B0stanbul&amp;output=embed"></iframe>
+            <iframe title="Federal Gold konumu — Kapalıçarşı" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Muhafazac%C4%B1lar%20Sk.%20No%3A12/1%2C%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%2C%2034126%20Fatih%2C%20%C4%B0stanbul&amp;z=17&amp;output=embed"></iframe>
           </div>
         </div>
       </div>
@@ -481,9 +501,9 @@
   <footer class="footer">
     <div class="container footer-inner">
       <span class="footer-brand">FEDERAL GOLD</span>
-      <span data-i18n="footerLoc">Kapalıçarşı, Muhafazacılar Sokak · Fatih / İstanbul</span>
-      <a href="tel:+905423905967">+90 542 390 59 67</a>
-      <span>© <span id="year">2026</span> Federal Gold Kuyumculuk · <span data-i18n="rights">Tüm hakları saklıdır.</span></span>
+      <span data-i18n="footerLoc">Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul</span>
+      <span class="footer-links"><a href="tel:+902125117428">+90 212 511 74 28</a><a href="tel:+905423905967">+90 542 390 59 67</a><a href="mailto:federalgold@hotmail.com">federalgold@hotmail.com</a><a class="icon-link" href="https://www.instagram.com/federalgoldd/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @federalgoldd"><svg aria-hidden="true"><use href="#i-instagram"/></svg>@federalgoldd</a></span>
+      <span>© <span id="year">2026</span> Federal Gold Sarrafiye ve Kuyumculuk Tic. San. Ltd. Şti. · <span data-i18n="rights">Tüm hakları saklıdır.</span></span>
     </div>
   </footer>
 
@@ -494,14 +514,14 @@
   <nav class="action-bar" aria-label="Hızlı işlemler">
     <a href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="barCall">Ara</span></a>
     <a class="is-primary wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-chat"/></svg><span>WhatsApp</span></a>
-    <a class="maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%20Muhafazac%C4%B1lar%20Sokak%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%20Fatih%20Istanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="barDirections">Yol Tarifi</span></a>
+    <a class="maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%2C%20Muhafazac%C4%B1lar%20Sk.%20No%3A12/1%2C%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%2C%20Fatih%2C%20%C4%B0stanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="barDirections">Yol Tarifi</span></a>
   </nav>
 
   <script>
     (() => {
       const dictionary = {
         tr: {
-          skip:"İçeriğe geç", location:"Kapalıçarşı, Muhafazacılar Sokak, Fatih / İstanbul", hoursShort:"Pzt – Cmt 09:00 – 18:00 · Pazar kapalı", brandSub:"KUYUMCULUK",
+          skip:"İçeriğe geç", location:"Kapalıçarşı, Muhafazacılar Sk. No:12/1, Fatih / İstanbul", addressFull:"Beyazıt Mah. Muhafazacılar Sk. No:12/1 (Kılıççılar Kapısı), Kapalıçarşı, 34126 Fatih / İstanbul", hoursShort:"Pzt – Cmt 09:00 – 18:00 · Pazar kapalı", brandSub:"KUYUMCULUK",
           navHome:"Ana Sayfa", navCollections:"Koleksiyonlar", navAbout:"Hakkımızda", navContact:"Ziyaret & İletişim", waWrite:"WhatsApp ile Yazın",
           heroEyebrow:"Kapalıçarşı · İstanbul", heroFirst:"Kapalıçarşı’dan", heroSecond:"Dünyaya",
           heroIntro:"Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.",
@@ -514,9 +534,9 @@
           aboutText1:"Federal Gold, İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.",
           aboutText2:"Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazamızda görebilir, WhatsApp üzerinden fotoğraf ve fiyat isteyebilirsiniz.",
           fact1:"Kapalıçarşı", fact1Sub:"Fatih / İstanbul", fact2Sub:"Koleksiyon", fact3Sub:"Hizmet dili",
-          visitEyebrow:"Ziyaret & İletişim", visitTitle:"Mağazamızı ziyaret edin", addressLabel:"Adres", phoneLabel:"Telefon", hoursLabel:"Çalışma saatleri",
+          visitEyebrow:"Ziyaret & İletişim", visitTitle:"Mağazamızı ziyaret edin", addressLabel:"Adres", phoneLabel:"Telefon", phoneStore:"Mağaza", phoneMobile:"Cep · WhatsApp", onlineLabel:"E-posta & Instagram", hoursLabel:"Çalışma saatleri",
           weekdays:"Pazartesi – Cumartesi", open:"09:00 – 18:00", sunday:"Pazar", closed:"Kapalı", hoursNote:"Resmi ve dini bayramlarda çalışma saatleri değişebilir.",
-          directions:"Yol Tarifi Al", callNow:"Hemen Ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sokak · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
+          directions:"Yol Tarifi Al", callNow:"Hemen Ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
           barCall:"Ara", barDirections:"Yol Tarifi", navMarket:"Canlı Kur",
           marketEyebrow:"Canlı Piyasa", marketTitle:"Güncel altın ve döviz kurları", marketLoading:"Kurlar yükleniyor…", marketGold:"Altın", marketFx:"Döviz & Gümüş",
           colItem:"Cins", colBuy:"Alış", colSell:"Satış", colChange:"Değişim", marketUpdated:"Son güncelleme: {time}", marketStale:"Bağlantı yok · son veri: {time}", marketOffline:"Kurlar alınamadı",
@@ -532,7 +552,7 @@
           ogTitle:"Federal Gold | Kapalıçarşı’dan Dünyaya", ogDesc:"Altın ve mücevherin zarafeti Federal Gold'da. Koleksiyonları keşfedin, WhatsApp üzerinden bize ulaşın."
         },
         en: {
-          skip:"Skip to content", location:"Grand Bazaar, Muhafazacılar Street, Fatih / Istanbul", hoursShort:"Mon – Sat 09:00 – 18:00 · Closed Sunday", brandSub:"JEWELLERY",
+          skip:"Skip to content", location:"Grand Bazaar, Muhafazacılar St. No:12/1, Fatih / Istanbul", addressFull:"Muhafazacılar St. No:12/1 (Kılıççılar Gate), Grand Bazaar, Beyazıt, 34126 Fatih / Istanbul", hoursShort:"Mon – Sat 09:00 – 18:00 · Closed Sunday", brandSub:"JEWELLERY",
           navHome:"Home", navCollections:"Collections", navAbout:"About", navContact:"Visit & Contact", waWrite:"Message on WhatsApp",
           heroEyebrow:"Grand Bazaar · Istanbul", heroFirst:"From the Grand Bazaar", heroSecond:"to the World",
           heroIntro:"Carefully selected gold and jewellery designs — bracelets, rings, necklaces and earrings. Contact us directly for models, weights and current prices.",
@@ -545,9 +565,9 @@
           aboutText1:"Federal Gold is located on Muhafazacılar Street in Istanbul's historic Grand Bazaar, bringing the bazaar's long jewellery tradition together with carefully selected designs.",
           aboutText2:"From bracelets to wedding bands, everyday pieces to special-occasion jewellery, see our pieces in store or ask for photos and prices on WhatsApp.",
           fact1:"Grand Bazaar", fact1Sub:"Fatih / Istanbul", fact2Sub:"Collections", fact3Sub:"Languages",
-          visitEyebrow:"Visit & Contact", visitTitle:"Visit our store", addressLabel:"Address", phoneLabel:"Phone", hoursLabel:"Opening hours",
+          visitEyebrow:"Visit & Contact", visitTitle:"Visit our store", addressLabel:"Address", phoneLabel:"Phone", phoneStore:"Store", phoneMobile:"Mobile · WhatsApp", onlineLabel:"Email & Instagram", hoursLabel:"Opening hours",
           weekdays:"Monday – Saturday", open:"09:00 – 18:00", sunday:"Sunday", closed:"Closed", hoursNote:"Opening hours may vary on public and religious holidays.",
-          directions:"Get Directions", callNow:"Call Now", footerLoc:"Grand Bazaar, Muhafazacılar Street · Fatih / Istanbul", rights:"All rights reserved.",
+          directions:"Get Directions", callNow:"Call Now", footerLoc:"Grand Bazaar, Muhafazacılar St. No:12/1 · Fatih / Istanbul", rights:"All rights reserved.",
           barCall:"Call", barDirections:"Directions", navMarket:"Live Rates",
           marketEyebrow:"Live Market", marketTitle:"Current gold and currency rates", marketLoading:"Loading rates…", marketGold:"Gold", marketFx:"Currency & Silver",
           colItem:"Item", colBuy:"Buy", colSell:"Sell", colChange:"Change", marketUpdated:"Last updated: {time}", marketStale:"Offline · last data: {time}", marketOffline:"Rates unavailable",
