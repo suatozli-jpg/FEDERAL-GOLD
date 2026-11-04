@@ -27,7 +27,7 @@
   <link rel="preload" as="image" href="assets/hero.webp" type="image/webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -47,6 +47,12 @@
       "addressRegion": "İstanbul",
       "addressCountry": "TR"
     },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 41.010833,
+      "longitude": 28.969722
+    },
+    "hasMap": "https://maps.app.goo.gl/YWWBHMbPw9xrshU19",
     "openingHoursSpecification": [{
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -70,6 +76,8 @@
       --muted: #b9b0a2;
       --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
       --sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+      --ease: cubic-bezier(.2, .7, .2, 1);
       --radius: 12px;
       --header-h: 84px;
     }
@@ -83,19 +91,19 @@
     a, button { -webkit-tap-highlight-color: transparent; }
     a:focus-visible, button:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 3px; border-radius: 6px; }
     .container { width: min(100% - 80px, 1280px); margin-inline: auto; }
-    .skip-link { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--gold); color: var(--gold-ink); padding: 10px 16px; border-radius: 8px; font-weight: 700; }
+    .skip-link { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--gold); color: var(--gold-ink); padding: 10px 16px; border-radius: 8px; font-weight: 600; }
     .skip-link:focus { top: 12px; }
-    .eyebrow { margin: 0 0 10px; font-size: 13px; letter-spacing: .32em; color: var(--gold); font-weight: 600; text-transform: uppercase; }
+    .eyebrow { margin: 0 0 8px; font-size: 14px; color: var(--muted); font-weight: 500; }
     .title { margin: 0; font: 500 clamp(36px, 4vw, 52px)/1.1 var(--serif); }
-    .title em { color: var(--gold-light); }
+    .title em { color: var(--gold-light); font-style: normal; }
 
     /* Buttons */
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 10px; font-weight: 700; font-size: 15px; border: 1px solid transparent; transition: background .2s, transform .2s, border-color .2s; }
-    .btn:hover { transform: translateY(-1px); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 10px; font-weight: 600; font-size: 15px; border: 1px solid transparent; transition: background-color .16s var(--ease), border-color .16s var(--ease), transform .12s var(--ease); }
+    .btn:active { transform: scale(.98); }
     .btn svg { width: 18px; height: 18px; }
     .btn-primary { background: var(--gold); color: var(--gold-ink); }
     .btn-primary:hover { background: #e6c178; }
-    .btn-outline { border-color: var(--gold); color: var(--text); background: rgba(11,10,9,.6); font-weight: 600; }
+    .btn-outline { border-color: var(--gold); color: var(--text); background: rgba(11,10,9,.6); font-weight: 500; }
     .btn-outline:hover { background: #241c10; }
 
     /* Topbar */
@@ -118,7 +126,7 @@
     .desktop-nav a[aria-current="true"] { color: var(--text); border-bottom-color: var(--gold); }
     .lang-switch { display: flex; border: 1px solid #4a3d27; border-radius: 10px; padding: 3px; flex: 0 0 auto; }
     .lang-switch button { min-width: 44px; min-height: 38px; border: 0; border-radius: 7px; background: transparent; color: #cfc7b8; font-size: 12px; font-weight: 600; letter-spacing: .06em; }
-    .lang-switch button[aria-pressed="true"] { background: #2a2215; color: var(--gold-light); font-weight: 700; }
+    .lang-switch button[aria-pressed="true"] { background: #2a2215; color: var(--gold-light); font-weight: 600; }
     .header-cta { min-height: 46px; padding: 0 18px; font-size: 14px; }
     .menu-button { display: none; width: 44px; height: 44px; border: 0; background: transparent; color: var(--text); place-items: center; padding: 0; }
     .menu-button svg { width: 24px; height: 24px; }
@@ -128,15 +136,15 @@
     .hero { background-image: linear-gradient(90deg, rgba(11,10,9,.96) 0%, rgba(11,10,9,.82) 32%, rgba(11,10,9,.15) 66%, rgba(11,10,9,0) 100%), url('assets/hero.webp'); background-size: cover; background-position: center; border-bottom: 1px solid var(--line); }
     .hero-content { padding-block: clamp(80px, 9vw, 120px); }
     .hero h1 { margin: 0; max-width: 640px; font: 500 clamp(56px, 6vw, 84px)/1 var(--serif); letter-spacing: -.01em; text-shadow: 0 2px 24px rgba(0,0,0,.6); }
-    .hero h1 em { color: var(--gold-light); }
+    .hero h1 em { color: var(--gold-light); font-style: normal; }
     .hero-lead { margin: 24px 0 0; max-width: 460px; font-size: 18px; line-height: 1.65; color: #e4ddcf; }
     .hero-buttons { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
 
     /* Trust */
     .trust { background: var(--surface); border-bottom: 1px solid var(--line); }
-    .trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-block: 28px; }
+    .trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-block: 24px; }
     .trust-item { display: flex; gap: 16px; align-items: center; }
-    .trust-item svg { width: 36px; height: 36px; color: var(--gold); }
+    .trust-item svg { width: 36px; height: 36px; color: var(--muted); }
     .trust-item b { display: block; font-weight: 600; }
     .trust-item small { display: block; font-size: 14px; color: var(--muted); }
 
@@ -149,11 +157,11 @@
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,207,142,.55); } 70% { box-shadow: 0 0 0 8px rgba(111,207,142,0); } 100% { box-shadow: 0 0 0 0 rgba(111,207,142,0); } }
     .market-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 20px; align-items: start; }
     .rate-card { border: 1px solid var(--line-strong); border-radius: 16px; background: var(--surface); overflow: hidden; }
-    .rate-card h3 { margin: 0; padding: 18px 22px; font: 600 22px/1.2 var(--serif); color: var(--gold-light); border-bottom: 1px solid var(--line-strong); }
+    .rate-card h3 { margin: 0; padding: 16px 20px; font: 600 22px/1.2 var(--serif); color: var(--gold-light); border-bottom: 1px solid var(--line-strong); }
     .rate-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-    .rate-table th { text-align: right; padding: 10px 22px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .rate-table th { text-align: right; padding: 12px 20px; font-size: 13px; color: var(--muted); font-weight: 500; }
     .rate-table th:first-child, .rate-table td:first-child { text-align: left; }
-    .rate-table td { text-align: right; padding: 13px 22px; border-top: 1px solid #241f17; font-size: 15px; white-space: nowrap; }
+    .rate-table td { text-align: right; padding: 12px 20px; border-top: 1px solid #241f17; font-size: 15px; white-space: nowrap; }
     .rate-table td:first-child { font-weight: 600; white-space: normal; }
     .rate-table tbody tr:hover { background: #1a1712; }
     .rate-table .sell { color: var(--text); font-weight: 600; }
@@ -161,11 +169,15 @@
     .chg { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; }
     .chg.up { color: #6fcf8e; } .chg.down { color: #f08a7a; } .chg.flat { color: var(--muted); }
     .chg-inline { display: none; }
+    .rate-name { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    /* Signature: hallmark stamp (ayar · milyem), used only in the rate table and product cards */
+    .stamp { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 4px; border: 1px solid rgba(217,176,98,.38); border-radius: 4px; font: 500 12px/1 var(--mono); color: #d8c08b; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .stamp i { font-style: normal; color: var(--muted); }
     .rate-table tr.flash td { animation: flash 1.2s ease-out; }
     @keyframes flash { from { background: rgba(217,176,98,.18); } to { background: transparent; } }
     .rate-placeholder td { color: var(--muted); font-weight: 400 !important; }
     .market-note { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
-    .market-note a { color: var(--gold-light); text-decoration: underline; text-underline-offset: 3px; }
+    .market-note a { color: var(--text-soft); text-decoration: underline; text-underline-offset: 3px; }
     .market-error { display: none; margin-top: 16px; padding: 14px 18px; border: 1px solid #5a4a2e; border-radius: 10px; color: var(--text-soft); font-size: 14px; }
     .market.is-error .market-error { display: block; }
     .market.is-error .market-grid { display: none; }
@@ -173,47 +185,48 @@
 
     /* Collections */
     .collections { padding-block: 96px; }
-    .section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 40px; }
+    .section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 32px; }
     .section-head p { margin: 0; max-width: 380px; color: var(--muted); font-size: 15px; }
     .category-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
-    .category-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden; background: var(--surface); transition: transform .2s, border-color .2s, box-shadow .2s; }
-    .category-card:hover { transform: translateY(-4px); border-color: #6b5631; box-shadow: 0 16px 40px rgba(0,0,0,.45); }
+    .category-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden; background: var(--surface); transition: border-color .16s var(--ease); }
+    .category-card:hover { border-color: #5a4a2e; }
     .category-photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3.4; object-fit: cover; background: #0d0b09; }
-    .category-body { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 20px; }
-    .category-name { display: block; font: 600 26px/1.1 var(--serif); }
+    .category-body { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; }
+    .category-name { display: block; font: 600 24px/1.1 var(--serif); }
     .category-sub { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
-    .category-cta { font-size: 13px; color: var(--gold-light); font-weight: 600; white-space: nowrap; }
+    .category-cta { font-size: 13px; color: var(--text-soft); font-weight: 500; white-space: nowrap; }
     .disclaimer { margin: 20px 0 0; font-size: 13px; color: var(--muted); }
 
     /* Vitrin (products from data/products.json, managed in Pages CMS) */
     .vitrin { padding-block: 0 96px; }
     .vitrin[hidden] { display: none; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-    .chip { min-height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text-soft); font-size: 14px; font-weight: 600; }
+    .chip { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text-soft); font-size: 14px; font-weight: 500; transition: background-color .16s var(--ease), border-color .16s var(--ease), color .16s var(--ease); }
     .chip:hover { border-color: #6b5631; color: var(--text); }
     .chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--gold-ink); }
     .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
     .product { display: flex; flex-direction: column; border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden; background: var(--surface); }
     .product-img { position: relative; aspect-ratio: 1 / 1; background: #0d0b09; }
     .product-img img { width: 100%; height: 100%; object-fit: cover; }
-    .badge { position: absolute; left: 12px; top: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(11,10,9,.85); border: 1px solid #6b5631; color: var(--gold-light); font-size: 12px; font-weight: 700; letter-spacing: .04em; }
-    .product-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-    .product-cat { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
-    .product-name { margin: 0; font: 600 23px/1.15 var(--serif); overflow-wrap: anywhere; }
-    .product-meta { font-size: 14px; color: var(--muted); }
-    .product-price { margin-top: 6px; font-size: 22px; font-weight: 600; line-height: 1.2; color: var(--gold-light); font-variant-numeric: tabular-nums; }
-    .product-ask { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: 10px; border: 1px solid var(--gold); color: var(--text); font-size: 14px; font-weight: 600; }
+    .badge { position: absolute; left: 12px; top: 12px; padding: 4px 8px; border-radius: 999px; background: rgba(11,10,9,.85); border: 1px solid #6b5631; color: var(--gold-light); font-size: 12px; font-weight: 600; }
+    .product-body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .product-cat { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .product-name { margin: 0; font: 600 24px/1.15 var(--serif); overflow-wrap: anywhere; }
+    .product-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+    .product-price { margin-top: 8px; font-size: 20px; font-weight: 600; line-height: 1.2; color: var(--gold-light); font-variant-numeric: tabular-nums; }
+    .product-ask { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: 10px; border: 1px solid var(--gold); color: var(--text); font-size: 14px; font-weight: 500; transition: background-color .16s var(--ease), transform .12s var(--ease); }
+    .product-ask:active, .chip:active { transform: scale(.98); }
     .product-body > :nth-last-child(2) { margin-bottom: 12px; }
     .product-ask:hover { background: #241c10; }
-    .product-ask svg { width: 17px; height: 17px; color: var(--gold); }
+    .product-ask svg { width: 16px; height: 16px; color: var(--muted); }
 
     /* Services */
     .services { padding-block: 0 96px; }
     .services .title { margin-bottom: 36px; }
     .service-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
     .service-card { border: 1px solid var(--line-strong); border-radius: 14px; background: var(--surface); padding: 28px 24px; }
-    .service-icon { width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; background: #221b10; border: 1px solid #4a3d27; margin-bottom: 20px; }
-    .service-icon svg { width: 26px; height: 26px; color: var(--gold); }
+    .service-icon { width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; background: #1a1713; border: 1px solid var(--line-strong); margin-bottom: 20px; }
+    .service-icon svg { width: 24px; height: 24px; color: var(--text-soft); }
     .service-card h3 { margin: 0 0 8px; font: 600 24px/1.2 var(--serif); }
     .service-card p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
 
@@ -222,9 +235,9 @@
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
     .about-photo { min-height: 440px; border-radius: 16px; border: 1px solid var(--line-strong); background: url('assets/hero.webp') 80% center / cover; }
     .about .title { margin-bottom: 22px; font-size: clamp(34px, 3.6vw, 48px); }
-    .about p { margin: 0 0 16px; color: var(--text-soft); font-size: 17px; line-height: 1.75; }
+    .about p { margin: 0 0 16px; color: var(--text-soft); font-size: 16px; line-height: 1.75; }
     .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; border-top: 1px solid var(--line-strong); padding-top: 24px; margin-top: 32px; }
-    .facts b { display: block; font: 500 34px/1 var(--serif); color: var(--gold-light); }
+    .facts b { display: block; font: 500 32px/1 var(--serif); color: var(--text); }
     .facts span { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; }
 
     /* Visit */
@@ -232,13 +245,13 @@
     .visit .title { margin-bottom: 40px; }
     .visit-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 24px; }
     .visit-card { border: 1px solid var(--line-strong); border-radius: 16px; background: var(--surface); padding: 32px; display: flex; flex-direction: column; }
-    .visit-label { font-size: 13px; letter-spacing: .14em; color: var(--gold); font-weight: 700; text-transform: uppercase; }
-    .visit-value { font-size: 18px; margin: 4px 0 22px; }
+    .visit-label { font-size: 14px; color: var(--muted); font-weight: 500; }
+    .visit-value { font-size: 18px; margin: 4px 0 20px; }
     .visit-value a:hover { color: var(--gold-light); }
     .visit-lines { display: flex; flex-direction: column; gap: 6px; }
     .visit-lines small { font-size: 13px; color: var(--muted); margin-left: 6px; }
     .icon-link { display: inline-flex; align-items: center; gap: 10px; min-height: 32px; }
-    .icon-link svg { width: 20px; height: 20px; color: var(--gold); }
+    .icon-link svg { width: 20px; height: 20px; color: var(--muted); }
     .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; }
     .footer-links .icon-link svg { width: 16px; height: 16px; }
     .hours { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; color: var(--text-soft); margin: 6px 0 4px; }
@@ -251,11 +264,13 @@
     .footer { border-top: 1px solid var(--line); background: var(--surface-2); padding-block: 40px; font-size: 14px; color: var(--muted); }
     .footer-inner { display: flex; flex-wrap: wrap; gap: 16px 40px; align-items: center; justify-content: space-between; }
     .footer-brand { font: 600 22px/1 var(--serif); color: var(--gold); letter-spacing: .06em; }
-    .footer a { color: var(--gold-light); }
+    .footer a { color: var(--text-soft); transition: color .16s var(--ease); }
+    .footer a:hover { color: var(--gold-light); }
 
     /* Floating WhatsApp (desktop) */
-    .floating-whatsapp { position: fixed; right: 24px; bottom: 24px; z-index: 60; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: var(--gold-ink); box-shadow: 0 10px 30px rgba(0,0,0,.5); transition: transform .2s; }
-    .floating-whatsapp:hover { transform: translateY(-3px); }
+    .floating-whatsapp { position: fixed; right: 24px; bottom: 24px; z-index: 60; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: var(--gold-ink); box-shadow: 0 10px 30px rgba(0,0,0,.5); transition: background-color .16s var(--ease), transform .12s var(--ease); }
+    .floating-whatsapp:hover { background: #e6c178; }
+    .floating-whatsapp:active { transform: scale(.96); }
     .floating-whatsapp svg { width: 30px; height: 30px; fill: currentColor; }
 
     .action-bar { display: none; }
@@ -292,23 +307,23 @@
       .action-bar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(11,10,9,.97); border-top: 1px solid var(--line-strong); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
       .action-bar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 56px; border-radius: 10px; font-size: 12px; font-weight: 600; }
       .action-bar svg { width: 22px; height: 22px; color: var(--gold); }
-      .action-bar .is-primary { background: var(--gold); color: var(--gold-ink); font-weight: 700; }
+      .action-bar .is-primary { background: var(--gold); color: var(--gold-ink); font-weight: 600; }
       .action-bar .is-primary svg { color: currentColor; }
     }
     @media (max-width: 640px) {
       .hero { min-height: 480px; min-height: max(460px, calc(100svh - 68px - 82px)); display: flex; align-items: flex-end; background-image: linear-gradient(0deg, #0b0a09 0%, rgba(11,10,9,.9) 34%, rgba(11,10,9,.35) 62%, rgba(11,10,9,.1) 100%), url('assets/hero.webp'); background-position: 72% center; }
       .hero-content { padding-block: 0 32px; }
-      .eyebrow { font-size: 12px; letter-spacing: .3em; }
+      .eyebrow { font-size: 13px; }
       .hero h1 { font-size: clamp(42px, 12.5vw, 52px); line-height: 1.02; }
       .hero-lead { font-size: 16px; margin-top: 14px; }
       .hero-buttons { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 22px; }
-      .trust-grid { grid-template-columns: 1fr; gap: 14px; padding-block: 22px; }
+      .trust-grid { grid-template-columns: 1fr; gap: 16px; padding-block: 24px; }
       .trust-item svg { width: 28px; height: 28px; }
       .market { padding-block: 44px 0; }
       .market-head { margin-bottom: 20px; }
-      .rate-card h3 { padding: 14px 16px; font-size: 20px; }
-      .rate-table th { padding: 8px 12px; font-size: 11px; letter-spacing: .08em; }
-      .rate-table td { padding: 11px 12px; font-size: 14px; }
+      .rate-card h3 { padding: 16px; font-size: 20px; }
+      .rate-table th { padding: 8px 12px; font-size: 12px; }
+      .rate-table td { padding: 12px; font-size: 14px; }
       .rate-table .col-chg { display: none; }
       .chg-inline { display: flex; margin-top: 2px; font-size: 12px; }
       .collections { padding-block: 48px; }
@@ -317,7 +332,7 @@
       .category-grid { gap: 12px; }
       .category-photo { aspect-ratio: 1 / 1; }
       .category-body { display: block; padding: 12px; }
-      .category-name { font-size: 22px; }
+      .category-name { font-size: 20px; }
       .category-sub { display: none; }
       .category-cta { display: block; margin-top: 4px; }
       .about, .visit { padding-block: 48px; }
@@ -328,21 +343,22 @@
       .chip { flex: 0 0 auto; }
       .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
       .product-body { padding: 12px; }
-      .product-name { font-size: 19px; }
+      .product-name { font-size: 20px; }
       .product-meta { font-size: 13px; }
       .product-price { font-size: 18px; }
-      .product-ask { min-height: 44px; font-size: 13px; padding: 0 6px; gap: 6px; white-space: nowrap; }
-      .product-ask svg { width: 15px; height: 15px; }
+      .product-ask { min-height: 44px; font-size: 13px; padding: 0 8px; gap: 8px; white-space: nowrap; }
+      .product-ask svg { width: 16px; height: 16px; }
+      .stamp { font-size: 11px; }
       .services .title { margin-bottom: 22px; }
       .service-grid { grid-template-columns: 1fr; gap: 12px; }
-      .service-card { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; padding: 18px; }
-      .service-icon { grid-row: span 2; margin: 0; width: 46px; height: 46px; }
-      .service-card h3 { font-size: 21px; margin: 0; align-self: end; }
+      .service-card { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; padding: 20px; }
+      .service-icon { grid-row: span 2; margin: 0; width: 48px; height: 48px; }
+      .service-card h3 { font-size: 20px; margin: 0; align-self: end; }
       .service-card p { font-size: 14px; }
       .about-photo { min-height: 220px; }
       .about p { font-size: 16px; }
       .facts { gap: 8px; margin-top: 20px; }
-      .facts b { font-size: 26px; }
+      .facts b { font-size: 24px; }
       .facts span { font-size: 12px; }
       .visit .title { margin-bottom: 22px; }
       .visit-card { padding: 22px; }
@@ -365,7 +381,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .btn, .category-card, .floating-whatsapp { transition: none; }
+      .btn, .category-card, .floating-whatsapp, .chip, .product-ask { transition: none; }
       .live-dot, .rate-table tr.flash td { animation: none; }
     }
   </style>
@@ -404,25 +420,25 @@
         <span class="brand-text"><span class="brand-title">FEDERAL GOLD</span><span class="brand-subtitle" data-i18n="brandSub">KUYUMCULUK</span></span>
       </a>
       <nav class="desktop-nav" aria-label="Ana menü">
-        <a href="#ana" data-i18n="navHome">Ana Sayfa</a>
-        <a href="#piyasa" data-i18n="navMarket">Canlı Kur</a>
+        <a href="#ana" data-i18n="navHome">Ana sayfa</a>
+        <a href="#piyasa" data-i18n="navMarket">Canlı kur</a>
         <a href="#koleksiyonlar" data-i18n="navCollections">Koleksiyonlar</a>
         <a href="#hakkimizda" data-i18n="navAbout">Hakkımızda</a>
-        <a href="#iletisim" data-i18n="navContact">Ziyaret &amp; İletişim</a>
+        <a href="#iletisim" data-i18n="navContact">Ziyaret &amp; iletişim</a>
       </nav>
       <div class="lang-switch" role="group" aria-label="Dil / Language">
         <button type="button" data-lang="tr" aria-pressed="true">TR</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
       </div>
-      <a class="btn btn-primary header-cta wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-chat"/></svg><span data-i18n="waWrite">WhatsApp ile Yazın</span></a>
+      <a class="btn btn-primary header-cta wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-chat"/></svg><span data-i18n="waWrite">WhatsApp ile yazın</span></a>
       <button class="menu-button" id="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menüyü aç"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
     </div>
     <nav class="mobile-menu" id="mobile-menu" aria-label="Mobil menü">
-      <a href="#ana" data-i18n="navHome">Ana Sayfa</a>
-      <a href="#piyasa" data-i18n="navMarket">Canlı Kur</a>
+      <a href="#ana" data-i18n="navHome">Ana sayfa</a>
+      <a href="#piyasa" data-i18n="navMarket">Canlı kur</a>
       <a href="#koleksiyonlar" data-i18n="navCollections">Koleksiyonlar</a>
       <a href="#hakkimizda" data-i18n="navAbout">Hakkımızda</a>
-      <a href="#iletisim" data-i18n="navContact">Ziyaret &amp; İletişim</a>
+      <a href="#iletisim" data-i18n="navContact">Ziyaret &amp; iletişim</a>
     </nav>
   </header>
 
@@ -433,8 +449,8 @@
         <h1><span data-i18n="heroFirst">Kapalıçarşı’dan</span> <em data-i18n="heroSecond">Dünyaya</em></h1>
         <p class="hero-lead" data-i18n="heroIntro">Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.</p>
         <div class="hero-buttons">
-          <a class="btn btn-primary" href="#koleksiyonlar"><span data-i18n="explore">Koleksiyonları İncele</span> <span aria-hidden="true">→</span></a>
-          <a class="btn btn-outline wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" data-i18n="askPrice">Fiyat Sor (WhatsApp)</a>
+          <a class="btn btn-primary" href="#koleksiyonlar"><span data-i18n="explore">Koleksiyonları incele</span> <span aria-hidden="true">→</span></a>
+          <a class="btn btn-outline wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" data-i18n="askPrice">Fiyat sor (WhatsApp)</a>
         </div>
       </div>
     </section>
@@ -451,7 +467,7 @@
       <div class="container">
         <div class="market-head">
           <div>
-            <p class="eyebrow" data-i18n="marketEyebrow">Canlı Piyasa</p>
+            <p class="eyebrow" data-i18n="marketEyebrow">Canlı piyasa</p>
             <h2 class="title" id="market-title" data-i18n="marketTitle">Güncel altın ve döviz kurları</h2>
           </div>
           <p class="market-status" aria-live="polite"><span class="live-dot" aria-hidden="true"></span><span id="market-updated" data-i18n="marketLoading">Kurlar yükleniyor…</span></p>
@@ -465,7 +481,7 @@
             </table>
           </div>
           <div class="rate-card">
-            <h3 data-i18n="marketFx">Döviz &amp; Gümüş</h3>
+            <h3 data-i18n="marketFx">Döviz &amp; gümüş</h3>
             <table class="rate-table">
               <thead><tr><th scope="col" data-i18n="colItem">Cins</th><th scope="col" data-i18n="colBuy">Alış</th><th scope="col" data-i18n="colSell">Satış</th><th scope="col" class="col-chg" data-i18n="colChange">Değişim</th></tr></thead>
               <tbody id="rates-fx"><tr class="rate-placeholder"><td colspan="4" data-i18n="marketLoading">Kurlar yükleniyor…</td></tr></tbody>
@@ -529,22 +545,22 @@
         <div class="service-grid">
           <div class="service-card">
             <span class="service-icon"><svg aria-hidden="true"><use href="#i-truck"/></svg></span>
-            <h3 data-i18n="svc1">Sigortalı Gönderim</h3>
+            <h3 data-i18n="svc1">Sigortalı gönderim</h3>
             <p data-i18n="svc1Text">Siparişleriniz sigortalı olarak, güvenle adresinize ulaştırılır.</p>
           </div>
           <div class="service-card">
             <span class="service-icon"><svg aria-hidden="true"><use href="#i-pen"/></svg></span>
-            <h3 data-i18n="svc2">Özel Sipariş</h3>
+            <h3 data-i18n="svc2">Özel sipariş</h3>
             <p data-i18n="svc2Text">İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.</p>
           </div>
           <div class="service-card">
             <span class="service-icon"><svg aria-hidden="true"><use href="#i-chart"/></svg></span>
-            <h3 data-i18n="svc3">Anlık Fiyat</h3>
+            <h3 data-i18n="svc3">Anlık fiyat</h3>
             <p data-i18n="svc3Text">LBMA bazlı, güne ve ana göre güncel altın fiyatı.</p>
           </div>
           <div class="service-card">
             <span class="service-icon"><svg aria-hidden="true"><use href="#i-card"/></svg></span>
-            <h3 data-i18n="svc4">Ödeme Kolaylığı</h3>
+            <h3 data-i18n="svc4">Ödeme kolaylığı</h3>
             <p data-i18n="svc4Text">Kredi kartı veya havale / EFT (T/T) ile ödeme.</p>
           </div>
         </div>
@@ -570,7 +586,7 @@
 
     <section class="visit" id="iletisim">
       <div class="container">
-        <p class="eyebrow" data-i18n="visitEyebrow">Ziyaret &amp; İletişim</p>
+        <p class="eyebrow" data-i18n="visitEyebrow">Ziyaret &amp; iletişim</p>
         <h2 class="title" data-i18n="visitTitle">Mağazamızı ziyaret edin</h2>
         <div class="visit-grid">
           <div class="visit-card">
@@ -593,12 +609,12 @@
             </div>
             <p class="hours-note" data-i18n="hoursNote">Resmi ve dini bayramlarda çalışma saatleri değişebilir.</p>
             <div class="visit-actions">
-              <a class="btn btn-primary maps-link" href="https://maps.app.goo.gl/YWWBHMbPw9xrshU19" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol Tarifi Al</span></a>
-              <a class="btn btn-outline" href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="callNow">Hemen Ara</span></a>
+              <a class="btn btn-primary maps-link" href="https://maps.app.goo.gl/YWWBHMbPw9xrshU19" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol tarifi al</span></a>
+              <a class="btn btn-outline" href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="callNow">Hemen ara</span></a>
             </div>
           </div>
           <div class="map">
-            <iframe title="Federal Gold konumu — Kapalıçarşı" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Muhafazac%C4%B1lar%20Sk.%20Kapal%C4%B1%20%C3%87ar%C5%9F%C4%B1%20No%3A12%20D%3A1%2C%20Beyaz%C4%B1t%2C%2034126%20Fatih/%C4%B0stanbul&amp;z=17&amp;output=embed"></iframe>
+            <iframe title="Federal Gold konumu — Kapalıçarşı" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=41.010833,28.969722&amp;z=18&amp;hl=tr&amp;output=embed"></iframe>
           </div>
         </div>
       </div>
@@ -621,7 +637,7 @@
   <nav class="action-bar" aria-label="Hızlı işlemler">
     <a href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="barCall">Ara</span></a>
     <a class="is-primary wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-chat"/></svg><span>WhatsApp</span></a>
-    <a class="maps-link" href="https://maps.app.goo.gl/YWWBHMbPw9xrshU19" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="barDirections">Yol Tarifi</span></a>
+    <a class="maps-link" href="https://maps.app.goo.gl/YWWBHMbPw9xrshU19" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="barDirections">Yol tarifi</span></a>
   </nav>
 
   <script>
@@ -629,10 +645,10 @@
       const dictionary = {
         tr: {
           skip:"İçeriğe geç", location:"Kapalıçarşı, Muhafazacılar Sk. No:12/1, Fatih / İstanbul", addressFull:"Beyazıt Mah. Muhafazacılar Sk. No:12/1 (Kılıççılar Kapısı), Kapalıçarşı, 34126 Fatih / İstanbul", hoursShort:"Pzt – Cmt 09:00 – 18:00 · Pazar kapalı", brandSub:"KUYUMCULUK",
-          navHome:"Ana Sayfa", navCollections:"Koleksiyonlar", navAbout:"Hakkımızda", navContact:"Ziyaret & İletişim", waWrite:"WhatsApp ile Yazın",
+          navHome:"Ana sayfa", navCollections:"Koleksiyonlar", navAbout:"Hakkımızda", navContact:"Ziyaret & iletişim", waWrite:"WhatsApp ile yazın",
           heroEyebrow:"Kapalıçarşı · İstanbul", heroFirst:"Kapalıçarşı’dan", heroSecond:"Dünyaya",
           heroIntro:"Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.",
-          explore:"Koleksiyonları İncele", askPrice:"Fiyat Sor (WhatsApp)",
+          explore:"Koleksiyonları incele", askPrice:"Fiyat sor (WhatsApp)",
           trust1:"Kapalıçarşı’da mağaza", trust1Sub:"Gelin, görün, deneyin", trust2:"Seçkin tasarımlar", trust2Sub:"Altın ve mücevher koleksiyonları", trust3:"WhatsApp’tan bilgi", trust3Sub:"Fotoğraf, gram ve fiyat",
           collectionsEyebrow:"Koleksiyonlar", collectionsTitle:"Her an için bir parça", collectionsText:"Bir kategoriye dokunun; WhatsApp’ta o ürün için hazır mesajla yazışma açılsın.",
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
@@ -642,24 +658,24 @@
           catBracelets:"Bilezik", catRings:"Yüzük", catNecklaces:"Kolye", catEarrings:"Küpe", catWatches:"Saat", catOther:"Diğer",
           vitrinRequest:"Merhaba Federal Gold, vitrindeki “{name}”{details} hakkında bilgi alabilir miyim?",
           servicesEyebrow:"Hizmetlerimiz", servicesTitle:"Kapalıçarşı’dan kapınıza",
-          svc1:"Sigortalı Gönderim", svc1Text:"Siparişleriniz sigortalı olarak, güvenle adresinize ulaştırılır.",
-          svc2:"Özel Sipariş", svc2Text:"İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.",
-          svc3:"Anlık Fiyat", svc3Text:"LBMA bazlı, güne ve ana göre güncel altın fiyatı.",
-          svc4:"Ödeme Kolaylığı", svc4Text:"Kredi kartı veya havale / EFT (T/T) ile ödeme.",
+          svc1:"Sigortalı gönderim", svc1Text:"Siparişleriniz sigortalı olarak, güvenle adresinize ulaştırılır.",
+          svc2:"Özel sipariş", svc2Text:"İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.",
+          svc3:"Anlık fiyat", svc3Text:"LBMA bazlı, güne ve ana göre güncel altın fiyatı.",
+          svc4:"Ödeme kolaylığı", svc4Text:"Kredi kartı veya havale / EFT (T/T) ile ödeme.",
           aboutEyebrow:"Hakkımızda", aboutTitle1:"Altın ve mücevherin", aboutTitle2:"zarif dünyası", aboutImg:"Altın kolye ve bilezikler",
           aboutText1:"Federal Gold, İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.",
           aboutText2:"Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazamızda görebilir, WhatsApp üzerinden fotoğraf ve fiyat isteyebilirsiniz.",
           fact1:"Kapalıçarşı", fact1Sub:"Fatih / İstanbul", fact2Sub:"Koleksiyon", fact3Sub:"Hizmet dili",
-          visitEyebrow:"Ziyaret & İletişim", visitTitle:"Mağazamızı ziyaret edin", addressLabel:"Adres", phoneLabel:"Telefon", phoneStore:"Mağaza", phoneMobile:"Cep · WhatsApp", onlineLabel:"E-posta & Instagram", hoursLabel:"Çalışma saatleri",
+          visitEyebrow:"Ziyaret & iletişim", visitTitle:"Mağazamızı ziyaret edin", addressLabel:"Adres", phoneLabel:"Telefon", phoneStore:"Mağaza", phoneMobile:"Cep · WhatsApp", onlineLabel:"E-posta & Instagram", hoursLabel:"Çalışma saatleri",
           weekdays:"Pazartesi – Cumartesi", open:"09:00 – 18:00", sunday:"Pazar", closed:"Kapalı", hoursNote:"Resmi ve dini bayramlarda çalışma saatleri değişebilir.",
-          directions:"Yol Tarifi Al", callNow:"Hemen Ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
-          barCall:"Ara", barDirections:"Yol Tarifi", navMarket:"Canlı Kur",
-          marketEyebrow:"Canlı Piyasa", marketTitle:"Güncel altın ve döviz kurları", marketLoading:"Kurlar yükleniyor…", marketGold:"Altın", marketFx:"Döviz & Gümüş",
+          directions:"Yol tarifi al", callNow:"Hemen ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
+          barCall:"Ara", barDirections:"Yol tarifi", navMarket:"Canlı kur",
+          marketEyebrow:"Canlı piyasa", marketTitle:"Güncel altın ve döviz kurları", marketLoading:"Kurlar yükleniyor…", marketGold:"Altın", marketFx:"Döviz & gümüş",
           colItem:"Cins", colBuy:"Alış", colSell:"Satış", colChange:"Değişim", marketUpdated:"Son güncelleme: {time}", marketStale:"Bağlantı yok · son veri: {time}", marketOffline:"Kurlar alınamadı",
           marketError:"Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.",
           marketNote:"Piyasa verileri bilgi amaçlıdır, dakikada bir yenilenir. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.", marketAsk:"WhatsApp’tan fiyat al",
           topbarGram:"Gram Altın {price}",
-          rGRA:"Gram Altın", rYIA:"22 Ayar Bilezik (gr)", r18:"18 Ayar (gr)", r14:"14 Ayar (gr)", rCEYREK:"Çeyrek Altın", rYARIM:"Yarım Altın", rTAM:"Tam Altın", rCUMHURIYET:"Cumhuriyet Altını", rATA:"Ata Altın",
+          rGRA:"Gram Altın", rYIA:"Bilezik (gr)", r18:"18 ayar (gr)", r14:"14 ayar (gr)", rCEYREK:"Çeyrek Altın", rYARIM:"Yarım Altın", rTAM:"Tam Altın", rCUMHURIYET:"Cumhuriyet Altını", rATA:"Ata Altın",
           rUSD:"Amerikan Doları", rEUR:"Euro", rGBP:"İngiliz Sterlini", rGUMUS:"Gümüş (gr)",
           waMessage:"Merhaba Federal Gold, ürünleriniz hakkında bilgi almak istiyorum.", productRequest:"Merhaba Federal Gold, {product} hakkında bilgi alabilir miyim?",
           productLabel:"{product} — WhatsApp’tan fiyat sor", whatsappLabel:"WhatsApp üzerinden iletişime geç", menuOpen:"Menüyü aç", menuClose:"Menüyü kapat",
@@ -669,10 +685,10 @@
         },
         en: {
           skip:"Skip to content", location:"Grand Bazaar, Muhafazacılar St. No:12/1, Fatih / Istanbul", addressFull:"Muhafazacılar St. No:12/1 (Kılıççılar Gate), Grand Bazaar, Beyazıt, 34126 Fatih / Istanbul", hoursShort:"Mon – Sat 09:00 – 18:00 · Closed Sunday", brandSub:"JEWELLERY",
-          navHome:"Home", navCollections:"Collections", navAbout:"About", navContact:"Visit & Contact", waWrite:"Message on WhatsApp",
+          navHome:"Home", navCollections:"Collections", navAbout:"About", navContact:"Visit & contact", waWrite:"Message on WhatsApp",
           heroEyebrow:"Grand Bazaar · Istanbul", heroFirst:"From the Grand Bazaar", heroSecond:"to the World",
           heroIntro:"Carefully selected gold and jewellery designs — bracelets, rings, necklaces and earrings. Contact us directly for models, weights and current prices.",
-          explore:"Explore Collections", askPrice:"Ask for a Price (WhatsApp)",
+          explore:"Explore collections", askPrice:"Ask for a price (WhatsApp)",
           trust1:"Store in the Grand Bazaar", trust1Sub:"Come, see, try on", trust2:"Selected designs", trust2Sub:"Gold and jewellery collections", trust3:"Info on WhatsApp", trust3Sub:"Photos, weights and prices",
           collectionsEyebrow:"Collections", collectionsTitle:"A piece for every moment", collectionsText:"Tap a category to open a WhatsApp chat with a ready-made message about it.",
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
@@ -681,25 +697,25 @@
           vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", vitrinNew:"NEW", vitrinKarat:"{k}K", vitrinGram:"{g} g",
           catBracelets:"Bracelets", catRings:"Rings", catNecklaces:"Necklaces", catEarrings:"Earrings", catWatches:"Watches", catOther:"Other",
           vitrinRequest:"Hello Federal Gold, could you tell me more about “{name}”{details} from your showcase?",
-          servicesEyebrow:"Our Services", servicesTitle:"From the Grand Bazaar to your door",
-          svc1:"Insured Delivery", svc1Text:"Your order is insured and delivered safely to your address.",
-          svc2:"Special Orders", svc2Text:"Pieces made to order in the model, karat and weight you want.",
-          svc3:"Instant Pricing", svc3Text:"Up-to-the-minute gold prices based on LBMA.",
-          svc4:"Easy Payment", svc4Text:"Pay by credit card or bank transfer (T/T).",
+          servicesEyebrow:"Our services", servicesTitle:"From the Grand Bazaar to your door",
+          svc1:"Insured delivery", svc1Text:"Your order is insured and delivered safely to your address.",
+          svc2:"Special orders", svc2Text:"Pieces made to order in the model, karat and weight you want.",
+          svc3:"Instant pricing", svc3Text:"Up-to-the-minute gold prices based on LBMA.",
+          svc4:"Easy payment", svc4Text:"Pay by credit card or bank transfer (T/T).",
           aboutEyebrow:"About us", aboutTitle1:"The elegant world of", aboutTitle2:"gold and jewellery", aboutImg:"Gold necklace and bracelets",
           aboutText1:"Federal Gold is located on Muhafazacılar Street in Istanbul's historic Grand Bazaar, bringing the bazaar's long jewellery tradition together with carefully selected designs.",
           aboutText2:"From bracelets to wedding bands, everyday pieces to special-occasion jewellery, see our pieces in store or ask for photos and prices on WhatsApp.",
           fact1:"Grand Bazaar", fact1Sub:"Fatih / Istanbul", fact2Sub:"Collections", fact3Sub:"Languages",
-          visitEyebrow:"Visit & Contact", visitTitle:"Visit our store", addressLabel:"Address", phoneLabel:"Phone", phoneStore:"Store", phoneMobile:"Mobile · WhatsApp", onlineLabel:"Email & Instagram", hoursLabel:"Opening hours",
+          visitEyebrow:"Visit & contact", visitTitle:"Visit our store", addressLabel:"Address", phoneLabel:"Phone", phoneStore:"Store", phoneMobile:"Mobile · WhatsApp", onlineLabel:"Email & Instagram", hoursLabel:"Opening hours",
           weekdays:"Monday – Saturday", open:"09:00 – 18:00", sunday:"Sunday", closed:"Closed", hoursNote:"Opening hours may vary on public and religious holidays.",
-          directions:"Get Directions", callNow:"Call Now", footerLoc:"Grand Bazaar, Muhafazacılar St. No:12/1 · Fatih / Istanbul", rights:"All rights reserved.",
-          barCall:"Call", barDirections:"Directions", navMarket:"Live Rates",
-          marketEyebrow:"Live Market", marketTitle:"Current gold and currency rates", marketLoading:"Loading rates…", marketGold:"Gold", marketFx:"Currency & Silver",
+          directions:"Get directions", callNow:"Call now", footerLoc:"Grand Bazaar, Muhafazacılar St. No:12/1 · Fatih / Istanbul", rights:"All rights reserved.",
+          barCall:"Call", barDirections:"Directions", navMarket:"Live rates",
+          marketEyebrow:"Live market", marketTitle:"Current gold and currency rates", marketLoading:"Loading rates…", marketGold:"Gold", marketFx:"Currency & silver",
           colItem:"Item", colBuy:"Buy", colSell:"Sell", colChange:"Change", marketUpdated:"Last updated: {time}", marketStale:"Offline · last data: {time}", marketOffline:"Rates unavailable",
           marketError:"Rates are unavailable right now. Message us on WhatsApp for current prices.",
           marketNote:"Market data is for information only and refreshes every minute. In-store buying/selling prices and craftsmanship fees may differ; contact us for an exact price.", marketAsk:"Get a price on WhatsApp",
           topbarGram:"Gram Gold {price}",
-          rGRA:"Gram Gold", rYIA:"22K Bracelet Gold (g)", r18:"18K Gold (g)", r14:"14K Gold (g)", rCEYREK:"Quarter Gold Coin", rYARIM:"Half Gold Coin", rTAM:"Full Gold Coin", rCUMHURIYET:"Republic Gold Coin", rATA:"Ata Gold Coin",
+          rGRA:"Gram Gold", rYIA:"Bracelet gold (g)", r18:"18K gold (g)", r14:"14K gold (g)", rCEYREK:"Quarter Gold Coin", rYARIM:"Half Gold Coin", rTAM:"Full Gold Coin", rCUMHURIYET:"Republic Gold Coin", rATA:"Ata Gold Coin",
           rUSD:"US Dollar", rEUR:"Euro", rGBP:"British Pound", rGUMUS:"Silver (g)",
           waMessage:"Hello Federal Gold, I would like to know more about your jewellery.", productRequest:"Hello Federal Gold, could you tell me more about your {product}?",
           productLabel:"{product} — ask for a price on WhatsApp", whatsappLabel:"Contact Federal Gold on WhatsApp", menuOpen:"Open menu", menuClose:"Close menu",
@@ -763,6 +779,9 @@
         'rates-gold': [['GRA','rGRA'],['YIA','rYIA'],['18AYARALTIN','r18'],['14AYARALTIN','r14'],['CEYREKALTIN','rCEYREK'],['YARIMALTIN','rYARIM'],['TAMALTIN','rTAM'],['CUMHURIYETALTINI','rCUMHURIYET'],['ATAALTIN','rATA']],
         'rates-fx': [['USD','rUSD'],['EUR','rEUR'],['GBP','rGBP'],['GUMUS','rGUMUS']]
       };
+      // ayar · milyem, shown as a hallmark stamp
+      const HALLMARK = { GRA: ['24', '995'], YIA: ['22', '916'], '18AYARALTIN': ['18', '750'], '14AYARALTIN': ['14', '585'], CEYREKALTIN: ['22', '916'], YARIMALTIN: ['22', '916'], TAMALTIN: ['22', '916'], CUMHURIYETALTINI: ['22', '916'], ATAALTIN: ['22', '916'] };
+      const MILYEM = { '8': '333', '14': '585', '18': '750', '21': '875', '22': '916', '24': '995' };
       const marketEl = $('#piyasa');
       let rates = null, prevSell = {}, ratesTime = '', failed = false;
       const num = (v) => { const n = typeof v === 'number' ? v : parseFloat(String(v).replace(/\./g, '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
@@ -793,7 +812,9 @@
             const sell = num(r.Selling), buy = num(r.Buying), chg = num(r.Change);
             if (!sell) return '';
             const changed = prevSell[key] != null && prevSell[key] !== sell;
-            return `<tr${changed ? ' class="flash"' : ''}><td>${d[label]}<span class="chg-inline">${changeHtml(chg)}</span></td><td class="buy">${money(buy)}</td><td class="sell">${money(sell)}</td><td class="col-chg">${changeHtml(chg)}</td></tr>`;
+            const hm = HALLMARK[key];
+            const stamp = hm ? `<span class="stamp" title="${hm[0]} ayar · ${hm[1]} milyem">${hm[0]}<i>·</i>${hm[1]}</span>` : '';
+            return `<tr${changed ? ' class="flash"' : ''}><td><span class="rate-name">${d[label]}${stamp}</span><span class="chg-inline">${changeHtml(chg)}</span></td><td class="buy">${money(buy)}</td><td class="sell">${money(sell)}</td><td class="col-chg">${changeHtml(chg)}</td></tr>`;
           }).join('');
           if (rows) $('#' + id).innerHTML = rows;
         });
@@ -869,7 +890,17 @@
           if (CAT_KEYS[p.category]) body.append(el('span', 'product-cat', d[CAT_KEYS[p.category]]));
           body.append(el('h3', 'product-name', p.name));
           const meta = [p.karat ? d.vitrinKarat.replace('{k}', p.karat) : '', p.weight ? d.vitrinGram.replace('{g}', p.weight) : ''].filter(Boolean);
-          if (meta.length) body.append(el('span', 'product-meta', meta.join(' · ')));
+          if (meta.length) {
+            const row = el('span', 'product-meta');
+            if (p.karat) {
+              const st = el('span', 'stamp', p.karat);
+              st.title = d.vitrinKarat.replace('{k}', p.karat);
+              if (MILYEM[p.karat]) st.append(el('i', null, '·'), MILYEM[p.karat]);
+              row.append(st);
+            }
+            if (p.weight) row.append(el('span', null, d.vitrinGram.replace('{g}', p.weight)));
+            body.append(row);
+          }
           if (p.price != null) body.append(el('span', 'product-price', typeof p.price === 'number' ? new Intl.NumberFormat(locale(), { maximumFractionDigits: 2 }).format(p.price) + ' ₺' : p.price));
           const details = meta.length ? ` (${meta.join(', ')})` : '';
           const ask = el('a', 'product-ask');
