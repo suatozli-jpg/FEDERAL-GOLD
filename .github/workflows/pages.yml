@@ -20,6 +20,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify site entry point
         run: test -s index.html
+      - name: Validate products data
+        run: python3 -m json.tool data/products.json > /dev/null
+      - name: Optimize product photos for the web
+        # Photos uploaded from phones can be several MB; shrink them in the
+        # deployed copy only (originals stay in the repository).
+        continue-on-error: true
+        run: |
+          command -v mogrify >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick)
+          find assets/products -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) \
+            -exec mogrify -auto-orient -resize '1200x1200>' -strip -quality 82 {} +
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

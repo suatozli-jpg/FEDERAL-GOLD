@@ -185,6 +185,28 @@
     .category-cta { font-size: 13px; color: var(--gold-light); font-weight: 600; white-space: nowrap; }
     .disclaimer { margin: 20px 0 0; font-size: 13px; color: var(--muted); }
 
+    /* Vitrin (products from data/products.json, managed in Pages CMS) */
+    .vitrin { padding-block: 0 96px; }
+    .vitrin[hidden] { display: none; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .chip { min-height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text-soft); font-size: 14px; font-weight: 600; }
+    .chip:hover { border-color: #6b5631; color: var(--text); }
+    .chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--gold-ink); }
+    .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+    .product { display: flex; flex-direction: column; border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden; background: var(--surface); }
+    .product-img { position: relative; aspect-ratio: 1 / 1; background: #0d0b09; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+    .badge { position: absolute; left: 12px; top: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(11,10,9,.85); border: 1px solid #6b5631; color: var(--gold-light); font-size: 12px; font-weight: 700; letter-spacing: .04em; }
+    .product-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .product-cat { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+    .product-name { margin: 0; font: 600 23px/1.15 var(--serif); overflow-wrap: anywhere; }
+    .product-meta { font-size: 14px; color: var(--muted); }
+    .product-price { margin-top: 6px; font-size: 22px; font-weight: 600; line-height: 1.2; color: var(--gold-light); font-variant-numeric: tabular-nums; }
+    .product-ask { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: 10px; border: 1px solid var(--gold); color: var(--text); font-size: 14px; font-weight: 600; }
+    .product-body > :nth-last-child(2) { margin-bottom: 12px; }
+    .product-ask:hover { background: #241c10; }
+    .product-ask svg { width: 17px; height: 17px; color: var(--gold); }
+
     /* Services */
     .services { padding-block: 0 96px; }
     .services .title { margin-bottom: 36px; }
@@ -242,6 +264,7 @@
       .header-cta { display: none; }
     }
     @media (max-width: 1100px) {
+      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .header-inner { gap: 16px; }
       .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -299,6 +322,17 @@
       .category-cta { display: block; margin-top: 4px; }
       .about, .visit { padding-block: 48px; }
       .services { padding-block: 0 48px; }
+      .vitrin { padding-block: 0 48px; }
+      .chips { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
+      .chips::-webkit-scrollbar { display: none; }
+      .chip { flex: 0 0 auto; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .product-body { padding: 12px; }
+      .product-name { font-size: 19px; }
+      .product-meta { font-size: 13px; }
+      .product-price { font-size: 18px; }
+      .product-ask { min-height: 44px; font-size: 13px; padding: 0 6px; gap: 6px; white-space: nowrap; }
+      .product-ask svg { width: 15px; height: 15px; }
       .services .title { margin-bottom: 22px; }
       .service-grid { grid-template-columns: 1fr; gap: 12px; }
       .service-card { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; padding: 18px; }
@@ -320,6 +354,9 @@
     }
     @media (max-width: 640px) {
       .header-inner { gap: 8px; }
+    }
+    @media (max-width: 400px) {
+      .product-ask svg { display: none; }
     }
     @media (max-width: 360px) {
       .brand svg { display: none; }
@@ -471,6 +508,20 @@
       </div>
     </section>
 
+    <section class="vitrin" id="vitrin" aria-labelledby="vitrin-title" hidden>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-i18n="vitrinEyebrow">Vitrin</p>
+            <h2 class="title" id="vitrin-title" data-i18n="vitrinTitle">Mağazamızdan seçmeler</h2>
+          </div>
+          <p data-i18n="vitrinText">Ürüne dokunun; WhatsApp’ta o ürün için hazır mesajla yazışma açılsın.</p>
+        </div>
+        <div class="chips" id="vitrin-chips" role="group" aria-label="Kategori"></div>
+        <div class="product-grid" id="vitrin-grid"></div>
+      </div>
+    </section>
+
     <section class="services" id="hizmetler" aria-labelledby="services-title">
       <div class="container">
         <p class="eyebrow" data-i18n="servicesEyebrow">Hizmetlerimiz</p>
@@ -542,12 +593,12 @@
             </div>
             <p class="hours-note" data-i18n="hoursNote">Resmi ve dini bayramlarda çalışma saatleri değişebilir.</p>
             <div class="visit-actions">
-              <a class="btn btn-primary maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%2C%20Muhafazac%C4%B1lar%20Sk.%20No%3A12/1%2C%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%2C%20Fatih%2C%20%C4%B0stanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol Tarifi Al</span></a>
+              <a class="btn btn-primary maps-link" href="https://maps.app.goo.gl/YWWBHMbPw9xrshU19" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol Tarifi Al</span></a>
               <a class="btn btn-outline" href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="callNow">Hemen Ara</span></a>
             </div>
           </div>
           <div class="map">
-            <iframe title="Federal Gold konumu — Kapalıçarşı" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Muhafazac%C4%B1lar%20Sk.%20No%3A12/1%2C%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%2C%2034126%20Fatih%2C%20%C4%B0stanbul&amp;z=17&amp;output=embed"></iframe>
+            <iframe title="Federal Gold konumu — Kapalıçarşı" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Muhafazac%C4%B1lar%20Sk.%20Kapal%C4%B1%20%C3%87ar%C5%9F%C4%B1%20No%3A12%20D%3A1%2C%20Beyaz%C4%B1t%2C%2034126%20Fatih/%C4%B0stanbul&amp;z=17&amp;output=embed"></iframe>
           </div>
         </div>
       </div>
@@ -570,7 +621,7 @@
   <nav class="action-bar" aria-label="Hızlı işlemler">
     <a href="tel:+905423905967"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="barCall">Ara</span></a>
     <a class="is-primary wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-chat"/></svg><span>WhatsApp</span></a>
-    <a class="maps-link" href="https://www.google.com/maps/search/?api=1&amp;query=Federal%20Gold%2C%20Muhafazac%C4%B1lar%20Sk.%20No%3A12/1%2C%20Kapal%C4%B1%C3%A7ar%C5%9F%C4%B1%2C%20Fatih%2C%20%C4%B0stanbul" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="barDirections">Yol Tarifi</span></a>
+    <a class="maps-link" href="https://maps.app.goo.gl/YWWBHMbPw9xrshU19" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="barDirections">Yol Tarifi</span></a>
   </nav>
 
   <script>
@@ -586,6 +637,10 @@
           collectionsEyebrow:"Koleksiyonlar", collectionsTitle:"Her an için bir parça", collectionsText:"Bir kategoriye dokunun; WhatsApp’ta o ürün için hazır mesajla yazışma açılsın.",
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
           askShort:"Fiyat sor →", imageDisclaimer:"Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.",
+          vitrinEyebrow:"Vitrin", vitrinTitle:"Mağazamızdan seçmeler", vitrinText:"Ürüne dokunun; WhatsApp’ta o ürün için hazır mesajla yazışma açılsın.",
+          vitrinAll:"Tümü", vitrinAsk:"WhatsApp’tan sor", vitrinNew:"YENİ", vitrinKarat:"{k} ayar", vitrinGram:"{g} gr",
+          catBracelets:"Bilezik", catRings:"Yüzük", catNecklaces:"Kolye", catEarrings:"Küpe", catWatches:"Saat", catOther:"Diğer",
+          vitrinRequest:"Merhaba Federal Gold, vitrindeki “{name}”{details} hakkında bilgi alabilir miyim?",
           servicesEyebrow:"Hizmetlerimiz", servicesTitle:"Kapalıçarşı’dan kapınıza",
           svc1:"Sigortalı Gönderim", svc1Text:"Siparişleriniz sigortalı olarak, güvenle adresinize ulaştırılır.",
           svc2:"Özel Sipariş", svc2Text:"İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.",
@@ -622,6 +677,10 @@
           collectionsEyebrow:"Collections", collectionsTitle:"A piece for every moment", collectionsText:"Tap a category to open a WhatsApp chat with a ready-made message about it.",
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
           askShort:"Ask price →", imageDisclaimer:"Images are illustrative. Contact us for stock, weights and current prices.",
+          vitrinEyebrow:"Showcase", vitrinTitle:"Selected pieces from our store", vitrinText:"Tap a piece to open a WhatsApp chat with a ready-made message about it.",
+          vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", vitrinNew:"NEW", vitrinKarat:"{k}K", vitrinGram:"{g} g",
+          catBracelets:"Bracelets", catRings:"Rings", catNecklaces:"Necklaces", catEarrings:"Earrings", catWatches:"Watches", catOther:"Other",
+          vitrinRequest:"Hello Federal Gold, could you tell me more about “{name}”{details} from your showcase?",
           servicesEyebrow:"Our Services", servicesTitle:"From the Grand Bazaar to your door",
           svc1:"Insured Delivery", svc1Text:"Your order is insured and delivered safely to your address.",
           svc2:"Special Orders", svc2Text:"Pieces made to order in the model, karat and weight you want.",
@@ -667,6 +726,7 @@
 
       const whatsappBase = 'https://wa.me/905423905967?text=';
       let renderRates = () => {};
+      let renderVitrin = () => {};
       const applyLanguage = (lang) => {
         const code = lang === 'en' ? 'en' : 'tr';
         const d = dictionary[code];
@@ -687,6 +747,7 @@
         $('meta[property="og:description"]').setAttribute('content', d.ogDesc);
         toggle.setAttribute('aria-label', mobileMenu.classList.contains('open') ? d.menuClose : d.menuOpen);
         renderRates();
+        renderVitrin();
         try { localStorage.setItem('federalgold-language', code); } catch (e) {}
       };
       $$('[data-lang]').forEach(b => b.addEventListener('click', () => applyLanguage(b.dataset.lang)));
@@ -771,6 +832,80 @@
       loadRates();
       setInterval(() => { if (document.visibilityState === 'visible') loadRates(); }, 60000);
       document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') loadRates(); });
+
+      // Vitrin: products are edited in Pages CMS and stored in data/products.json
+      const CAT_KEYS = { bracelets: 'catBracelets', rings: 'catRings', necklaces: 'catNecklaces', earrings: 'catEarrings', watches: 'catWatches', other: 'catOther' };
+      const vitrinEl = $('#vitrin');
+      let products = [], vitrinFilter = 'all';
+      const safeImage = (src) => typeof src === 'string' && /^\/?assets\/[\w\-./]+\.(webp|jpe?g|png|gif|avif)$/i.test(src) && !src.includes('..') ? src.replace(/^\//, '') : null;
+      const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+      renderVitrin = () => {
+        if (!products.length) return;
+        const d = t();
+        const code = document.documentElement.lang;
+        const cats = [...new Set(products.map(p => p.category))].filter(c => CAT_KEYS[c]);
+        if (vitrinFilter !== 'all' && !cats.includes(vitrinFilter)) vitrinFilter = 'all';
+        const chips = $('#vitrin-chips');
+        chips.replaceChildren();
+        chips.setAttribute('aria-label', code === 'en' ? 'Category' : 'Kategori');
+        ['all', ...cats].forEach(c => {
+          const b = el('button', 'chip', c === 'all' ? d.vitrinAll : d[CAT_KEYS[c]]);
+          b.type = 'button';
+          b.setAttribute('aria-pressed', String(c === vitrinFilter));
+          b.addEventListener('click', () => { vitrinFilter = c; renderVitrin(); });
+          chips.append(b);
+        });
+        chips.hidden = cats.length < 2;
+        const grid = $('#vitrin-grid');
+        grid.replaceChildren();
+        products.filter(p => vitrinFilter === 'all' || p.category === vitrinFilter).forEach(p => {
+          const card = el('article', 'product');
+          const media = el('div', 'product-img');
+          const img = el('img');
+          img.src = p.img; img.alt = p.name; img.loading = 'lazy'; img.decoding = 'async'; img.width = 600; img.height = 600;
+          media.append(img);
+          if (p.isNew) media.append(el('span', 'badge', d.vitrinNew));
+          const body = el('div', 'product-body');
+          if (CAT_KEYS[p.category]) body.append(el('span', 'product-cat', d[CAT_KEYS[p.category]]));
+          body.append(el('h3', 'product-name', p.name));
+          const meta = [p.karat ? d.vitrinKarat.replace('{k}', p.karat) : '', p.weight ? d.vitrinGram.replace('{g}', p.weight) : ''].filter(Boolean);
+          if (meta.length) body.append(el('span', 'product-meta', meta.join(' · ')));
+          if (p.price != null) body.append(el('span', 'product-price', typeof p.price === 'number' ? new Intl.NumberFormat(locale(), { maximumFractionDigits: 2 }).format(p.price) + ' ₺' : p.price));
+          const details = meta.length ? ` (${meta.join(', ')})` : '';
+          const ask = el('a', 'product-ask');
+          ask.href = whatsappBase + encodeURIComponent(d.vitrinRequest.replace('{name}', p.name).replace('{details}', details));
+          ask.target = '_blank'; ask.rel = 'noopener noreferrer';
+          ask.setAttribute('aria-label', `${p.name} — ${d.vitrinAsk}`);
+          ask.insertAdjacentHTML('afterbegin', '<svg aria-hidden="true"><use href="#i-chat"/></svg>');
+          ask.append(d.vitrinAsk);
+          body.append(ask);
+          card.append(media, body);
+          grid.append(card);
+        });
+        vitrinEl.hidden = false;
+      };
+      fetch('data/products.json', { cache: 'no-cache' })
+        .then(r => r.ok ? r.json() : [])
+        .then(list => {
+          products = (Array.isArray(list) ? list : []).map(p => {
+            if (!p || typeof p !== 'object') return null;
+            const name = String(p.name || '').trim().slice(0, 120);
+            const img = safeImage(p.image);
+            if (!name || !img) return null;
+            const priceNum = typeof p.price === 'number' && p.price > 0 ? p.price : null;
+            const priceStr = typeof p.price === 'string' && p.price.trim() ? p.price.trim().slice(0, 40) : null;
+            return {
+              name, img,
+              category: String(p.category || ''),
+              karat: String(p.karat || '').trim().slice(0, 10),
+              weight: String(p.weight || '').trim().slice(0, 20),
+              price: priceNum ?? priceStr,
+              isNew: p.isNew === true
+            };
+          }).filter(Boolean);
+          renderVitrin();
+        })
+        .catch(() => {});
 
       // Highlight the nav link of the section in view
       const navLinks = $$('.desktop-nav a');
