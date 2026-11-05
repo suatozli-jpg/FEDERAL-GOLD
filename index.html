@@ -108,6 +108,41 @@
         "closes": "18:00"
       }
     ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "JewelryStore",
+    "name": "Federal Gold Van",
+    "url": "https://federalgold.org/",
+    "image": "https://federalgold.org/assets/hero.webp",
+    "telephone": "+905324421784",
+    "parentOrganization": {
+      "@type": "Organization",
+      "name": "Federal Gold Sarrafiye ve Kuyumculuk Tic. San. Ltd. Şti."
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Cumhuriyet Caddesi, Değer İş Merkezi Kat: 3 No: 6",
+      "postalCode": "65130",
+      "addressLocality": "Van",
+      "addressRegion": "Van",
+      "addressCountry": "TR"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      }
+    ]
   }
 ]
   </script>
@@ -289,7 +324,8 @@
     /* About */
     .about { background: var(--surface); border-block: 1px solid var(--line); padding-block: 96px; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-    .about-photo { min-height: 440px; border-radius: 16px; border: 1px solid var(--line-strong); background: url('assets/hero.webp') 80% center / cover; }
+    .about-photo { position: relative; margin: 0; border-radius: 16px; overflow: hidden; border: 1px solid var(--line-strong); aspect-ratio: 1 / 1; }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
     .about .title { margin-bottom: 22px; font-size: clamp(34px, 3.6vw, 48px); }
     .about p { margin: 0 0 16px; color: var(--text-soft); font-size: 16px; line-height: 1.75; }
     .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; border-top: 1px solid var(--line-strong); padding-top: 24px; margin-top: 32px; }
@@ -299,11 +335,13 @@
     /* Visit */
     .visit { padding-block: 96px; }
     .visit .title { margin-bottom: 40px; }
-    .visit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+    .visit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: stretch; }
+    .store-photo { margin: -32px -32px 24px; aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 1px solid var(--line-strong); }
+    .store-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
     .store-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--line-strong); }
     .store-head h3 { margin: 0; font: 500 32px/1.1 var(--serif); }
     .store-tag { font-size: 14px; color: var(--muted); }
-    .visit-card { border: 1px solid var(--line-strong); border-radius: 16px; background: var(--surface); padding: 32px; display: flex; flex-direction: column; }
+    .visit-card { border: 1px solid var(--line-strong); border-radius: 16px; background: var(--surface); padding: 32px; display: flex; flex-direction: column; overflow: hidden; }
     .visit-label { font-size: 14px; color: var(--muted); font-weight: 500; }
     .visit-value { font-size: 18px; margin: 4px 0 20px; }
     .visit-value a:hover { color: var(--gold-light); }
@@ -361,7 +399,7 @@
       .mobile-menu a:hover { background: #1d170e; }
       .about-grid, .visit-grid { grid-template-columns: 1fr; gap: 32px; }
       .market-grid { grid-template-columns: 1fr; }
-      .about-photo { min-height: 300px; }
+      .about-photo { aspect-ratio: 1 / 1; max-width: 520px; }
       .floating-whatsapp { display: none; }
       body { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
       .action-bar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: rgba(11,10,9,.97); border-top: 1px solid var(--line-strong); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
@@ -418,13 +456,14 @@
       .service-icon { grid-row: span 2; margin: 0; width: 48px; height: 48px; }
       .service-card h3 { font-size: 20px; margin: 0; align-self: end; }
       .service-card p { font-size: 14px; }
-      .about-photo { min-height: 220px; }
+      .about-photo { aspect-ratio: 1 / 1; max-width: 520px; }
       .about p { font-size: 16px; }
       .facts { gap: 8px; margin-top: 20px; }
       .facts b { font-size: 24px; }
       .facts span { font-size: 12px; }
       .visit .title { margin-bottom: 22px; }
       .visit-card { padding: 22px; }
+      .store-photo { margin: -22px -22px 20px; }
       .visit-value { font-size: 16px; }
       .visit-actions .btn { flex: 1 1 140px; white-space: nowrap; padding: 0 14px; }
       .map, .map iframe { min-height: 220px; }
@@ -522,7 +561,7 @@
       <div class="container trust-grid">
         <div class="trust-item"><svg aria-hidden="true"><use href="#i-home"/></svg><div><b data-i18n="trust1">Kapalıçarşı’da mağaza</b><small data-i18n="trust1Sub">Gelin, görün, deneyin</small></div></div>
         <div class="trust-item"><svg aria-hidden="true"><use href="#i-gem"/></svg><div><b data-i18n="trust2">Seçkin tasarımlar</b><small data-i18n="trust2Sub">Altın ve mücevher koleksiyonları</small></div></div>
-        <div class="trust-item"><svg aria-hidden="true"><use href="#i-pin"/></svg><div><b data-i18n="trust3">İki şube</b><small data-i18n="trust3Sub">Kapalıçarşı · Şemdinli</small></div></div>
+        <div class="trust-item"><svg aria-hidden="true"><use href="#i-pin"/></svg><div><b data-i18n="trust3">Üç şube</b><small data-i18n="trust3Sub">Kapalıçarşı · Şemdinli · Van</small></div></div>
       </div>
     </section>
 
@@ -632,14 +671,14 @@
 
     <section class="about" id="hakkimizda">
       <div class="container about-grid">
-        <div class="about-photo" role="img" aria-label="Altın kolye ve bilezikler" data-i18n-aria="aboutImg"></div>
+        <figure class="about-photo founder-photo"><img src="assets/founder.webp" width="750" height="719" alt="Apo Kaya" loading="lazy"></figure>
         <div>
           <p class="eyebrow" data-i18n="aboutEyebrow">Hakkımızda</p>
           <h2 class="title"><span data-i18n="aboutTitle1">Altın ve mücevherin</span> <em data-i18n="aboutTitle2">zarif dünyası</em></h2>
-          <p data-i18n="aboutText1">Federal Gold, İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.</p>
-          <p data-i18n="aboutText2">Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazamızda görebilir, WhatsApp üzerinden fotoğraf ve fiyat isteyebilirsiniz.</p>
+          <p data-i18n="aboutText1">Federal Gold, merkez mağazasıyla İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta; şubeleriyle Şemdinli ve Van’da hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.</p>
+          <p data-i18n="aboutText2">Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazalarımızda yakından görebilirsiniz.</p>
           <div class="facts">
-            <div><b data-i18n="fact1">Kapalıçarşı</b><span data-i18n="fact1Sub">Fatih / İstanbul</span></div>
+            <div><b>3</b><span data-i18n="fact1Sub">Şube</span></div>
             <div><b>4</b><span data-i18n="fact2Sub">Koleksiyon</span></div>
             <div><b>TR · EN</b><span data-i18n="fact3Sub">Hizmet dili</span></div>
           </div>
@@ -653,6 +692,7 @@
         <h2 class="title" data-i18n="visitTitle">Mağazalarımızı ziyaret edin</h2>
         <div class="visit-grid">
           <article class="visit-card">
+            <figure class="store-photo"><img src="assets/store-kapalicarsi.webp" width="840" height="1120" alt="Federal Gold Kapalıçarşı mağazasının vitrini" data-i18n-alt="aboutImg" loading="lazy"></figure>
             <header class="store-head"><h3 data-i18n="store1Name">Kapalıçarşı</h3><span class="store-tag" data-i18n="store1Tag">Merkez · İstanbul</span></header>
             <span class="visit-label" data-i18n="addressLabel">Adres</span>
             <span class="visit-value" data-i18n="addressFull">Beyazıt Mah. Muhafazacılar Sk. No:12/1 (Kılıççılar Kapısı), Kapalıçarşı, 34126 Fatih / İstanbul</span>
@@ -706,6 +746,28 @@
               <iframe title="Federal Gold 2 Şemdinli konumu" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Cumhuriyet%20Caddesi%2046/A%2C%20%C5%9Eemdinli%2C%20Hakkari&amp;z=16&amp;hl=tr&amp;output=embed"></iframe>
             </div>
           </article>
+          <article class="visit-card">
+            <header class="store-head"><h3 data-i18n="store3Name">Van</h3><span class="store-tag" data-i18n="store3Tag">Şube · Van</span></header>
+            <span class="visit-label" data-i18n="addressLabel">Adres</span>
+            <span class="visit-value" data-i18n="addressFull3">Cumhuriyet Caddesi, Değer İş Merkezi Kat: 3 No: 6, 65130 Van</span>
+            <span class="visit-label" data-i18n="phoneLabel">Telefon</span>
+            <span class="visit-value visit-lines">
+              <span><a href="tel:+905324421784">+90 532 442 17 84</a> <small data-i18n="phoneMobile">Cep · WhatsApp</small></span>
+            </span>
+            <span class="visit-label" data-i18n="hoursLabel">Çalışma saatleri</span>
+            <div class="hours">
+              <span data-i18n="weekdays">Pazartesi – Cumartesi</span><span data-i18n="open">09:00 – 18:00</span>
+              <span data-i18n="sunday">Pazar</span><span data-i18n="closed">Kapalı</span>
+            </div>
+            <p class="hours-note" data-i18n="hoursNote">Resmi ve dini bayramlarda çalışma saatleri değişebilir.</p>
+            <div class="visit-actions">
+              <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&amp;query=De%C4%9Fer%20%C4%B0%C5%9F%20Merkezi%2C%20Cumhuriyet%20Caddesi%2C%20Van" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="directions">Yol tarifi al</span></a>
+              <a class="btn btn-outline" href="tel:+905324421784"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="callNow">Hemen ara</span></a>
+            </div>
+            <div class="map">
+              <iframe title="Federal Gold Van konumu" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=De%C4%9Fer%20%C4%B0%C5%9F%20Merkezi%2C%20Cumhuriyet%20Caddesi%2C%20Van&amp;z=17&amp;hl=tr&amp;output=embed"></iframe>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -714,8 +776,8 @@
   <footer class="footer">
     <div class="container footer-inner">
       <img class="footer-logo" src="assets/logo-full.webp" width="480" height="289" alt="Federal Gold" loading="lazy">
-      <span class="footer-stores"><span data-i18n="footerLoc">Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul</span><span data-i18n="footerLoc2">Cumhuriyet Cd. No:46/A · Şemdinli / Hakkari</span></span>
-      <span class="footer-links"><a href="tel:+902125117428">+90 212 511 74 28</a><a href="tel:+905423905967">+90 542 390 59 67</a><a href="tel:+905494050500">+90 549 405 05 00</a><a href="mailto:federalgold@hotmail.com">federalgold@hotmail.com</a><a class="icon-link" href="https://www.instagram.com/federalgoldd/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @federalgoldd"><svg aria-hidden="true"><use href="#i-instagram"/></svg>@federalgoldd</a><a class="icon-link" href="https://www.instagram.com/federal_goldd2/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @federal_goldd2"><svg aria-hidden="true"><use href="#i-instagram"/></svg>@federal_goldd2</a></span>
+      <span class="footer-stores"><span data-i18n="footerLoc">Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul</span><span data-i18n="footerLoc2">Cumhuriyet Cd. No:46/A · Şemdinli / Hakkari</span><span data-i18n="footerLoc3">Değer İş Merkezi Kat:3 No:6, Cumhuriyet Cd. · Van</span></span>
+      <span class="footer-links"><a href="tel:+902125117428">+90 212 511 74 28</a><a href="tel:+905423905967">+90 542 390 59 67</a><a href="tel:+905494050500">+90 549 405 05 00</a><a href="tel:+905324421784">+90 532 442 17 84</a><a href="mailto:federalgold@hotmail.com">federalgold@hotmail.com</a><a class="icon-link" href="https://www.instagram.com/federalgoldd/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @federalgoldd"><svg aria-hidden="true"><use href="#i-instagram"/></svg>@federalgoldd</a><a class="icon-link" href="https://www.instagram.com/federal_goldd2/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @federal_goldd2"><svg aria-hidden="true"><use href="#i-instagram"/></svg>@federal_goldd2</a></span>
       <span>© <span id="year">2026</span> Federal Gold Sarrafiye ve Kuyumculuk Tic. San. Ltd. Şti. · <span data-i18n="rights">Tüm hakları saklıdır.</span></span>
     </div>
   </footer>
@@ -739,7 +801,7 @@
           heroEyebrow:"Kapalıçarşı · İstanbul", heroFirst:"Kapalıçarşı’dan", heroSecond:"Dünyaya",
           heroIntro:"Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.",
           explore:"Koleksiyonları incele", askPrice:"Fiyat sor (WhatsApp)",
-          trust1:"Kapalıçarşı’da mağaza", trust1Sub:"Gelin, görün, deneyin", trust2:"Seçkin tasarımlar", trust2Sub:"Altın ve mücevher koleksiyonları", trust3:"İki şube", trust3Sub:"Kapalıçarşı · Şemdinli",
+          trust1:"Kapalıçarşı’da mağaza", trust1Sub:"Gelin, görün, deneyin", trust2:"Seçkin tasarımlar", trust2Sub:"Altın ve mücevher koleksiyonları", trust3:"Üç şube", trust3Sub:"Kapalıçarşı · Şemdinli · Van",
           collectionsEyebrow:"Koleksiyonlar", collectionsTitle:"Her an için bir parça", collectionsText:"Bir kategoriye dokunun; WhatsApp’ta o ürün için hazır mesajla yazışma açılsın.",
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
           askShort:"Fiyat sor →", imageDisclaimer:"Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.",
@@ -752,11 +814,11 @@
           svc2:"Özel sipariş", svc2Text:"İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.",
           svc3:"Anlık fiyat", svc3Text:"LBMA bazlı, güne ve ana göre güncel altın fiyatı.",
           svc4:"Ödeme kolaylığı", svc4Text:"Kredi kartı veya havale / EFT (T/T) ile ödeme.",
-          aboutEyebrow:"Hakkımızda", aboutTitle1:"Altın ve mücevherin", aboutTitle2:"zarif dünyası", aboutImg:"Altın kolye ve bilezikler",
-          aboutText1:"Federal Gold, İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.",
-          aboutText2:"Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazamızda görebilir, WhatsApp üzerinden fotoğraf ve fiyat isteyebilirsiniz.",
-          fact1:"Kapalıçarşı", fact1Sub:"Fatih / İstanbul", fact2Sub:"Koleksiyon", fact3Sub:"Hizmet dili",
-          visitEyebrow:"Ziyaret & iletişim", visitTitle:"Mağazalarımızı ziyaret edin", store1Name:"Kapalıçarşı", store1Tag:"Merkez · İstanbul", store2Name:"Şemdinli", store2Tag:"Federal Gold 2 · Hakkari", addressFull2:"Cumhuriyet Caddesi No:46/A, Şemdinli / Hakkari",  footerLoc2:"Cumhuriyet Cd. No:46/A · Şemdinli / Hakkari", addressLabel:"Adres", phoneLabel:"Telefon", phoneStore:"Mağaza", phoneMobile:"Cep · WhatsApp", onlineLabel:"E-posta & Instagram", hoursLabel:"Çalışma saatleri",
+          aboutEyebrow:"Hakkımızda", aboutTitle1:"Altın ve mücevherin", aboutTitle2:"zarif dünyası", aboutImg:"Federal Gold Kapalıçarşı mağazasının vitrini",
+          aboutText1:"Federal Gold, merkez mağazasıyla İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta; şubeleriyle Şemdinli ve Van’da hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.",
+          aboutText2:"Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazalarımızda yakından görebilirsiniz.",
+          fact1Sub:"Şube", fact2Sub:"Koleksiyon", fact3Sub:"Hizmet dili",
+          visitEyebrow:"Ziyaret & iletişim", visitTitle:"Mağazalarımızı ziyaret edin", store3Name:"Van", store3Tag:"Şube · Van", addressFull3:"Cumhuriyet Caddesi, Değer İş Merkezi Kat: 3 No: 6, 65130 Van", footerLoc3:"Değer İş Merkezi Kat:3 No:6, Cumhuriyet Cd. · Van", store1Name:"Kapalıçarşı", store1Tag:"Merkez · İstanbul", store2Name:"Şemdinli", store2Tag:"Federal Gold 2 · Hakkari", addressFull2:"Cumhuriyet Caddesi No:46/A, Şemdinli / Hakkari",  footerLoc2:"Cumhuriyet Cd. No:46/A · Şemdinli / Hakkari", addressLabel:"Adres", phoneLabel:"Telefon", phoneStore:"Mağaza", phoneMobile:"Cep · WhatsApp", onlineLabel:"E-posta & Instagram", hoursLabel:"Çalışma saatleri",
           weekdays:"Pazartesi – Cumartesi", open:"09:00 – 18:00", sunday:"Pazar", closed:"Kapalı", hoursNote:"Resmi ve dini bayramlarda çalışma saatleri değişebilir.",
           directions:"Yol tarifi al", callNow:"Hemen ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
           barCall:"Ara", barDirections:"Yol tarifi", navMarket:"Canlı kur",
@@ -779,7 +841,7 @@
           heroEyebrow:"Grand Bazaar · Istanbul", heroFirst:"From the Grand Bazaar", heroSecond:"to the World",
           heroIntro:"Carefully selected gold and jewellery designs — bracelets, rings, necklaces and earrings. Contact us directly for models, weights and current prices.",
           explore:"Explore collections", askPrice:"Ask for a price (WhatsApp)",
-          trust1:"Store in the Grand Bazaar", trust1Sub:"Come, see, try on", trust2:"Selected designs", trust2Sub:"Gold and jewellery collections", trust3:"Two stores", trust3Sub:"Grand Bazaar · Şemdinli",
+          trust1:"Store in the Grand Bazaar", trust1Sub:"Come, see, try on", trust2:"Selected designs", trust2Sub:"Gold and jewellery collections", trust3:"Three stores", trust3Sub:"Grand Bazaar · Şemdinli · Van",
           collectionsEyebrow:"Collections", collectionsTitle:"A piece for every moment", collectionsText:"Tap a category to open a WhatsApp chat with a ready-made message about it.",
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
           askShort:"Ask price →", imageDisclaimer:"Images are illustrative. Contact us for stock, weights and current prices.",
@@ -792,11 +854,11 @@
           svc2:"Special orders", svc2Text:"Pieces made to order in the model, karat and weight you want.",
           svc3:"Instant pricing", svc3Text:"Up-to-the-minute gold prices based on LBMA.",
           svc4:"Easy payment", svc4Text:"Pay by credit card or bank transfer (T/T).",
-          aboutEyebrow:"About us", aboutTitle1:"The elegant world of", aboutTitle2:"gold and jewellery", aboutImg:"Gold necklace and bracelets",
-          aboutText1:"Federal Gold is located on Muhafazacılar Street in Istanbul's historic Grand Bazaar, bringing the bazaar's long jewellery tradition together with carefully selected designs.",
-          aboutText2:"From bracelets to wedding bands, everyday pieces to special-occasion jewellery, see our pieces in store or ask for photos and prices on WhatsApp.",
-          fact1:"Grand Bazaar", fact1Sub:"Fatih / Istanbul", fact2Sub:"Collections", fact3Sub:"Languages",
-          visitEyebrow:"Visit & contact", visitTitle:"Visit our stores", store1Name:"Grand Bazaar", store1Tag:"Main store · Istanbul", store2Name:"Şemdinli", store2Tag:"Federal Gold 2 · Hakkari", addressFull2:"Cumhuriyet Street No:46/A, Şemdinli / Hakkari",  footerLoc2:"Cumhuriyet St. No:46/A · Şemdinli / Hakkari", addressLabel:"Address", phoneLabel:"Phone", phoneStore:"Store", phoneMobile:"Mobile · WhatsApp", onlineLabel:"Email & Instagram", hoursLabel:"Opening hours",
+          aboutEyebrow:"About us", aboutTitle1:"The elegant world of", aboutTitle2:"gold and jewellery", aboutImg:"Shop window of Federal Gold in the Grand Bazaar",
+          aboutText1:"Federal Gold has its main store on Muhafazacılar Street in Istanbul's historic Grand Bazaar, with branches in Şemdinli and Van. We bring the bazaar's long jewellery tradition together with carefully selected designs.",
+          aboutText2:"From bracelets to wedding bands, everyday pieces to special-occasion jewellery, you can see our pieces up close in our stores.",
+          fact1Sub:"Stores", fact2Sub:"Collections", fact3Sub:"Languages",
+          visitEyebrow:"Visit & contact", visitTitle:"Visit our stores", store3Name:"Van", store3Tag:"Branch · Van", addressFull3:"Cumhuriyet Street, Değer Business Centre Floor 3 No 6, 65130 Van", footerLoc3:"Değer Business Centre Floor 3 No 6, Cumhuriyet St. · Van", store1Name:"Grand Bazaar", store1Tag:"Main store · Istanbul", store2Name:"Şemdinli", store2Tag:"Federal Gold 2 · Hakkari", addressFull2:"Cumhuriyet Street No:46/A, Şemdinli / Hakkari",  footerLoc2:"Cumhuriyet St. No:46/A · Şemdinli / Hakkari", addressLabel:"Address", phoneLabel:"Phone", phoneStore:"Store", phoneMobile:"Mobile · WhatsApp", onlineLabel:"Email & Instagram", hoursLabel:"Opening hours",
           weekdays:"Monday – Saturday", open:"09:00 – 18:00", sunday:"Sunday", closed:"Closed", hoursNote:"Opening hours may vary on public and religious holidays.",
           directions:"Get directions", callNow:"Call now", footerLoc:"Grand Bazaar, Muhafazacılar St. No:12/1 · Fatih / Istanbul", rights:"All rights reserved.",
           barCall:"Call", barDirections:"Directions", navMarket:"Live rates",
@@ -839,6 +901,7 @@
         document.documentElement.lang = code;
         $$('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if (d[k]) el.textContent = d[k]; });
         $$('[data-i18n-aria]').forEach(el => { const k = el.dataset.i18nAria; if (d[k]) el.setAttribute('aria-label', d[k]); });
+        $$('[data-i18n-alt]').forEach(el => { const k = el.dataset.i18nAlt; if (d[k]) el.setAttribute('alt', d[k]); });
         $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === code)));
         $$('.wa-link').forEach(a => { a.href = whatsappBase + encodeURIComponent(d.waMessage); });
         $$('.product-wa').forEach(a => {
@@ -1029,15 +1092,16 @@
         const grid = $('#vitrin-grid');
         grid.replaceChildren();
         products.filter(p => vitrinFilter === 'all' || p.category === vitrinFilter).forEach(p => {
+          const title = code === 'en' && p.nameEn ? p.nameEn : p.name;
           const card = el('article', 'product');
           const media = el('div', 'product-img');
           const img = el('img');
-          img.src = p.img; img.alt = p.name; img.loading = 'lazy'; img.decoding = 'async'; img.width = 600; img.height = 600;
+          img.src = p.img; img.alt = title; img.loading = 'lazy'; img.decoding = 'async'; img.width = 600; img.height = 600;
           media.append(img);
           if (p.isNew) media.append(el('span', 'badge', d.vitrinNew));
           const body = el('div', 'product-body');
           if (CAT_KEYS[p.category]) body.append(el('span', 'product-cat', d[CAT_KEYS[p.category]]));
-          body.append(el('h3', 'product-name', p.name));
+          body.append(el('h3', 'product-name', title));
           const meta = [p.karat ? d.vitrinKarat.replace('{k}', p.karat) : '', p.weight ? d.vitrinGram.replace('{g}', p.weight) : ''].filter(Boolean);
           if (meta.length) {
             const row = el('span', 'product-meta');
@@ -1053,9 +1117,9 @@
           if (p.price != null) body.append(el('span', 'product-price', typeof p.price === 'number' ? new Intl.NumberFormat(locale(), { maximumFractionDigits: 2 }).format(p.price) + ' ₺' : p.price));
           const details = meta.length ? ` (${meta.join(', ')})` : '';
           const ask = el('a', 'product-ask');
-          ask.href = whatsappBase + encodeURIComponent(d.vitrinRequest.replace('{name}', p.name).replace('{details}', details));
+          ask.href = whatsappBase + encodeURIComponent(d.vitrinRequest.replace('{name}', title).replace('{details}', details));
           ask.target = '_blank'; ask.rel = 'noopener noreferrer';
-          ask.setAttribute('aria-label', `${p.name} — ${d.vitrinAsk}`);
+          ask.setAttribute('aria-label', `${title} — ${d.vitrinAsk}`);
           ask.append(d.vitrinAsk);
           body.append(ask);
           card.append(media, body);
@@ -1069,12 +1133,13 @@
           products = (Array.isArray(list) ? list : []).map(p => {
             if (!p || typeof p !== 'object') return null;
             const name = String(p.name || '').trim().slice(0, 120);
+            const nameEn = String(p.nameEn || '').trim().slice(0, 120);
             const img = safeImage(p.image);
             if (!name || !img) return null;
             const priceNum = typeof p.price === 'number' && p.price > 0 ? p.price : null;
             const priceStr = typeof p.price === 'string' && p.price.trim() ? p.price.trim().slice(0, 40) : null;
             return {
-              name, img,
+              name, nameEn, img,
               category: String(p.category || ''),
               karat: String(p.karat || '').trim().slice(0, 10),
               weight: String(p.weight || '').trim().slice(0, 20),

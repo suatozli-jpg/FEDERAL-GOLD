@@ -19,6 +19,9 @@ content:
         label: Ürün adı
         type: string
         required: true
+      - name: nameEn
+        label: İngilizce ad (isteğe bağlı, site EN'deyken görünür)
+        type: string
       - name: image
         label: Fotoğraf
         type: image
