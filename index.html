@@ -292,6 +292,7 @@
     .category-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
     .category-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden; background: var(--surface); transition: border-color .16s var(--ease); }
     .category-card:hover { border-color: #5a4a2e; }
+    button.category-card { width: 100%; padding: 0; font: inherit; color: inherit; text-align: left; cursor: zoom-in; }
     .category-photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3.4; object-fit: cover; background: #0d0b09; }
     .category-body { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; }
     .category-name { display: block; font: 600 24px/1.1 var(--serif); }
@@ -603,7 +604,7 @@
         <p class="hero-lead" data-i18n="heroIntro">Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.</p>
         <div class="hero-buttons">
           <a class="btn btn-primary" href="#koleksiyonlar"><span data-i18n="explore">Koleksiyonları incele</span> <span aria-hidden="true">→</span></a>
-          <a class="btn btn-outline wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" data-i18n="askPrice">Fiyat sor (WhatsApp)</a>
+          <a class="btn btn-outline wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" data-i18n="askPrice">Detaylı bilgi için</a>
         </div>
       </div>
     </section>
@@ -656,22 +657,22 @@
           <p data-i18n="collectionsText">Günlük kullanım, düğün ve hediye için.</p>
         </div>
         <div class="category-grid">
-          <a class="category-card product-wa" data-product="bracelets" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
+          <button type="button" class="category-card" data-product="bracelets">
             <img class="category-photo" src="assets/bracelets.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
             <span class="category-body"><span><span class="category-name" data-i18n="bracelets">Bilezikler</span><span class="category-sub" data-i18n="braceletsSub">Burma, kelepçe, hasır</span></span></span>
-          </a>
-          <a class="category-card product-wa" data-product="rings" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
+          </button>
+          <button type="button" class="category-card" data-product="rings">
             <img class="category-photo" src="assets/rings.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
             <span class="category-body"><span><span class="category-name" data-i18n="rings">Yüzükler</span><span class="category-sub" data-i18n="ringsSub">Tektaş, alyans, günlük</span></span></span>
-          </a>
-          <a class="category-card product-wa" data-product="necklaces" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
+          </button>
+          <button type="button" class="category-card" data-product="necklaces">
             <img class="category-photo" src="assets/necklaces.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
             <span class="category-body"><span><span class="category-name" data-i18n="necklaces">Kolyeler</span><span class="category-sub" data-i18n="necklacesSub">Zincir, damla, set</span></span></span>
-          </a>
-          <a class="category-card product-wa" data-product="earrings" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
+          </button>
+          <button type="button" class="category-card" data-product="earrings">
             <img class="category-photo" src="assets/earrings.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
             <span class="category-body"><span><span class="category-name" data-i18n="earrings">Küpeler</span><span class="category-sub" data-i18n="earringsSub">Halka, sallantı, taşlı</span></span></span>
-          </a>
+          </button>
         </div>
         <p class="disclaimer" data-i18n="imageDisclaimer">Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.</p>
       </div>
@@ -866,7 +867,7 @@
           navHome:"Ana sayfa", navCollections:"Koleksiyonlar", navAbout:"Hakkımızda", navContact:"Ziyaret & iletişim", waWrite:"WhatsApp ile yazın",
           heroEyebrow:"Kapalıçarşı · İstanbul", heroFirst:"Kapalıçarşı’dan", heroSecond:"Dünyaya",
           heroIntro:"Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.",
-          explore:"Koleksiyonları incele", askPrice:"Fiyat sor (WhatsApp)",
+          explore:"Koleksiyonları incele", askPrice:"Detaylı bilgi için",
           trust1:"Kapalıçarşı’da mağaza", trust1Sub:"Gelin, görün, deneyin", trust2:"Seçkin tasarımlar", trust2Sub:"Altın ve mücevher koleksiyonları", trust3:"Üç şube", trust3Sub:"Kapalıçarşı · Şemdinli · Van",
           collectionsEyebrow:"Koleksiyonlar", collectionsTitle:"Her an için bir parça", collectionsText:"Günlük kullanım, düğün ve hediye için.",
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
@@ -906,7 +907,7 @@
           navHome:"Home", navCollections:"Collections", navAbout:"About", navContact:"Visit & contact", waWrite:"Message on WhatsApp",
           heroEyebrow:"Grand Bazaar · Istanbul", heroFirst:"From the Grand Bazaar", heroSecond:"to the World",
           heroIntro:"Carefully selected gold and jewellery designs — bracelets, rings, necklaces and earrings. Contact us directly for models, weights and current prices.",
-          explore:"Explore collections", askPrice:"Ask for a price (WhatsApp)",
+          explore:"Explore collections", askPrice:"For more information",
           trust1:"Store in the Grand Bazaar", trust1Sub:"Come, see, try on", trust2:"Selected designs", trust2Sub:"Gold and jewellery collections", trust3:"Three stores", trust3Sub:"Grand Bazaar · Şemdinli · Van",
           collectionsEyebrow:"Collections", collectionsTitle:"A piece for every moment", collectionsText:"For everyday wear, weddings and gifts.",
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
@@ -1196,7 +1197,7 @@
           ask.append(d.vitrinAskShort);
           body.append(ask);
           const idx = lbItems.length;
-          lbItems.push({ src: p.img, alt: title, title, ask: ask.href, askLabel: d.vitrinAsk });
+          lbItems.push({ src: p.img, alt: title, title }); // photo only; WhatsApp link stays on the card
           zoom.addEventListener('click', () => openLightbox(lbItems, idx));
           card.append(media, body);
           grid.append(card);
@@ -1273,6 +1274,10 @@
       $('#lb-close').addEventListener('click', () => lb.close());
       $('#lb-prev').addEventListener('click', () => lbShow(lbIndex - 1));
       $('#lb-next').addEventListener('click', () => lbShow(lbIndex + 1));
+      // Collection cards open their photo in the lightbox (no WhatsApp link)
+      const catCards = $$('.category-card');
+      const catItems = () => catCards.map(c => { const n = c.querySelector('.category-name').textContent; return { src: c.querySelector('img').src, alt: n, title: n }; });
+      catCards.forEach((c, i) => c.addEventListener('click', () => openLightbox(catItems(), i)));
       // Zoom: pinch, double-tap/double-click, mouse wheel, zoom button; drag to move
       const stage = $('#lb-stage'), zimg = $('#lb-img');
       const MAX = 4;
