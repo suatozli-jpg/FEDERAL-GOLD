@@ -591,7 +591,7 @@
           </div>
         </div>
         <p class="market-error" role="status" data-i18n="marketError">Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.</p>
-        <p class="market-note"><span id="market-source"></span> <span data-i18n="marketNote">Piyasa verileri bilgi amaçlıdır. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.</span> <a class="wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" data-i18n="marketAsk">WhatsApp’tan fiyat al</a></p>
+        <p class="market-note"><span data-i18n="marketNote">Piyasa verileri bilgi amaçlıdır. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.</span> <a class="wa-link" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer" data-i18n="marketAsk">WhatsApp’tan fiyat al</a></p>
       </div>
     </section>
 
@@ -826,7 +826,7 @@
           marketEyebrow:"Canlı piyasa", marketTitle:"Güncel altın ve döviz kurları", marketLoading:"Kurlar yükleniyor…", marketGold:"Altın", marketFx:"Döviz & gümüş",
           colItem:"Cins", colBuy:"Alış", colSell:"Satış", colChange:"Değişim", marketUpdated:"Son güncelleme: {time}", marketStale:"Bağlantı yok · son veri: {time}", marketOffline:"Kurlar alınamadı",
           marketError:"Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.",
-          marketNote:"Piyasa verileri bilgi amaçlıdır. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.", marketSourceHarem:"Kaynak: Harem Altın, anlık.", marketSourceBackup:"Kaynak: yedek veri servisi, dakikada bir yenilenir.", marketAsk:"WhatsApp’tan fiyat al",
+          marketNote:"Piyasa verileri bilgi amaçlıdır. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.", marketAsk:"WhatsApp’tan fiyat al",
           topbarGram:"Gram Altın {price}",
           rHAS:"Has Altın", rGRA:"Gram Altın", rYIA:"22 ayar (gr)", r18:"18 ayar (gr)", r14:"14 ayar (gr)", rGREMSE:"Gremse Altın", rCEYREK:"Çeyrek Altın", rYARIM:"Yarım Altın", rTAM:"Tam Altın", rCUMHURIYET:"Cumhuriyet Altını", rATA:"Ata Altın",
           rUSD:"Amerikan Doları", rEUR:"Euro", rGBP:"İngiliz Sterlini", rGUMUS:"Gümüş (gr)",
@@ -866,7 +866,7 @@
           marketEyebrow:"Live market", marketTitle:"Current gold and currency rates", marketLoading:"Loading rates…", marketGold:"Gold", marketFx:"Currency & silver",
           colItem:"Item", colBuy:"Buy", colSell:"Sell", colChange:"Change", marketUpdated:"Last updated: {time}", marketStale:"Offline · last data: {time}", marketOffline:"Rates unavailable",
           marketError:"Rates are unavailable right now. Message us on WhatsApp for current prices.",
-          marketNote:"Market data is for information only. In-store buying/selling prices and craftsmanship fees may differ; contact us for an exact price.", marketSourceHarem:"Source: Harem Altın, live.", marketSourceBackup:"Source: backup data service, refreshed every minute.", marketAsk:"Get a price on WhatsApp",
+          marketNote:"Market data is for information only. In-store buying/selling prices and craftsmanship fees may differ; contact us for an exact price.", marketAsk:"Get a price on WhatsApp",
           topbarGram:"Gram Gold {price}",
           rHAS:"Pure gold", rGRA:"Gram gold", rYIA:"22K gold (g)", r18:"18K gold (g)", r14:"14K gold (g)", rGREMSE:"Gremse gold coin", rCEYREK:"Quarter Gold Coin", rYARIM:"Half Gold Coin", rTAM:"Full Gold Coin", rCUMHURIYET:"Republic Gold Coin", rATA:"Ata Gold Coin",
           rUSD:"US Dollar", rEUR:"Euro", rGBP:"British Pound", rGUMUS:"Silver (g)",
@@ -999,7 +999,6 @@
         });
         prevSell = Object.fromEntries(Object.entries(rates).map(([k, v]) => [k, v.sell]));
         status.textContent = (failed ? d.marketStale : d.marketUpdated).replace('{time}', ratesTime);
-        $('#market-source').textContent = ratesSource === 'harem' ? d.marketSourceHarem : d.marketSourceBackup;
         const tb = $('#topbar-rate');
         if (rates.GRAM) { tb.textContent = d.topbarGram.replace('{price}', money(rates.GRAM.sell)); tb.hidden = false; }
       };
