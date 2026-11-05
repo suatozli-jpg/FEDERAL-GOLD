@@ -27,5 +27,83 @@
     "image": "/assets/products/earrings.webp",
     "category": "earrings",
     "isNew": false
+  },
+  {
+    "name": "Tuğralı Kelepçe Bilezik",
+    "nameEn": "Tughra Cuff Bangle",
+    "image": "/assets/products/tugrali-kelepce-bilezik.webp",
+    "category": "bracelets",
+    "karat": "22",
+    "isNew": false
+  },
+  {
+    "name": "Fiyonk Kolye Seti",
+    "nameEn": "Bow Necklace Set",
+    "image": "/assets/products/fiyonk-kolye-seti.webp",
+    "category": "necklaces",
+    "isNew": false
+  },
+  {
+    "name": "Petek Desenli Kolye Seti",
+    "nameEn": "Honeycomb Necklace Set",
+    "image": "/assets/products/petek-desenli-kolye-seti.webp",
+    "category": "necklaces",
+    "isNew": false
+  },
+  {
+    "name": "Kat Kat Altın Kolye Seti",
+    "nameEn": "Layered Gold Necklace Set",
+    "image": "/assets/products/kat-kat-kolye-seti.webp",
+    "category": "necklaces",
+    "isNew": false
+  },
+  {
+    "name": "Top Boncuklu Kolye Seti",
+    "nameEn": "Gold Bead Necklace Set",
+    "image": "/assets/products/top-boncuklu-kolye-seti.webp",
+    "category": "necklaces",
+    "isNew": false
+  },
+  {
+    "name": "Kafes Gerdanlık",
+    "nameEn": "Gold Mesh Collar Necklace",
+    "image": "/assets/products/kafes-gerdanlik.webp",
+    "category": "necklaces",
+    "isNew": false
+  },
+  {
+    "name": "Taşlı Kolye ve Zincir Seti",
+    "nameEn": "Stone-Set Necklace and Chain Set",
+    "image": "/assets/products/tasli-kolye-ve-zincir.webp",
+    "category": "necklaces",
+    "isNew": false
+  },
+  {
+    "name": "Zincir Koleksiyonu",
+    "nameEn": "Gold Chain Collection",
+    "image": "/assets/products/zincir-koleksiyonu.webp",
+    "category": "necklaces",
+    "isNew": false
+  },
+  {
+    "name": "Bilezik ve Zincir Koleksiyonu",
+    "nameEn": "Bangle and Chain Collection",
+    "image": "/assets/products/bilezik-ve-zincirler.webp",
+    "category": "bracelets",
+    "isNew": false
+  },
+  {
+    "name": "Hasır ve Gurmet Bilezikler",
+    "nameEn": "Woven and Curb Bangles",
+    "image": "/assets/products/hasir-bilezikler.webp",
+    "category": "bracelets",
+    "isNew": false
+  },
+  {
+    "name": "Külçe Altın ve Gümüş",
+    "nameEn": "Gold and Silver Bullion",
+    "image": "/assets/products/kulce-altin-gumus.webp",
+    "category": "other",
+    "isNew": false
   }
 ]
