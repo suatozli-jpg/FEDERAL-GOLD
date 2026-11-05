@@ -264,8 +264,19 @@
     /* Signature: hallmark stamp (ayar · milyem), used only in the rate table and product cards */
     .stamp { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 4px; border: 1px solid rgba(217,176,98,.38); border-radius: 4px; font: 500 12px/1 var(--mono); color: #d8c08b; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .stamp i { font-style: normal; color: var(--muted); }
-    .rate-table tr.flash td { animation: flash 1.2s ease-out; }
-    @keyframes flash { from { background: rgba(217,176,98,.18); } to { background: transparent; } }
+    /* Live tick: price up = green, down = red, fades back in ~2s */
+    .rate-table .px { position: relative; }
+    .rate-table tr.tick-up td:first-child { animation: tick-up-bg 2.4s ease-out; }
+    .rate-table tr.tick-down td:first-child { animation: tick-down-bg 2.4s ease-out; }
+    .rate-table tr.tick-up .buy, .rate-table tr.tick-up .sell { animation: tick-up-bg 2.4s ease-out, tick-up-text 2.4s ease-out; }
+    .rate-table tr.tick-down .buy, .rate-table tr.tick-down .sell { animation: tick-down-bg 2.4s ease-out, tick-down-text 2.4s ease-out; }
+    .tick { position: absolute; left: -15px; top: 50%; transform: translateY(-50%); font-size: 11px; line-height: 1; opacity: 0; animation: tick-arrow 2.4s ease-out; }
+    .tick-up .tick { color: #4be38a; } .tick-down .tick { color: #ff6e5c; }
+    @keyframes tick-up-bg { from { background: rgba(52,211,113,.17); } to { background: transparent; } }
+    @keyframes tick-down-bg { from { background: rgba(255,92,72,.17); } to { background: transparent; } }
+    @keyframes tick-up-text { 0%, 65% { color: #4be38a; } }
+    @keyframes tick-down-text { 0%, 65% { color: #ff6e5c; } }
+    @keyframes tick-arrow { 0%, 60% { opacity: 1; } 100% { opacity: 0; } }
     .rate-placeholder td { color: var(--muted); font-weight: 400 !important; }
     .market-note { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
     .market-note a { color: var(--text-soft); text-decoration: underline; text-underline-offset: 3px; }
@@ -517,7 +528,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .btn, .category-card, .floating-whatsapp, .chip, .product-ask { transition: none; }
-      .live-dot, .rate-table tr.flash td, .hero-photo, .hero-shine { animation: none; }
+      .live-dot, .rate-table tr[class^="tick-"] td, .rate-table tr[class^="tick-"] .buy, .rate-table tr[class^="tick-"] .sell, .tick, .hero-photo, .hero-shine { animation: none; }
     }
     /* Vitrin: quiet text link instead of a boxed button */
     .product-ask { align-self: flex-start; justify-content: flex-start; min-height: 40px; padding: 0; border: 0; border-radius: 0; background: none; color: var(--gold-light); font-size: 14px; font-weight: 600; }
@@ -1045,10 +1056,12 @@
           const rows = items.map(([key, label]) => {
             const r = rates[key];
             if (!r) return '';
-            const changed = prevSell[key] != null && prevSell[key] !== r.sell;
+            const prev = prevSell[key];
+            const dir = prev == null || prev === r.sell ? '' : (r.sell > prev ? 'up' : 'down');
+            const arrow = dir ? `<span class="tick" aria-hidden="true">${dir === 'up' ? '▲' : '▼'}</span>` : '';
             const hm = HALLMARK[key];
             const stamp = hm ? `<span class="stamp" title="${hm[0]} ayar · ${hm[1]} milyem">${hm[0]}<i>·</i>${hm[1]}</span>` : '';
-            return `<tr${changed ? ' class="flash"' : ''}><td><span class="rate-name">${d[label]}${stamp}</span><span class="chg-inline">${changeHtml(r.chg)}</span></td><td class="buy">${money(r.buy)}</td><td class="sell">${money(r.sell)}</td><td class="col-chg">${changeHtml(r.chg)}</td></tr>`;
+            return `<tr${dir ? ` class="tick-${dir}"` : ''}><td><span class="rate-name">${d[label]}${stamp}</span><span class="chg-inline">${changeHtml(r.chg)}</span></td><td class="buy"><span class="px">${arrow}${money(r.buy)}</span></td><td class="sell"><span class="px">${arrow}${money(r.sell)}</span></td><td class="col-chg">${changeHtml(r.chg)}</td></tr>`;
           }).join('');
           if (rows) $('#' + id).innerHTML = rows;
         });
