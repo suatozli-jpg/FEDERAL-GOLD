@@ -1,34 +1,5 @@
 [
   {
-    "name": "Desenli Bilezik",
-    "nameEn": "Patterned Gold Bangle",
-    "image": "/assets/products/bracelets.webp",
-    "category": "bracelets",
-    "karat": "22",
-    "isNew": true
-  },
-  {
-    "name": "Tektaş Yüzük",
-    "nameEn": "Solitaire Ring",
-    "image": "/assets/products/rings.webp",
-    "category": "rings",
-    "isNew": false
-  },
-  {
-    "name": "Damla Kolye",
-    "nameEn": "Teardrop Necklace",
-    "image": "/assets/products/necklaces.webp",
-    "category": "necklaces",
-    "isNew": false
-  },
-  {
-    "name": "Damla Küpe",
-    "nameEn": "Teardrop Earrings",
-    "image": "/assets/products/earrings.webp",
-    "category": "earrings",
-    "isNew": false
-  },
-  {
     "name": "Tuğralı Kelepçe Bilezik",
     "nameEn": "Tughra Cuff Bangle",
     "image": "/assets/products/tugrali-kelepce-bilezik.webp",
