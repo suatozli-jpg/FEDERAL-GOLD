@@ -182,7 +182,14 @@
     .mobile-menu { display: none; }
 
     /* Hero */
-    .hero { background-image: linear-gradient(90deg, rgba(11,10,9,.96) 0%, rgba(11,10,9,.82) 32%, rgba(11,10,9,.15) 66%, rgba(11,10,9,0) 100%), url('assets/hero.webp'); background-size: cover; background-position: center; border-bottom: 1px solid var(--line); }
+    .hero { position: relative; overflow: hidden; isolation: isolate; background: var(--bg); border-bottom: 1px solid var(--line); }
+    /* Showcase motion: the photo turns gently like a display stand and a lamp light passes over the jewellery */
+    .hero-media { position: absolute; inset: 0; z-index: -1; perspective: 1400px; }
+    .hero-photo { position: absolute; inset: -4%; background: url('assets/hero.webp') center / cover no-repeat; transform-origin: 72% 45%; will-change: transform; animation: hero-turn 9s ease-in-out infinite alternate; }
+    .hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,10,9,.96) 0%, rgba(11,10,9,.82) 32%, rgba(11,10,9,.15) 66%, rgba(11,10,9,0) 100%); }
+    .hero-shine { position: absolute; inset: 0; background: linear-gradient(110deg, transparent 46%, rgba(255,236,190,.18) 48%, rgba(255,250,235,.5) 50%, rgba(255,236,190,.18) 52%, transparent 54%) no-repeat; background-size: 260% 100%; background-position: 130% 0; mix-blend-mode: screen; -webkit-mask-image: linear-gradient(90deg, transparent 38%, #000 60%); mask-image: linear-gradient(90deg, transparent 38%, #000 60%); animation: hero-shine 9s cubic-bezier(.45, 0, .25, 1) 1s infinite; }
+    @keyframes hero-turn { from { transform: rotateY(-7deg) scale(1.02); } to { transform: rotateY(7deg) scale(1.02); } }
+    @keyframes hero-shine { 0% { background-position: 130% 0; } 50%, 100% { background-position: -30% 0; } }
     .hero-content { padding-block: clamp(80px, 9vw, 120px); }
     .hero h1 { margin: 0; max-width: 640px; font: 500 clamp(56px, 6vw, 84px)/1 var(--serif); letter-spacing: -.01em; text-shadow: 0 2px 24px rgba(0,0,0,.6); }
     .hero h1 em { color: var(--gold-light); font-style: normal; }
@@ -364,7 +371,10 @@
       .action-bar .is-primary svg { color: currentColor; }
     }
     @media (max-width: 640px) {
-      .hero { min-height: 480px; min-height: max(460px, calc(100svh - 68px - 82px)); display: flex; align-items: flex-end; background-image: linear-gradient(0deg, #0b0a09 0%, rgba(11,10,9,.9) 34%, rgba(11,10,9,.35) 62%, rgba(11,10,9,.1) 100%), url('assets/hero.webp'); background-position: 72% center; }
+      .hero { min-height: 480px; min-height: max(460px, calc(100svh - 68px - 82px)); display: flex; align-items: flex-end; }
+      .hero-photo { background-position: 72% center; }
+      .hero-media::after { background: linear-gradient(0deg, #0b0a09 0%, rgba(11,10,9,.9) 34%, rgba(11,10,9,.35) 62%, rgba(11,10,9,.1) 100%); }
+      .hero-shine { -webkit-mask-image: linear-gradient(0deg, transparent 40%, #000 70%); mask-image: linear-gradient(0deg, transparent 40%, #000 70%); }
       .hero-content { padding-block: 0 32px; }
       .eyebrow { font-size: 13px; }
       .hero h1 { font-size: clamp(42px, 12.5vw, 52px); line-height: 1.02; }
@@ -436,7 +446,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .btn, .category-card, .floating-whatsapp, .chip, .product-ask { transition: none; }
-      .live-dot, .rate-table tr.flash td { animation: none; }
+      .live-dot, .rate-table tr.flash td, .hero-photo, .hero-shine { animation: none; }
     }
   </style>
 </head>
@@ -496,6 +506,7 @@
 
   <main id="main">
     <section class="hero" id="ana">
+      <div class="hero-media" aria-hidden="true"><div class="hero-photo"></div><div class="hero-shine"></div></div>
       <div class="container hero-content">
         <p class="eyebrow" data-i18n="heroEyebrow">Kapalıçarşı · İstanbul</p>
         <h1><span data-i18n="heroFirst">Kapalıçarşı’dan</span> <em data-i18n="heroSecond">Dünyaya</em></h1>
