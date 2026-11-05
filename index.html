@@ -519,6 +519,9 @@
       .btn, .category-card, .floating-whatsapp, .chip, .product-ask { transition: none; }
       .live-dot, .rate-table tr.flash td, .hero-photo, .hero-shine { animation: none; }
     }
+    /* Vitrin: quiet text link instead of a boxed button */
+    .product-ask { align-self: flex-start; justify-content: flex-start; min-height: 40px; padding: 0; border: 0; border-radius: 0; background: none; color: var(--gold-light); font-size: 14px; font-weight: 600; }
+    .product-ask:hover { background: none; color: #f6e2b3; text-decoration: underline; text-underline-offset: 4px; }
   </style>
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3e98ee3ae74b463e894117224498be74"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -644,19 +647,19 @@
         <div class="category-grid">
           <a class="category-card product-wa" data-product="bracelets" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
             <img class="category-photo" src="assets/bracelets.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-            <span class="category-body"><span><span class="category-name" data-i18n="bracelets">Bilezikler</span><span class="category-sub" data-i18n="braceletsSub">Burma, kelepçe, hasır</span></span><span class="category-cta" data-i18n="askShort">Fiyat sor →</span></span>
+            <span class="category-body"><span><span class="category-name" data-i18n="bracelets">Bilezikler</span><span class="category-sub" data-i18n="braceletsSub">Burma, kelepçe, hasır</span></span></span>
           </a>
           <a class="category-card product-wa" data-product="rings" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
             <img class="category-photo" src="assets/rings.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-            <span class="category-body"><span><span class="category-name" data-i18n="rings">Yüzükler</span><span class="category-sub" data-i18n="ringsSub">Tektaş, alyans, günlük</span></span><span class="category-cta" data-i18n="askShort">Fiyat sor →</span></span>
+            <span class="category-body"><span><span class="category-name" data-i18n="rings">Yüzükler</span><span class="category-sub" data-i18n="ringsSub">Tektaş, alyans, günlük</span></span></span>
           </a>
           <a class="category-card product-wa" data-product="necklaces" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
             <img class="category-photo" src="assets/necklaces.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-            <span class="category-body"><span><span class="category-name" data-i18n="necklaces">Kolyeler</span><span class="category-sub" data-i18n="necklacesSub">Zincir, damla, set</span></span><span class="category-cta" data-i18n="askShort">Fiyat sor →</span></span>
+            <span class="category-body"><span><span class="category-name" data-i18n="necklaces">Kolyeler</span><span class="category-sub" data-i18n="necklacesSub">Zincir, damla, set</span></span></span>
           </a>
           <a class="category-card product-wa" data-product="earrings" href="https://wa.me/905423905967" target="_blank" rel="noopener noreferrer">
             <img class="category-photo" src="assets/earrings.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-            <span class="category-body"><span><span class="category-name" data-i18n="earrings">Küpeler</span><span class="category-sub" data-i18n="earringsSub">Halka, sallantı, taşlı</span></span><span class="category-cta" data-i18n="askShort">Fiyat sor →</span></span>
+            <span class="category-body"><span><span class="category-name" data-i18n="earrings">Küpeler</span><span class="category-sub" data-i18n="earringsSub">Halka, sallantı, taşlı</span></span></span>
           </a>
         </div>
         <p class="disclaimer" data-i18n="imageDisclaimer">Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.</p>
@@ -858,7 +861,7 @@
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
           askShort:"Fiyat sor →", imageDisclaimer:"Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.",
           vitrinEyebrow:"Vitrin", vitrinTitle:"Mağazamızdan seçmeler", vitrinText:"Kapalıçarşı’daki mağazamızın vitrininden.",
-          vitrinAll:"Tümü", vitrinAsk:"WhatsApp’tan sor", lbZoom:"Fotoğrafı büyüt", lbZoomIn:"Yakınlaştır", lbZoomOut:"Uzaklaştır", lbHint:"Yakınlaştırmak için çift dokunun veya iki parmakla açın", lbHintMouse:"Yakınlaştırmak için çift tıklayın veya fare tekerleğini kullanın", lbPrev:"Önceki", lbNext:"Sonraki", lbClose:"Kapat", lbLabel:"Fotoğraf", vitrinNew:"YENİ", vitrinKarat:"{k} ayar", vitrinGram:"{g} gr",
+          vitrinAll:"Tümü", vitrinAsk:"WhatsApp’tan sor", vitrinAskShort:"Bilgi al →", lbZoom:"Fotoğrafı büyüt", lbZoomIn:"Yakınlaştır", lbZoomOut:"Uzaklaştır", lbHint:"Yakınlaştırmak için çift dokunun veya iki parmakla açın", lbHintMouse:"Yakınlaştırmak için çift tıklayın veya fare tekerleğini kullanın", lbPrev:"Önceki", lbNext:"Sonraki", lbClose:"Kapat", lbLabel:"Fotoğraf", vitrinNew:"YENİ", vitrinKarat:"{k} ayar", vitrinGram:"{g} gr",
           catBracelets:"Bilezik", catRings:"Yüzük", catNecklaces:"Kolye", catEarrings:"Küpe", catWatches:"Saat", catOther:"Diğer",
           vitrinRequest:"Merhaba Federal Gold, vitrindeki “{name}”{details} hakkında bilgi alabilir miyim?",
           servicesEyebrow:"Hizmetlerimiz", servicesTitle:"Kapalıçarşı’dan kapınıza",
@@ -898,7 +901,7 @@
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
           askShort:"Ask price →", imageDisclaimer:"Images are illustrative. Contact us for stock, weights and current prices.",
           vitrinEyebrow:"Showcase", vitrinTitle:"Selected pieces from our store", vitrinText:"Straight from our Grand Bazaar showcase.",
-          vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", lbZoom:"Enlarge photo", lbZoomIn:"Zoom in", lbZoomOut:"Zoom out", lbHint:"Double-tap or pinch to zoom", lbHintMouse:"Double-click or use the mouse wheel to zoom", lbPrev:"Previous", lbNext:"Next", lbClose:"Close", lbLabel:"Photo", vitrinNew:"NEW", vitrinKarat:"{k}K", vitrinGram:"{g} g",
+          vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", vitrinAskShort:"Enquire →", lbZoom:"Enlarge photo", lbZoomIn:"Zoom in", lbZoomOut:"Zoom out", lbHint:"Double-tap or pinch to zoom", lbHintMouse:"Double-click or use the mouse wheel to zoom", lbPrev:"Previous", lbNext:"Next", lbClose:"Close", lbLabel:"Photo", vitrinNew:"NEW", vitrinKarat:"{k}K", vitrinGram:"{g} g",
           catBracelets:"Bracelets", catRings:"Rings", catNecklaces:"Necklaces", catEarrings:"Earrings", catWatches:"Watches", catOther:"Other",
           vitrinRequest:"Hello Federal Gold, could you tell me more about “{name}”{details} from your showcase?",
           servicesEyebrow:"Our services", servicesTitle:"From the Grand Bazaar to your door",
@@ -1177,7 +1180,7 @@
           ask.href = whatsappBase + encodeURIComponent(d.vitrinRequest.replace('{name}', title).replace('{details}', details));
           ask.target = '_blank'; ask.rel = 'noopener noreferrer';
           ask.setAttribute('aria-label', `${title} — ${d.vitrinAsk}`);
-          ask.append(d.vitrinAsk);
+          ask.append(d.vitrinAskShort);
           body.append(ask);
           const idx = lbItems.length;
           lbItems.push({ src: p.img, alt: title, title, ask: ask.href, askLabel: d.vitrinAsk });
