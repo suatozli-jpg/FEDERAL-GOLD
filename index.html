@@ -305,10 +305,15 @@
     .lightbox { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #080706; color: var(--text); }
     .lightbox::backdrop { background: rgba(0,0,0,.6); }
     .lightbox[open] { display: grid; grid-template-rows: minmax(0, 1fr) auto; }
-    .lb-stage { position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; padding: 64px 80px 16px; touch-action: pan-y; }
-    .lb-stage img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; user-select: none; -webkit-user-drag: none; }
+    .lb-stage { position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; padding: 64px 80px 16px; overflow: hidden; touch-action: none; }
+    .lb-stage img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; user-select: none; -webkit-user-drag: none; transform-origin: center center; cursor: zoom-in; will-change: transform; }
+    .lb-stage.zoomed img { cursor: grab; border-radius: 0; }
+    .lb-stage.zooming img { transition: transform .2s var(--ease); }
+    .lb-zoom { top: 12px; right: 76px; }
+    .lb-hint { font-size: 12px; color: var(--muted); }
     .lb-btn { position: absolute; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line-strong); background: rgba(20,18,15,.85); color: var(--text); padding: 0; }
     .lb-btn:hover { border-color: #5a4a2e; }
+    .lb-btn[hidden], .lb-ask[hidden] { display: none; }
     .lb-btn svg { width: 22px; height: 22px; }
     .lb-close { top: 12px; right: 16px; }
     .lb-prev { left: 16px; top: 50%; transform: translateY(-50%); }
@@ -496,6 +501,7 @@
     @media (max-width: 640px) {
       .lb-stage { padding: 64px 8px 8px; }
       .lb-prev, .lb-next { top: auto; bottom: 12px; transform: none; width: 44px; height: 44px; }
+      .lb-zoom { right: 72px; }
       .lb-title { font-size: 21px; }
       .lb-bar { padding: 12px 16px calc(16px + env(safe-area-inset-bottom)); }
       .lb-ask { width: 100%; }
@@ -523,6 +529,8 @@
     <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6 3 3 6c-.8 7.1 7.9 15.8 15 15l3-3-5.4-4-2.5 2c-2.3-1.1-4.2-3-5.3-5.3l2-2.5L6 3Z" stroke="currentColor" fill="none" stroke-width="1.7" stroke-linejoin="round"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4.6 19.5 2.5 22l.9-5A9 9 0 1 1 7 20.5l-2.4-1Z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-zoom-in" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-zoom-out" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 15.5 21 21M7.5 10.5h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
@@ -816,10 +824,11 @@
       <img id="lb-img" alt="">
       <button class="lb-btn lb-prev" type="button" id="lb-prev" aria-label="Önceki"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
       <button class="lb-btn lb-next" type="button" id="lb-next" aria-label="Sonraki"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+      <button class="lb-btn lb-zoom" type="button" id="lb-zoom" aria-label="Yakınlaştır"><svg aria-hidden="true"><use href="#i-zoom-in"/></svg></button>
       <button class="lb-btn lb-close" type="button" id="lb-close" aria-label="Kapat"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
     </div>
     <div class="lb-bar" id="lb-bar">
-      <div><p class="lb-title" id="lb-title"></p><span class="lb-count" id="lb-count"></span></div>
+      <div><p class="lb-title" id="lb-title"></p><span class="lb-count" id="lb-count"></span> <span class="lb-hint" id="lb-hint"></span></div>
       <a class="btn btn-primary lb-ask" id="lb-ask" target="_blank" rel="noopener noreferrer"></a>
     </div>
   </dialog>
@@ -848,7 +857,7 @@
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
           askShort:"Fiyat sor →", imageDisclaimer:"Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.",
           vitrinEyebrow:"Vitrin", vitrinTitle:"Mağazamızdan seçmeler", vitrinText:"Ürüne dokunun; WhatsApp’ta o ürün için hazır mesajla yazışma açılsın.",
-          vitrinAll:"Tümü", vitrinAsk:"WhatsApp’tan sor", lbZoom:"Fotoğrafı büyüt", lbPrev:"Önceki", lbNext:"Sonraki", lbClose:"Kapat", lbLabel:"Fotoğraf", vitrinNew:"YENİ", vitrinKarat:"{k} ayar", vitrinGram:"{g} gr",
+          vitrinAll:"Tümü", vitrinAsk:"WhatsApp’tan sor", lbZoom:"Fotoğrafı büyüt", lbZoomIn:"Yakınlaştır", lbZoomOut:"Uzaklaştır", lbHint:"Yakınlaştırmak için çift dokunun veya iki parmakla açın", lbHintMouse:"Yakınlaştırmak için çift tıklayın veya fare tekerleğini kullanın", lbPrev:"Önceki", lbNext:"Sonraki", lbClose:"Kapat", lbLabel:"Fotoğraf", vitrinNew:"YENİ", vitrinKarat:"{k} ayar", vitrinGram:"{g} gr",
           catBracelets:"Bilezik", catRings:"Yüzük", catNecklaces:"Kolye", catEarrings:"Küpe", catWatches:"Saat", catOther:"Diğer",
           vitrinRequest:"Merhaba Federal Gold, vitrindeki “{name}”{details} hakkında bilgi alabilir miyim?",
           servicesEyebrow:"Hizmetlerimiz", servicesTitle:"Kapalıçarşı’dan kapınıza",
@@ -888,7 +897,7 @@
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
           askShort:"Ask price →", imageDisclaimer:"Images are illustrative. Contact us for stock, weights and current prices.",
           vitrinEyebrow:"Showcase", vitrinTitle:"Selected pieces from our store", vitrinText:"Tap a piece to open a WhatsApp chat with a ready-made message about it.",
-          vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", lbZoom:"Enlarge photo", lbPrev:"Previous", lbNext:"Next", lbClose:"Close", lbLabel:"Photo", vitrinNew:"NEW", vitrinKarat:"{k}K", vitrinGram:"{g} g",
+          vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", lbZoom:"Enlarge photo", lbZoomIn:"Zoom in", lbZoomOut:"Zoom out", lbHint:"Double-tap or pinch to zoom", lbHintMouse:"Double-click or use the mouse wheel to zoom", lbPrev:"Previous", lbNext:"Next", lbClose:"Close", lbLabel:"Photo", vitrinNew:"NEW", vitrinKarat:"{k}K", vitrinGram:"{g} g",
           catBracelets:"Bracelets", catRings:"Rings", catNecklaces:"Necklaces", catEarrings:"Earrings", catWatches:"Watches", catOther:"Other",
           vitrinRequest:"Hello Federal Gold, could you tell me more about “{name}”{details} from your showcase?",
           servicesEyebrow:"Our services", servicesTitle:"From the Grand Bazaar to your door",
@@ -1208,7 +1217,18 @@
         const d = t();
         lbIndex = (i + lbList.length) % lbList.length;
         const it = lbList[lbIndex];
-        $('#lb-img').src = it.src; $('#lb-img').alt = it.alt || '';
+        zoomReset(false);
+        const im = $('#lb-img');
+        im.alt = it.alt || '';
+        im.onerror = null;
+        im.src = it.src;
+        // Prefer the high-resolution copy in assets/products/large/ when it exists
+        const m = /^(.*assets\/products\/)([^/]+)$/.exec(it.src);
+        if (m) {
+          const big = new Image();
+          big.onload = () => { if (lbList[lbIndex] === it) im.src = big.src; };
+          big.src = m[1] + 'large/' + m[2];
+        }
         const many = lbList.length > 1;
         $('#lb-prev').hidden = !many; $('#lb-next').hidden = !many;
         $('#lb-bar').hidden = !it.title;
@@ -1217,35 +1237,119 @@
         const ask = $('#lb-ask');
         ask.hidden = !it.ask;
         if (it.ask) { ask.href = it.ask; ask.textContent = it.askLabel; }
-        [lbList[lbIndex + 1], lbList[lbIndex - 1]].forEach(n => { if (n) { const im = new Image(); im.src = n.src; } });
+        $('#lb-hint').textContent = matchMedia('(pointer: fine)').matches ? d.lbHintMouse : d.lbHint;
+        [lbList[lbIndex + 1], lbList[lbIndex - 1]].forEach(n => { if (n) { const pre = new Image(); pre.src = n.src; } });
       };
       const openLightbox = (list, i) => {
         if (!lb.showModal) return;
         lbOpener = document.activeElement;
         lbList = list; lbShow(i);
         const d = t();
+        $('#lb-zoom').setAttribute('aria-label', d.lbZoomIn);
         $('#lb-prev').setAttribute('aria-label', d.lbPrev); $('#lb-next').setAttribute('aria-label', d.lbNext); $('#lb-close').setAttribute('aria-label', d.lbClose);
         lb.setAttribute('aria-label', d.lbLabel);
         document.documentElement.style.overflow = 'hidden';
         lb.showModal();
         $('#lb-close').focus();
       };
-      lb.addEventListener('close', () => { document.documentElement.style.overflow = ''; if (lbOpener && lbOpener.focus) lbOpener.focus(); });
+      lb.addEventListener('close', () => { zoomReset(false); document.documentElement.style.overflow = ''; if (lbOpener && lbOpener.focus) lbOpener.focus(); });
       $('#lb-close').addEventListener('click', () => lb.close());
       $('#lb-prev').addEventListener('click', () => lbShow(lbIndex - 1));
       $('#lb-next').addEventListener('click', () => lbShow(lbIndex + 1));
-      $('#lb-stage').addEventListener('click', e => { if (e.target.id === 'lb-stage') lb.close(); });
+      // Zoom: pinch, double-tap/double-click, mouse wheel, zoom button; drag to move
+      const stage = $('#lb-stage'), zimg = $('#lb-img');
+      const MAX = 4;
+      let zs = 1, zx = 0, zy = 0;
+      const clampPan = () => {
+        const w = zimg.clientWidth, h = zimg.clientHeight;
+        const mx = Math.max(0, (w * zs - stage.clientWidth) / 2 + 8), my = Math.max(0, (h * zs - stage.clientHeight) / 2 + 8);
+        const lx = Math.max(mx, (w * zs - w) / 2), ly = Math.max(my, (h * zs - h) / 2);
+        zx = Math.min(lx, Math.max(-lx, zx)); zy = Math.min(ly, Math.max(-ly, zy));
+      };
+      const zoomApply = (animate) => {
+        if (zs <= 1.01) { zs = 1; zx = 0; zy = 0; }
+        clampPan();
+        stage.classList.toggle('zooming', !!animate);
+        zimg.style.transform = zs === 1 ? '' : `translate(${zx}px, ${zy}px) scale(${zs})`;
+        stage.classList.toggle('zoomed', zs > 1);
+        const d = t();
+        $('#lb-zoom use').setAttribute('href', zs > 1 ? '#i-zoom-out' : '#i-zoom-in');
+        $('#lb-zoom').setAttribute('aria-label', zs > 1 ? d.lbZoomOut : d.lbZoomIn);
+        const many = lbList.length > 1 && zs === 1;
+        $('#lb-prev').hidden = !many; $('#lb-next').hidden = !many;
+      };
+      const zoomReset = (animate) => { zs = 1; zx = 0; zy = 0; zoomApply(animate); };
+      // Zoom to scale s keeping the point (cx, cy) in viewport coordinates under the finger/cursor
+      const zoomAt = (s, cx, cy, animate) => {
+        s = Math.min(MAX, Math.max(1, s));
+        const r = stage.getBoundingClientRect();
+        const ox = cx - (r.left + r.width / 2), oy = cy - (r.top + r.height / 2);
+        zx = ox - (ox - zx) * (s / zs); zy = oy - (oy - zy) * (s / zs); zs = s;
+        zoomApply(animate);
+      };
+      const onImage = (x, y) => { const r = zimg.getBoundingClientRect(); return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; };
+      const center = () => { const r = stage.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+      $('#lb-zoom').addEventListener('click', () => { if (zs > 1) zoomReset(true); else zoomAt(2.5, ...center(), true); });
+      let lastPointer = 'mouse';
+      // Mouse double-click (touch double-tap is handled in the pointer code below)
+      stage.addEventListener('dblclick', e => {
+        if (lastPointer !== 'mouse' || e.target.closest('button') || (zs === 1 && !onImage(e.clientX, e.clientY))) return;
+        if (zs > 1) zoomReset(true); else zoomAt(2.5, e.clientX, e.clientY, true);
+      });
+      stage.addEventListener('wheel', e => { e.preventDefault(); zoomAt(zs * Math.exp(-e.deltaY / 300), e.clientX, e.clientY, false); }, { passive: false });
+      // Pointer gestures (mouse drag, one-finger pan/swipe, two-finger pinch, double-tap)
+      const pts = new Map();
+      let start = null, pinch = null, moved = false, lastTap = 0;
+      stage.addEventListener('pointerdown', e => {
+        lastPointer = e.pointerType;
+        if (e.target.closest('button')) return;
+        stage.setPointerCapture(e.pointerId);
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        moved = false;
+        if (pts.size === 1) start = { x: e.clientX, y: e.clientY, zx, zy, target: e.target };
+        if (pts.size === 2) {
+          const [a, b] = [...pts.values()];
+          pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), s: zs };
+        }
+      });
+      stage.addEventListener('pointermove', e => {
+        if (!pts.has(e.pointerId)) return;
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pts.size === 2 && pinch) {
+          const [a, b] = [...pts.values()];
+          zoomAt(pinch.s * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d, (a.x + b.x) / 2, (a.y + b.y) / 2, false);
+          moved = true;
+        } else if (pts.size === 1 && start) {
+          const dx = e.clientX - start.x, dy = e.clientY - start.y;
+          if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+          if (zs > 1) { zx = start.zx + dx; zy = start.zy + dy; zoomApply(false); }
+        }
+      });
+      const end = e => {
+        if (!pts.has(e.pointerId)) return;
+        pts.delete(e.pointerId);
+        if (pts.size < 2) pinch = null;
+        if (pts.size === 0 && start) {
+          const dx = e.clientX - start.x, dy = e.clientY - start.y;
+          if (zs === 1 && moved && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) && lbList.length > 1) lbShow(lbIndex + (dx < 0 ? 1 : -1));
+          else if (!moved && e.pointerType !== 'mouse') {
+            const now = Date.now();
+            if (now - lastTap < 300) { if (zs > 1) zoomReset(true); else zoomAt(2.5, e.clientX, e.clientY, true); lastTap = 0; }
+            else { lastTap = now; if (zs === 1 && !onImage(e.clientX, e.clientY)) setTimeout(() => { if (lastTap === now) lb.close(); }, 300); }
+          } else if (!moved && e.pointerType === 'mouse' && zs === 1 && !onImage(e.clientX, e.clientY)) lb.close();
+          start = null;
+        }
+      };
+      stage.addEventListener('pointerup', end);
+      stage.addEventListener('pointercancel', end);
       lb.addEventListener('keydown', e => {
-        if (e.key === 'ArrowLeft' && lbList.length > 1) lbShow(lbIndex - 1);
-        if (e.key === 'ArrowRight' && lbList.length > 1) lbShow(lbIndex + 1);
+        if (e.key === 'ArrowLeft' && lbList.length > 1 && zs === 1) lbShow(lbIndex - 1);
+        if (e.key === 'ArrowRight' && lbList.length > 1 && zs === 1) lbShow(lbIndex + 1);
+        if (e.key === '+' || e.key === '=') zoomAt(zs * 1.5, ...center(), true);
+        if (e.key === '-') { if (zs / 1.5 <= 1) zoomReset(true); else zoomAt(zs / 1.5, ...center(), true); }
       });
-      let touchX = null;
-      $('#lb-stage').addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
-      $('#lb-stage').addEventListener('touchend', e => {
-        if (touchX == null || lbList.length < 2) return;
-        const dx = e.changedTouches[0].clientX - touchX; touchX = null;
-        if (Math.abs(dx) > 50) lbShow(lbIndex + (dx < 0 ? 1 : -1));
-      });
+      window.addEventListener('resize', () => { if (lb.open) zoomApply(false); });
+
       // Store and about photos open on their own
       $$('.store-photo img, .about-photo img').forEach(img => {
         img.classList.add('zoomable');
