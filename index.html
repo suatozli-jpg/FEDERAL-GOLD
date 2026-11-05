@@ -21,6 +21,10 @@
   <meta property="og:locale:alternate" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://federalgold.org/assets/og-image.jpg">
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="144x144" href="/favicon-144.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" as="image" href="assets/hero.webp" type="image/webp">
@@ -278,6 +282,23 @@
     @keyframes tick-down-text { 0%, 65% { color: #ff6e5c; } }
     @keyframes tick-arrow { 0%, 60% { opacity: 1; } 100% { opacity: 0; } }
     .rate-placeholder td { color: var(--muted); font-weight: 400 !important; }
+    /* Gold calculator (uses the live rates above) */
+    .market-side { display: grid; gap: 20px; }
+    .calc { padding: 18px 20px 16px; border: 1px solid var(--line-strong); border-radius: 16px; background: var(--surface); }
+    .calc h3 { margin: 0 0 14px; font: 600 22px/1.2 var(--serif); color: var(--gold-light); }
+    .calc-row { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 12px; align-items: end; }
+    .calc-out { grid-column: 1 / -1; }
+    .calc-field > span { display: block; margin-bottom: 6px; font-size: 13px; color: var(--muted); }
+    .calc-field select, .calc-field input { width: 100%; min-height: 50px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 10px; background: #0d0b09; color: var(--text); font: 500 16px/1 var(--sans); font-variant-numeric: tabular-nums; }
+    .calc-field select { appearance: none; -webkit-appearance: none; padding-right: 38px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23d9b062' stroke-width='1.6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+    .calc-field select:focus, .calc-field input:focus { outline: none; border-color: var(--gold); }
+    .calc-out { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 2px 14px; min-height: 50px; padding: 8px 16px; border: 1px solid rgba(217,176,98,.32); border-radius: 10px; background: #19150e; }
+    .calc-out span { font-size: 13px; color: var(--muted); }
+    .calc-out b { text-align: right; font: 600 18px/1.35 var(--sans); font-variant-numeric: tabular-nums; color: var(--text-soft); }
+    .calc-out b.calc-main { font-size: 22px; color: var(--gold-light); }
+    .calc-note { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
+    .market.is-error .calc { display: none; }
+    @media (max-width: 700px) { .calc { padding: 16px; } }
     .market-note { margin: 16px 0 0; font-size: 13px; color: var(--muted); }
     .market-note a { color: var(--text-soft); text-decoration: underline; text-underline-offset: 3px; }
     .market-error { display: none; margin-top: 16px; padding: 14px 18px; border: 1px solid #5a4a2e; border-radius: 10px; color: var(--text-soft); font-size: 14px; }
@@ -364,9 +385,6 @@
     .about-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
     .about .title { margin-bottom: 22px; font-size: clamp(34px, 3.6vw, 48px); }
     .about p { margin: 0 0 16px; color: var(--text-soft); font-size: 16px; line-height: 1.75; }
-    .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; border-top: 1px solid var(--line-strong); padding-top: 24px; margin-top: 32px; }
-    .facts b { display: block; font: 500 32px/1 var(--serif); color: var(--text); }
-    .facts span { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; }
 
     /* Visit */
     .visit { padding-block: 96px; }
@@ -494,9 +512,6 @@
       .service-card p { font-size: 14px; }
       .about-photo { aspect-ratio: 1 / 1; max-width: 520px; }
       .about p { font-size: 16px; }
-      .facts { gap: 8px; margin-top: 20px; }
-      .facts b { font-size: 24px; }
-      .facts span { font-size: 12px; }
       .visit .title { margin-bottom: 22px; }
       .visit-card { padding: 22px; }
       .store-photo { margin: -22px -22px 20px; }
@@ -634,12 +649,23 @@
               <tbody id="rates-gold"><tr class="rate-placeholder"><td colspan="4" data-i18n="marketLoading">Kurlar yükleniyor…</td></tr></tbody>
             </table>
           </div>
+          <div class="market-side">
           <div class="rate-card">
             <h3 data-i18n="marketFx">Döviz &amp; gümüş</h3>
             <table class="rate-table">
               <thead><tr><th scope="col" data-i18n="colItem">Cins</th><th scope="col" data-i18n="colBuy">Alış</th><th scope="col" data-i18n="colSell">Satış</th><th scope="col" class="col-chg" data-i18n="colChange">Değişim</th></tr></thead>
               <tbody id="rates-fx"><tr class="rate-placeholder"><td colspan="4" data-i18n="marketLoading">Kurlar yükleniyor…</td></tr></tbody>
             </table>
+          </div>
+          <div class="calc" id="calc">
+          <h3 data-i18n="calcTitle">Altın hesaplama</h3>
+          <div class="calc-row">
+            <label class="calc-field"><span data-i18n="calcType">Cins</span><select id="calc-type"></select></label>
+            <label class="calc-field"><span id="calc-unit">Miktar (gram)</span><input id="calc-amount" type="text" inputmode="decimal" autocomplete="off" value="10"></label>
+            <div class="calc-out" aria-live="polite"><span data-i18n="colSell">Satış</span><b class="calc-main" id="calc-sell">—</b><span data-i18n="colBuy">Alış</span><b id="calc-buy">—</b></div>
+          </div>
+          <p class="calc-note" data-i18n="calcNote">İşçilik hariçtir; sonuç bilgi amaçlıdır.</p>
+        </div>
           </div>
         </div>
         <p class="market-error" role="status" data-i18n="marketError">Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.</p>
@@ -729,11 +755,6 @@
           <h2 class="title"><span data-i18n="aboutTitle1">Altın ve mücevherin</span> <em data-i18n="aboutTitle2">zarif dünyası</em></h2>
           <p data-i18n="aboutText1">Federal Gold, merkez mağazasıyla İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta; şubeleriyle Şemdinli ve Van’da hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.</p>
           <p data-i18n="aboutText2">Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazalarımızda yakından görebilirsiniz.</p>
-          <div class="facts">
-            <div><b>3</b><span data-i18n="fact1Sub">Şube</span></div>
-            <div><b>4</b><span data-i18n="fact2Sub">Koleksiyon</span></div>
-            <div><b>TR · EN</b><span data-i18n="fact3Sub">Hizmet dili</span></div>
-          </div>
         </div>
       </div>
     </section>
@@ -884,7 +905,6 @@
           aboutEyebrow:"Hakkımızda", aboutTitle1:"Altın ve mücevherin", aboutTitle2:"zarif dünyası", aboutImg:"Federal Gold Kapalıçarşı mağazasının vitrini",
           aboutText1:"Federal Gold, merkez mağazasıyla İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta; şubeleriyle Şemdinli ve Van’da hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.",
           aboutText2:"Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazalarımızda yakından görebilirsiniz.",
-          fact1Sub:"Şube", fact2Sub:"Koleksiyon", fact3Sub:"Hizmet dili",
           visitEyebrow:"Ziyaret & iletişim", visitTitle:"Mağazalarımızı ziyaret edin", store3Name:"Van", store3Tag:"Şube · Van", addressFull3:"Cumhuriyet Caddesi, Değer İş Merkezi Kat: 3 No: 6, 65130 Van", footerLoc3:"Değer İş Merkezi Kat:3 No:6, Cumhuriyet Cd. · Van", store1Name:"Kapalıçarşı", store1Tag:"Merkez · İstanbul", store2Name:"Şemdinli", store2Img:"Federal Gold storefront in Şemdinli", store2Img:"Federal Gold Şemdinli mağazasının cephesi", store2Tag:"Federal Gold 2 · Hakkari", addressFull2:"Cumhuriyet Caddesi No:46/A, Şemdinli / Hakkari",  footerLoc2:"Cumhuriyet Cd. No:46/A · Şemdinli / Hakkari", addressLabel:"Adres", phoneLabel:"Telefon", phoneStore:"Mağaza", phoneMobile:"Cep · WhatsApp", onlineLabel:"E-posta & Instagram", hoursLabel:"Çalışma saatleri",
           weekdays:"Pazartesi – Cumartesi", open:"09:00 – 18:00", sunday:"Pazar", closed:"Kapalı", hoursNote:"Resmi ve dini bayramlarda çalışma saatleri değişebilir.",
           directions:"Yol tarifi al", callNow:"Hemen ara", footerLoc:"Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul", rights:"Tüm hakları saklıdır.",
@@ -893,7 +913,7 @@
           colItem:"Cins", colBuy:"Alış", colSell:"Satış", colChange:"Değişim", marketUpdated:"Son güncelleme: {time}", marketStale:"Bağlantı yok · son veri: {time}", marketOffline:"Kurlar alınamadı",
           marketError:"Kurlar şu anda alınamıyor. Güncel fiyat için bize WhatsApp’tan yazabilirsiniz.",
           marketNote:"Piyasa verileri bilgi amaçlıdır. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.", marketAsk:"WhatsApp’tan fiyat al",
-          topbarGram:"Gram Altın {price}",
+          topbarGram:"Gram Altın {price}", calcTitle:"Altın hesaplama", calcType:"Cins", calcGram:"Miktar (gram)", calcPiece:"Adet", calcAmount:"Miktar", calcNote:"İşçilik hariçtir; sonuç bilgi amaçlıdır.",
           rHAS:"Has Altın", rGRA:"Gram Altın", rYIA:"22 ayar (gr)", r18:"18 ayar (gr)", r14:"14 ayar (gr)", rGREMSE:"Gremse Altın", rCEYREK:"Çeyrek Altın", rYARIM:"Yarım Altın", rTAM:"Tam Altın", rCUMHURIYET:"Cumhuriyet Altını", rATA:"Ata Altın",
           rUSD:"Amerikan Doları", rEUR:"Euro", rGBP:"İngiliz Sterlini", rGUMUS:"Gümüş (gr)",
           waMessage:"Merhaba Federal Gold, ürünleriniz hakkında bilgi almak istiyorum.", productRequest:"Merhaba Federal Gold, {product} hakkında bilgi alabilir miyim?",
@@ -924,7 +944,6 @@
           aboutEyebrow:"About us", aboutTitle1:"The elegant world of", aboutTitle2:"gold and jewellery", aboutImg:"Shop window of Federal Gold in the Grand Bazaar",
           aboutText1:"Federal Gold has its main store on Muhafazacılar Street in Istanbul's historic Grand Bazaar, with branches in Şemdinli and Van. We bring the bazaar's long jewellery tradition together with carefully selected designs.",
           aboutText2:"From bracelets to wedding bands, everyday pieces to special-occasion jewellery, you can see our pieces up close in our stores.",
-          fact1Sub:"Stores", fact2Sub:"Collections", fact3Sub:"Languages",
           visitEyebrow:"Visit & contact", visitTitle:"Visit our stores", store3Name:"Van", store3Tag:"Branch · Van", addressFull3:"Cumhuriyet Street, Değer Business Centre Floor 3 No 6, 65130 Van", footerLoc3:"Değer Business Centre Floor 3 No 6, Cumhuriyet St. · Van", store1Name:"Grand Bazaar", store1Tag:"Main store · Istanbul", store2Name:"Şemdinli", store2Tag:"Federal Gold 2 · Hakkari", addressFull2:"Cumhuriyet Street No:46/A, Şemdinli / Hakkari",  footerLoc2:"Cumhuriyet St. No:46/A · Şemdinli / Hakkari", addressLabel:"Address", phoneLabel:"Phone", phoneStore:"Store", phoneMobile:"Mobile · WhatsApp", onlineLabel:"Email & Instagram", hoursLabel:"Opening hours",
           weekdays:"Monday – Saturday", open:"09:00 – 18:00", sunday:"Sunday", closed:"Closed", hoursNote:"Opening hours may vary on public and religious holidays.",
           directions:"Get directions", callNow:"Call now", footerLoc:"Grand Bazaar, Muhafazacılar St. No:12/1 · Fatih / Istanbul", rights:"All rights reserved.",
@@ -933,7 +952,7 @@
           colItem:"Item", colBuy:"Buy", colSell:"Sell", colChange:"Change", marketUpdated:"Last updated: {time}", marketStale:"Offline · last data: {time}", marketOffline:"Rates unavailable",
           marketError:"Rates are unavailable right now. Message us on WhatsApp for current prices.",
           marketNote:"Market data is for information only. In-store buying/selling prices and craftsmanship fees may differ; contact us for an exact price.", marketAsk:"Get a price on WhatsApp",
-          topbarGram:"Gram Gold {price}",
+          topbarGram:"Gram Gold {price}", calcTitle:"Gold calculator", calcType:"Item", calcGram:"Amount (grams)", calcPiece:"Pieces", calcAmount:"Amount", calcNote:"Excludes craftsmanship; for information only.",
           rHAS:"Pure gold", rGRA:"Gram gold", rYIA:"22K gold (g)", r18:"18K gold (g)", r14:"14K gold (g)", rGREMSE:"Gremse gold coin", rCEYREK:"Quarter Gold Coin", rYARIM:"Half Gold Coin", rTAM:"Full Gold Coin", rCUMHURIYET:"Republic Gold Coin", rATA:"Ata Gold Coin",
           rUSD:"US Dollar", rEUR:"Euro", rGBP:"British Pound", rGUMUS:"Silver (g)",
           waMessage:"Hello Federal Gold, I would like to know more about your jewellery.", productRequest:"Hello Federal Gold, could you tell me more about your {product}?",
@@ -1014,6 +1033,27 @@
       const num = (v) => { if (typeof v === 'number') return Number.isFinite(v) ? v : null; const s = String(v ?? '').trim(); const n = parseFloat(/,\d+$/.test(s) ? s.replace(/\./g, '').replace(',', '.') : s); return Number.isFinite(n) ? n : null; };
       const locale = () => document.documentElement.lang === 'en' ? 'en-GB' : 'tr-TR';
       const money = (n) => n == null || n <= 0 ? '—' : new Intl.NumberFormat(locale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' ₺';
+      // Gold calculator: amount × live buy/sell rate of the chosen item
+      const COINS = ['CEYREK', 'YARIM', 'TAM', 'CUMHURIYET', 'ATA', 'GREMSE'], FX = ['USD', 'EUR', 'GBP'];
+      const calcType = $('#calc-type'), calcAmt = $('#calc-amount');
+      const updateCalc = () => {
+        if (!rates) return;
+        const d = t();
+        const items = Object.values(RATE_GROUPS).flat().filter(([k]) => rates[k]);
+        const sig = items.map(([k, l]) => k + d[l]).join('|');
+        if (calcType.dataset.sig !== sig) {
+          const cur = calcType.value || 'GRAM';
+          calcType.innerHTML = items.map(([k, l]) => `<option value="${k}">${d[l]}</option>`).join('');
+          calcType.value = items.some(([k]) => k === cur) ? cur : 'GRAM';
+          calcType.dataset.sig = sig;
+        }
+        const k = calcType.value, r = rates[k], q = num(calcAmt.value);
+        $('#calc-unit').textContent = COINS.includes(k) ? d.calcPiece : FX.includes(k) ? d.calcAmount : d.calcGram;
+        $('#calc-sell').textContent = r && q > 0 ? money(r.sell * q) : '—';
+        $('#calc-buy').textContent = r && q > 0 && r.buy ? money(r.buy * q) : '—';
+      };
+      calcType.addEventListener('change', updateCalc);
+      calcAmt.addEventListener('input', updateCalc);
       const changeHtml = (c) => {
         if (c == null) return '<span class="chg flat">—</span>';
         const cls = c > 0 ? 'up' : c < 0 ? 'down' : 'flat';
@@ -1070,6 +1110,7 @@
         status.textContent = (failed ? d.marketStale : d.marketUpdated).replace('{time}', ratesTime);
         const tb = $('#topbar-rate');
         if (rates.GRAM) { tb.textContent = d.topbarGram.replace('{price}', money(rates.GRAM.sell)); tb.hidden = false; }
+        updateCalc();
       };
 
       // Backup source (polled only while Harem is unavailable)
