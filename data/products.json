@@ -3,36 +3,26 @@
     "name": "Desenli Bilezik",
     "image": "/assets/products/bracelets.webp",
     "category": "bracelets",
-    "karat": "",
-    "weight": "",
-    "price": null,
-    "isNew": false
+    "karat": "24",
+    "weight": "10",
+    "isNew": true
   },
   {
     "name": "Tektaş Yüzük",
     "image": "/assets/products/rings.webp",
     "category": "rings",
-    "karat": "",
-    "weight": "",
-    "price": null,
     "isNew": false
   },
   {
     "name": "Damla Kolye",
     "image": "/assets/products/necklaces.webp",
     "category": "necklaces",
-    "karat": "",
-    "weight": "",
-    "price": null,
     "isNew": false
   },
   {
     "name": "Damla Küpe",
     "image": "/assets/products/earrings.webp",
     "category": "earrings",
-    "karat": "",
-    "weight": "",
-    "price": null,
     "isNew": false
   }
 ]
