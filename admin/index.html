@@ -50,6 +50,42 @@
       -webkit-line-clamp: 2 !important; white-space: normal; min-height: calc(2.4em + 26px);
     }
 
+    /* Site İçeriği: groups as dark cards with gold serif titles, photos as a grid of picture cards */
+    section.field[data-field-type="object"] > .field-wrapper > .wrapper {
+      border: 1px solid #3a3022 !important; border-radius: 14px; overflow: hidden; background: #14120f;
+    }
+    section.field[data-field-type="object"] > .field-wrapper > .wrapper > .header { background: transparent !important; }
+    section.field[data-field-type="object"] > .field-wrapper > .wrapper > .item-list > .summary,
+    section.field[data-field-type="object"] > .field-wrapper > .wrapper .summary {
+      font: 500 19px/1.3 'Cormorant Garamond', Georgia, serif; color: #f0d59a;
+    }
+    section.field[data-field-type="object"]:not([data-key-path*="."]) > header h4 {
+      font: 600 26px/1.15 'Cormorant Garamond', Georgia, serif; color: #f0d59a; letter-spacing: .01em;
+    }
+    section.field[data-field-type="object"][data-key-path*="."] > header h4 {
+      font: 600 21px/1.2 'Cormorant Garamond', Georgia, serif; color: #f5f0e6;
+    }
+    section.field[data-key-path="fotograflar"] > .field-wrapper > .wrapper > .item-list {
+      display: grid !important; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; padding: 14px !important;
+    }
+    section.field[data-key-path="fotograflar"] > .field-wrapper > .wrapper > .item-list > section.field {
+      margin: 0 !important; padding: 12px !important; border: 1px solid #3a3022 !important; border-radius: 12px; background: #0b0a09;
+    }
+    section.field[data-key-path="fotograflar"] > .field-wrapper > .wrapper > .item-list > section.field[data-field-type="list"] { grid-column: 1 / -1; }
+    section.field[data-key-path^="fotograflar."][data-field-type="image"] .filled { display: flex !important; flex-direction: column; align-items: stretch; gap: 8px; }
+    section.field[data-key-path^="fotograflar."][data-field-type="image"] .preview.tile {
+      width: 100% !important; height: auto !important; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden;
+    }
+    section.field[data-key-path^="fotograflar."][data-field-type="image"] .preview.tile img { width: 100%; height: 100%; object-fit: cover; }
+    section.field[data-key-path^="fotograflar."][data-field-type="image"] .path { display: none !important; }
+    section.field[data-key-path^="fotograflar."][data-field-type="image"] > header h4 { font-size: 14px; }
+    section.field[data-key-path^="fotograflar."][data-field-type="image"] .drop-target * { white-space: normal !important; text-align: center; font-size: 12px; }
+    section.field[data-field-type="object"] > .field-wrapper > .wrapper .summary .truncated-text { -webkit-line-clamp: 2 !important; white-space: normal; }
+    @media (max-width: 600px) {
+      section.field[data-key-path="fotograflar"] > .field-wrapper > .wrapper > .item-list { gap: 10px; padding: 10px !important; }
+      section.field[data-key-path="fotograflar"] > .field-wrapper > .wrapper > .item-list > section.field { padding: 8px !important; }
+    }
+
     /* field opened from a click in the preview */
     .fg-flash { animation: fg-flash 2.2s ease-out; border-radius: 10px; }
     @keyframes fg-flash { 0%, 45% { box-shadow: 0 0 0 3px #d9b062, 0 0 0 9px rgba(217,176,98,.18); } 100% { box-shadow: none; } }
