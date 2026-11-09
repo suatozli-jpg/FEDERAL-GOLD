@@ -277,3 +277,49 @@
 
   CMS.registerCustomPage({ id: 'durum', label: 'Site Durumu', icon: 'monitor_heart', component: Status });
 })();
+
+// ---- Click in the preview → open that field in the editor ----
+(() => {
+  const ENTRY = { site: '#/collections/site/entries/site', vitrin: '#/collections/vitrin/entries/products' };
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const find = (kp) => document.querySelector(`section.field[data-key-path="${CSS.escape(kp)}"]`);
+  const waitFor = async (fn, ms = 6000) => {
+    const end = Date.now() + ms;
+    for (;;) { const v = fn(); if (v || Date.now() > end) return v; await sleep(80); }
+  };
+  const expand = async (btn) => { if (btn && btn.getAttribute('aria-expanded') === 'false') { btn.click(); await sleep(120); } };
+
+  const reveal = async (path) => {
+    const parts = path.split('.');
+    for (let i = 1; i <= parts.length; i++) {
+      const kp = parts.slice(0, i).join('.');
+      if (/^\d+$/.test(parts[i - 1])) {
+        // list item: open it in its parent list
+        const list = find(parts.slice(0, i - 1).join('.'));
+        await expand(list && list.querySelector(`button[aria-controls$="-item-${parts[i - 1]}-body"]`));
+        continue;
+      }
+      const sec = await waitFor(() => find(kp), 3000);
+      if (!sec) return;
+      if (i < parts.length && sec.dataset.fieldType === 'object') await expand(sec.querySelector('button[aria-controls^="object-"]'));
+    }
+    const field = await waitFor(() => find(path), 3000);
+    if (!field) return;
+    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    field.classList.remove('fg-flash'); void field.offsetWidth; field.classList.add('fg-flash');
+    const input = field.querySelector('input:not([type=hidden]), textarea, [contenteditable=true]');
+    if (input) setTimeout(() => input.focus({ preventScroll: true }), 350);
+  };
+
+  window.addEventListener('message', async (e) => {
+    // from the preview (same origin, or the opaque origin of its nested frames); it can only move the editor's focus
+    if ((e.origin !== location.origin && e.origin !== 'null') || !e.data || typeof e.data.fgEdit !== 'string' || !/^[\w.]+$/.test(e.data.fgEdit)) return;
+    const hash = ENTRY[e.data.collection];
+    if (!hash) return;
+    if (!location.hash.startsWith(hash)) {
+      location.hash = hash;
+      await waitFor(() => find(e.data.collection === 'site' ? 'iletisim' : 'products'), 8000);
+    }
+    reveal(e.data.fgEdit);
+  });
+})();

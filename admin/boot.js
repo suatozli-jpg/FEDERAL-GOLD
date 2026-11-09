@@ -22,9 +22,19 @@
     return res;
   };
 
-  // Tab title: "Federal Gold Paneli" instead of the CMS name
-  const fixTitle = () => {
-    if (document.title.includes('Sveltia CMS')) document.title = document.title.replace('Sveltia CMS', 'Federal Gold Paneli');
+  // "Federal Gold Paneli" instead of the CMS name, in the tab title and on screen
+  const NAME = 'Federal Gold Paneli';
+  const swap = (node) => {
+    if (node.nodeType === 3) { if (node.nodeValue.includes('Sveltia CMS')) node.nodeValue = node.nodeValue.replace(/Sveltia CMS/g, NAME); return; }
+    if (node.nodeType !== 1 || node.tagName === 'SCRIPT' || node.tagName === 'STYLE') return;
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) if (n.nodeValue.includes('Sveltia CMS')) n.nodeValue = n.nodeValue.replace(/Sveltia CMS/g, NAME);
   };
-  new MutationObserver(fixTitle).observe(document.head, { subtree: true, childList: true, characterData: true });
+  new MutationObserver((list) => {
+    if (document.title.includes('Sveltia CMS')) document.title = document.title.replace('Sveltia CMS', NAME);
+    for (const m of list) {
+      if (m.type === 'characterData') swap(m.target);
+      else m.addedNodes.forEach(swap);
+    }
+  }).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
 })();

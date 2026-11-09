@@ -43,6 +43,7 @@ media_libraries:
 collections:
   - name: vitrin
     label: Vitrin
+    icon: diamond
     description: Sitedeki "Mağazamızdan seçmeler" bölümündeki ürünler. Sıralama sitedeki sıradır.
     files:
       - name: products
@@ -56,6 +57,8 @@ collections:
             widget: list
             root: true
             summary: "{{name}}"
+            thumbnail: image
+            collapsed: true
             add_to_top: true
             fields:
               - name: name
@@ -108,6 +111,7 @@ collections:
 
   - name: site
     label: Site İçeriği
+    icon: web
     description: Sitedeki yazılar, telefonlar, adresler ve fotoğraflar. Kaydedince yaklaşık 1 dakikada sitede görünür.
     files:
       - name: site
@@ -121,6 +125,8 @@ collections:
           - name: iletisim
             label: İletişim bilgileri
             widget: object
+            collapsed: true
+            summary: "Telefonlar, WhatsApp, e-posta, Instagram"
             fields:
               - { name: magazaTel, label: "Kapalıçarşı mağaza telefonu", widget: string, hint: "Örnek: +90 212 511 74 28" }
               - { name: whatsapp, label: "Kapalıçarşı cep · WhatsApp", widget: string, hint: "Sitedeki tüm WhatsApp butonları bu numaraya gider" }
@@ -132,6 +138,8 @@ collections:
           - name: fotograflar
             label: Fotoğraflar
             widget: object
+            collapsed: true
+            summary: "Ana ekran, Hakkımızda, şubeler, koleksiyon kartları"
             hint: Fotoğrafı silersen (Hakkımızda ve şube fotoğrafları) o fotoğraf sitede görünmez.
             fields:
               - { name: anaEkran, label: "Ana ekran arka planı", widget: image, required: false }
@@ -146,8 +154,9 @@ collections:
           - name: tr
             label: "Yazılar (Türkçe)"
             widget: object
-            collapsed: false
-            hint: "Sitedeki tüm Türkçe yazılar, bölüm bölüm."
+            collapsed: true
+            summary: "Sitedeki tüm Türkçe yazılar, bölüm bölüm"
+            hint: "İpucu: sağdaki önizlemede bir yazıya dokunursan doğrudan o alan açılır."
             fields:
               - name: anaEkran
                 label: "Ana ekran"
@@ -297,6 +306,7 @@ collections:
             label: "Yazılar (İngilizce)"
             widget: object
             collapsed: true
+            summary: "Site EN modundayken görünen yazılar"
             hint: "Site EN modundayken görünen yazılar. Türkçeyi değiştirdiysen buradaki karşılığını da güncelle."
             fields:
               - name: anaEkran

@@ -1181,7 +1181,8 @@
       const CAT_KEYS = { bracelets: 'catBracelets', rings: 'catRings', necklaces: 'catNecklaces', earrings: 'catEarrings', watches: 'catWatches', other: 'catOther' };
       const vitrinEl = $('#vitrin');
       let products = [], vitrinFilter = 'all';
-      const safeImage = (src) => typeof src === 'string' && /^\/?assets\/[\w\-./]+\.(webp|jpe?g|png|gif|avif)$/i.test(src) && !src.includes('..') ? src.replace(/^\//, '') : null;
+      const safeImage = (src) => (window.__PRODUCTS__ && typeof src === 'string' && /^blob:https?:\/\/[^/]+\/[\w-]+$/.test(src)) ? src // unsaved photo in the panel preview
+        : typeof src === 'string' && /^\/?assets\/[\w\-./]+\.(webp|jpe?g|png|gif|avif)$/i.test(src) && !src.includes('..') ? src.replace(/^\//, '') : null;
       const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
       renderVitrin = () => {
         if (!products.length) return;
@@ -1206,6 +1207,7 @@
         products.filter(p => vitrinFilter === 'all' || p.category === vitrinFilter).forEach(p => {
           const title = code === 'en' && p.nameEn ? p.nameEn : p.name;
           const card = el('article', 'product');
+          card.dataset.i = p.idx;
           const media = el('div', 'product-img');
           const img = el('img');
           img.src = p.img; img.alt = title; img.loading = 'lazy'; img.decoding = 'async'; img.width = 600; img.height = 600;
@@ -1249,7 +1251,7 @@
       // window.__PRODUCTS__ is set only in the panel's live preview
       (window.__PRODUCTS__ ? Promise.resolve(window.__PRODUCTS__) : fetch('data/products.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : []))
         .then(list => {
-          products = (Array.isArray(list) ? list : []).map(p => {
+          products = (Array.isArray(list) ? list : []).map((p, idx) => {
             if (!p || typeof p !== 'object' || p.visible === false) return null;
             const name = String(p.name || '').trim().slice(0, 120);
             const nameEn = String(p.nameEn || '').trim().slice(0, 120);
@@ -1258,7 +1260,7 @@
             const priceNum = typeof p.price === 'number' && p.price > 0 ? p.price : null;
             const priceStr = typeof p.price === 'string' && p.price.trim() ? p.price.trim().slice(0, 40) : null;
             return {
-              name, nameEn, img,
+              name, nameEn, img, idx,
               category: String(p.category || ''),
               karat: String(p.karat || '').trim().slice(0, 10),
               weight: String(p.weight || '').trim().slice(0, 20),

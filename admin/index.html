@@ -6,6 +6,15 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Federal Gold Paneli</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <style>
+    /* Federal Gold colours for the panel (gold accent instead of blue) */
+    :root, :root[data-theme] { --sui-base-hue: 38 !important; }
+    /* sections are always there: no required star on group headers */
+    section.field[data-field-type="object"] > header .required, section.field[data-field-type="list"] > header .required { display: none; }
+    /* field opened from a click in the preview */
+    .fg-flash { animation: fg-flash 2.2s ease-out; border-radius: 10px; }
+    @keyframes fg-flash { 0%, 45% { box-shadow: 0 0 0 3px hsl(38 85% 50%), 0 0 0 9px hsl(38 85% 50% / .18); } 100% { box-shadow: none; } }
+  </style>
 </head>
 <body>
   <!-- Sveltia CMS (pinned version). Settings live in ./config.yml -->

@@ -149,6 +149,41 @@ function flatten(lang) {
   return out;
 }
 
+const EDIT_BRIDGE = `(() => {
+  const C = window.__FG_EDIT__ || { map: {}, phones: {} };
+  const CARD = { bracelets: 'bilezikler', rings: 'yuzukler', necklaces: 'kolyeler', earrings: 'kupeler' };
+  const target = (t) => {
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'tr';
+    const prod = t.closest('#vitrin-grid [data-i]');
+    if (prod) return { c: 'vitrin', p: 'products.' + prod.dataset.i + (t.closest('img, .product-img') ? '.image' : '.name') };
+    const i18n = t.closest('[data-i18n]');
+    if (i18n && C.map[i18n.dataset.i18n]) return { c: 'site', p: lang + '.' + C.map[i18n.dataset.i18n] + '.' + i18n.dataset.i18n };
+    const a = t.closest('a[href]');
+    if (a) {
+      const h = a.getAttribute('href') || '';
+      if (h.startsWith('tel:')) { const k = C.phones[h.replace(/\\D/g, '')]; if (k) return { c: 'site', p: 'iletisim.' + k }; }
+      if (h.includes('wa.me/')) return { c: 'site', p: 'iletisim.whatsapp' };
+      if (h.startsWith('mailto:')) return { c: 'site', p: 'iletisim.eposta' };
+      if (h.includes('instagram.com/')) return { c: 'site', p: C.insta2 && h.includes('/' + C.insta2 + '/') ? 'iletisim.instagram2' : 'iletisim.instagram' };
+    }
+    if (t.closest('figure.founder-photo')) return { c: 'site', p: 'fotograflar.hakkimizda' };
+    const store = t.closest('.visit-card[data-store]');
+    if (store && t.closest('figure.store-photo')) return { c: 'site', p: 'fotograflar.' + store.dataset.store };
+    const cat = t.closest('.category-card[data-product]');
+    if (cat && CARD[cat.dataset.product]) return { c: 'site', p: 'fotograflar.' + CARD[cat.dataset.product] };
+    if (t.closest('.hero')) return { c: 'site', p: 'fotograflar.anaEkran' };
+    return null;
+  };
+  document.addEventListener('click', (e) => {
+    const t = e.target instanceof Element ? e.target : e.target.parentElement;
+    if (!t || t.closest('[data-lang], #vitrin-chips, #menu-toggle, .lb-btn, #calc select, #calc input')) return;
+    e.preventDefault(); e.stopPropagation();
+    const hit = target(t);
+    // the preview sits in nested blob:/srcdoc frames whose origin is opaque, so no target origin can be named
+    if (hit) window.top.postMessage({ fgEdit: hit.p, collection: hit.c }, '*');
+  }, true);
+})();`;
+
 async function renderHome(request, env, preview = null) {
   const res = await env.ASSETS.fetch(preview ? new Request(new URL('/', request.url)) : request);
   const type = res.headers.get('Content-Type') || '';
@@ -193,12 +228,23 @@ async function renderHome(request, env, preview = null) {
   const json = JSON.stringify({ tr, en }).replace(/</g, '\\u003c');
   const photo = (key) => (f[key] === '' || f[key] == null) ? '' : safePath(f[key], pv);
 
+  // Panel preview only: clicking a text, photo, number or product opens that field in the editor
+  let bridge = '';
+  if (pv) {
+    const map = {};
+    for (const [sec, obj] of Object.entries(site.tr || {})) if (obj && typeof obj === 'object') for (const k of Object.keys(obj)) map[k] = sec;
+    const phones = {};
+    for (const k of ['magazaTel', 'whatsapp', 'semdinliTel', 'vanTel']) phones[intl(c[k] || DEFAULTS.iletisim[k])] = k;
+    const cfg = JSON.stringify({ map, phones, insta2: String(c.instagram2 || '').replace(/^@/, '') }).replace(/</g, '\\u003c');
+    bridge = `<style>[data-i18n]:hover,#vitrin-grid [data-i]:hover,figure:hover,.category-card:hover,a[href^="tel:"]:hover,.floating-whatsapp:hover{outline:2px dashed #d9b062!important;outline-offset:3px;cursor:pointer}</style>`
+      + `<script>window.__FG_EDIT__=${cfg}</script><script>${EDIT_BRIDGE}</script>`;
+  }
   const products = preview && Array.isArray(preview.products)
     ? `<script>window.__PRODUCTS__=${JSON.stringify(preview.products).replace(/</g, '\\u003c')}</script>` : '';
   let rw = new HTMLRewriter()
     .on('head', { element(e) {
       if (pv) e.prepend('<base href="/" target="_blank"><meta name="robots" content="noindex">', { html: true });
-      e.append(`<script>window.__SITE__=${json}</script>${products}`, { html: true });
+      e.append(`<script>window.__SITE__=${json}</script>${products}${bridge}`, { html: true });
     } })
     .on('[data-i18n]', { element(e) { const k = e.getAttribute('data-i18n'); if (tr[k] != null) e.setInnerContent(tr[k]); } })
     .on('[data-i18n-alt]', { element(e) { const k = e.getAttribute('data-i18n-alt'); if (tr[k] != null) e.setAttribute('alt', tr[k]); } })
