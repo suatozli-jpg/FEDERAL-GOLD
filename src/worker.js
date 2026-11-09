@@ -33,18 +33,26 @@ function safeEqual(a, b) {
   return diff === 0;
 }
 
-async function makeSession(env) {
+// Two kinds of sign-in: the owner (PANEL_SIFRE, everything) and "abi" (PANEL_SIFRE_ABI: only Vitrin,
+// no history, status, visitors or site texts, and nothing from the repository's history).
+async function makeSession(env, role = 'owner') {
   const exp = String(Date.now() + SESSION_DAYS * 864e5);
-  return `${exp}.${await hmac(env, exp)}`;
+  const payload = role === 'owner' ? exp : `${exp}~${role}`;
+  return `${payload}.${await hmac(env, role === 'abi' ? `${payload}\u0000${env.PANEL_SIFRE_ABI}` : payload)}`;
 }
 
+// returns 'owner', 'abi' or null
 async function hasSession(request, env) {
-  if (!env.PANEL_SIFRE || !env.GITLAB_TOKEN) return false;
+  if (!env.PANEL_SIFRE || !env.GITLAB_TOKEN) return null;
   const m = (request.headers.get('Cookie') || '').match(new RegExp(`(?:^|;\\s*)${COOKIE}=([^;]+)`));
-  if (!m) return false;
-  const [exp, sig] = m[1].split('.');
-  if (!exp || !sig || Number(exp) < Date.now()) return false;
-  return safeEqual(sig, await hmac(env, exp));
+  if (!m) return null;
+  const [payload, sig] = m[1].split('.');
+  if (!payload || !sig) return null;
+  const [exp, role = 'owner'] = payload.split('~');
+  if (Number(exp) < Date.now() || !['owner', 'abi'].includes(role)) return null;
+  if (role === 'abi' && !env.PANEL_SIFRE_ABI) return null; // removing the secret signs abi out everywhere
+  if (!safeEqual(sig, await hmac(env, role === 'abi' ? `${payload}\u0000${env.PANEL_SIFRE_ABI}` : payload))) return null;
+  return role;
 }
 
 const cookieHeader = (value, maxAge) =>
@@ -116,13 +124,56 @@ function allowedGitLabPath(path) {
     || path === `/v4/projects/${REPO_ID}` || path.startsWith(`/v4/projects/${REPO_ID}/`);
 }
 
-async function proxyGitLab(request, env, url) {
+// For "abi": only what the Vitrin editor needs, and every name, e-mail or note from the repository history is hidden
+const ABI_FILES = /^(data\/products\.json|assets\/products\/[^/]+)$/;
+const scrub = (v) => {
+  if (typeof v === 'string') {
+    return v.replace(/(^|\n)(Co-Authored-By|Claude-Session|Signed-off-by):[^\n]*/gi, '')
+      .replace(/https?:\/\/(claude\.ai|claude\.com|anthropic\.com)\S*/gi, '')
+      .replace(/[\w.+-]+@(anthropic\.com|users\.noreply\.gitlab\.com|gmail\.com|hotmail\.com)/gi, 'panel@federalgold.org')
+      .replace(/\b(Claude|Anthropic|Opus|Sonnet|Haiku)\b/gi, 'Federal Gold');
+  }
+  if (Array.isArray(v)) return v.map(scrub);
+  if (v && typeof v === 'object') {
+    const out = {};
+    for (const [k, x] of Object.entries(v)) {
+      out[k] = /^(author|committer)(_?name|_?email)?$/i.test(k) && typeof x === 'string' ? (/email/i.test(k) ? 'panel@federalgold.org' : 'Federal Gold')
+        : /^(message|full_?title|title|description|trailers|extended_trailers)$/i.test(k) && typeof x === 'string' ? 'Panel kaydı'
+        : scrub(x);
+    }
+    return out;
+  }
+  return v;
+};
+
+async function abiAllowed(request, rest, url) {
+  const m = request.method;
+  if (rest === '/graphql') {
+    // read-only queries; mutations are not used by the panel's GitLab backend for saving
+    const body = await request.clone().text();
+    return !/\bmutation\b/i.test(body);
+  }
+  if (m === 'GET' || m === 'HEAD') return !/\/repository\/commits\/[^/]+\/(revert|cherry_pick)|\/(members|variables|hooks|deploy_keys|access_tokens)/.test(rest);
+  if (m === 'POST' && /\/repository\/commits$/.test(rest)) {
+    let body;
+    try { body = await request.clone().json(); } catch { return false; }
+    const actions = Array.isArray(body && body.actions) ? body.actions : [];
+    return body.branch === 'main' && actions.length > 0 && actions.every((a) => a && ABI_FILES.test(String(a.file_path || ''))
+      && (!a.previous_path || ABI_FILES.test(String(a.previous_path))));
+  }
+  return false;
+}
+
+async function proxyGitLab(request, env, url, role = 'owner') {
   // /admin/api/gitlab/v4/... -> https://gitlab.com/api/v4/... ; /admin/api/gitlab/graphql -> https://gitlab.com/api/graphql
   const rest = url.pathname.slice('/admin/api/gitlab'.length);
   // keep the raw (still encoded) path so "sozlu99-hue%2Ffederal-gold" stays one segment
   const rawRest = request.url.split('?')[0].replace(/^https?:\/\/[^/]+\/admin\/api\/gitlab/, '');
   if (!allowedGitLabPath(rest) && !allowedGitLabPath(rawRest)) {
     return new Response('Forbidden', { status: 403, headers: securityHeaders });
+  }
+  if (role === 'abi' && !(await abiAllowed(request, decodeURIComponent(rawRest), url))) {
+    return new Response(JSON.stringify({ message: 'Bu işlem için yetkin yok.' }), { status: 403, headers: { 'Content-Type': 'application/json', ...securityHeaders } });
   }
   const target = `https://gitlab.com/api${rawRest}${url.search}`;
   const headers = new Headers();
@@ -137,18 +188,25 @@ async function proxyGitLab(request, env, url) {
   const out = new Headers(res.headers);
   out.delete('Set-Cookie');
   out.set('Cache-Control', 'no-store');
+  if (role === 'abi' && (out.get('Content-Type') || '').includes('json')) {
+    const data = await res.json().catch(() => null);
+    out.delete('Content-Length'); out.delete('Content-Encoding'); out.delete('ETag');
+    return new Response(JSON.stringify(scrub(data)), { status: res.status, headers: out });
+  }
   return new Response(res.body, { status: res.status, headers: out });
 }
 
-async function panelConfig(request, env, url) {
+async function panelConfig(request, env, url, role = 'owner') {
   const res = await env.ASSETS.fetch(new Request(new URL('/admin/config.yml', url), request));
   if (!res.ok) return res;
   // federalgold.org edits the live site (main); a preview like "<branch>-federal-gold.<x>.workers.dev" edits that branch
   const m = url.hostname.match(/^([a-z0-9-]+?)-federal-gold\./);
   const branch = m ? m[1] : 'main';
-  const text = (await res.text())
+  let text = (await res.text())
     .replaceAll('__ORIGIN__', url.origin)
     .replaceAll('__BRANCH__', branch);
+  // abi: only the Vitrin collection (Site İçeriği is the last collection in the file)
+  if (role === 'abi') text = text.replace(/\n  - name: site\n[\s\S]*$/, '\n');
   return new Response(text, { headers: { 'Content-Type': 'text/yaml; charset=utf-8', ...securityHeaders } });
 }
 
@@ -389,11 +447,13 @@ export default {
         }
         const form = await request.formData().catch(() => null);
         const given = form ? String(form.get('password') || '') : '';
-        if (given && safeEqual(given, env.PANEL_SIFRE)) {
+        const role = given && safeEqual(given, env.PANEL_SIFRE) ? 'owner'
+          : given && env.PANEL_SIFRE_ABI && safeEqual(given, env.PANEL_SIFRE_ABI) ? 'abi' : null;
+        if (role) {
           if (tries) await setFailedTries(request, 0);
           // The panel signs itself in (admin/boot.js); the real GitLab token never leaves this worker.
           return new Response(null, { status: 303, headers: {
-            Location: '/admin/', 'Set-Cookie': cookieHeader(await makeSession(env), SESSION_DAYS * 86400), ...securityHeaders } });
+            Location: '/admin/', 'Set-Cookie': cookieHeader(await makeSession(env, role), SESSION_DAYS * 86400), ...securityHeaders } });
         }
         await setFailedTries(request, tries + 1);
         await new Promise((r) => setTimeout(r, 1500)); // slow down guessing
@@ -408,12 +468,15 @@ export default {
       return new Response(null, { status: 303, headers: { Location: '/admin/login', 'Set-Cookie': cookieHeader('', 0), ...securityHeaders } });
     }
 
-    if (!(await hasSession(request, env))) {
+    const role = await hasSession(request, env);
+    if (!role) {
       if (p.startsWith('/admin/api/')) return new Response('Unauthorized', { status: 401, headers: { ...securityHeaders, 'X-Panel-Session': 'expired' } });
       return Response.redirect(`${url.origin}/admin/login`, 303);
     }
 
-    if (p.startsWith('/admin/api/gitlab/')) return proxyGitLab(request, env, url);
+    if (p.startsWith('/admin/api/gitlab/')) return proxyGitLab(request, env, url, role);
+    // abi: no history, status or visitor numbers
+    if (role === 'abi' && /^\/admin\/api\/(status|visitors)/.test(p)) return new Response('Forbidden', { status: 403, headers: securityHeaders });
     if (p === '/admin/api/describe' && request.method === 'POST') return describeProduct(request, env);
     if (p === '/admin/api/translate' && request.method === 'POST') return translateTexts(request, env);
     if (p === '/admin/api/visitors' && request.method === 'GET') return visitors(request, env);
@@ -426,11 +489,15 @@ export default {
       if (JSON.stringify(body).length > 500000) return new Response('Too large', { status: 413, headers: securityHeaders });
       return renderHome(request, env, { site: body.site, products: body.products });
     }
-    if (p === '/admin/config.yml') return panelConfig(request, env, url);
+    if (p === '/admin/config.yml') return panelConfig(request, env, url, role);
 
     const res = await env.ASSETS.fetch(request);
     const out = new Response(res.body, res);
     for (const [k, v] of Object.entries(securityHeaders)) out.headers.set(k, v);
+    // tell the panel page who signed in, so it can hide the owner-only pages
+    if ((out.headers.get('Content-Type') || '').includes('text/html')) {
+      return new HTMLRewriter().on('head', { element(e) { e.prepend(`<script>window.__FG_ROLE__=${JSON.stringify(role)}</script>`, { html: true }); } }).transform(out);
+    }
     return out;
   },
   async scheduled(event, env, ctx) {

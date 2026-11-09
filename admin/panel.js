@@ -147,7 +147,8 @@
     );
   }
 
-  CMS.registerCustomPage({ id: 'gecmis', label: 'Değişiklik Geçmişi', icon: 'history', component: History });
+  // owner-only page (hidden for the "abi" sign-in)
+  if (window.__FG_ROLE__ !== 'abi') CMS.registerCustomPage({ id: 'gecmis', label: 'Değişiklik Geçmişi', icon: 'history', component: History });
 })();
 
 // ---- Product name from the photo ----
@@ -345,7 +346,8 @@
       h('button', { style: btn, disabled: busy, onClick: runNow }, busy ? 'Kontrol ediliyor…' : 'Şimdi kontrol et'));
   }
 
-  CMS.registerCustomPage({ id: 'durum', label: 'Site Durumu', icon: 'monitor_heart', component: Status });
+  // owner-only page (hidden for the "abi" sign-in)
+  if (window.__FG_ROLE__ !== 'abi') CMS.registerCustomPage({ id: 'durum', label: 'Site Durumu', icon: 'monitor_heart', component: Status });
 })();
 
 // ---- "Ziyaretçiler" page: Cloudflare Web Analytics numbers (real browsers; bots and panel pages left out) ----
@@ -478,7 +480,8 @@
       body);
   }
 
-  CMS.registerCustomPage({ id: 'ziyaretciler', label: 'Ziyaretçiler', icon: 'group', component: Visitors });
+  // owner-only page (hidden for the "abi" sign-in)
+  if (window.__FG_ROLE__ !== 'abi') CMS.registerCustomPage({ id: 'ziyaretciler', label: 'Ziyaretçiler', icon: 'group', component: Visitors });
 })();
 
 // ---- Click in the preview → open that field in the editor ----
