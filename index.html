@@ -1250,7 +1250,7 @@
       (window.__PRODUCTS__ ? Promise.resolve(window.__PRODUCTS__) : fetch('data/products.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : []))
         .then(list => {
           products = (Array.isArray(list) ? list : []).map(p => {
-            if (!p || typeof p !== 'object') return null;
+            if (!p || typeof p !== 'object' || p.visible === false) return null;
             const name = String(p.name || '').trim().slice(0, 120);
             const nameEn = String(p.nameEn || '').trim().slice(0, 120);
             const img = safeImage(p.image);

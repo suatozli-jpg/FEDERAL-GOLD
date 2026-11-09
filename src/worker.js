@@ -244,11 +244,9 @@ export default {
         const form = await request.formData().catch(() => null);
         const given = form ? String(form.get('password') || '') : '';
         if (given && safeEqual(given, env.PANEL_SIFRE)) {
-          // Sign the panel in automatically: its "sign in on another device" link carries a
-          // placeholder token; the real GitLab token never leaves this worker.
-          const magic = b64url(enc.encode(JSON.stringify({ token: 'panel-session' })));
+          // The panel signs itself in (admin/boot.js); the real GitLab token never leaves this worker.
           return new Response(null, { status: 303, headers: {
-            Location: `/admin/#/signin/${magic}`, 'Set-Cookie': cookieHeader(await makeSession(env), SESSION_DAYS * 86400), ...securityHeaders } });
+            Location: '/admin/', 'Set-Cookie': cookieHeader(await makeSession(env), SESSION_DAYS * 86400), ...securityHeaders } });
         }
         await new Promise((r) => setTimeout(r, 1500)); // slow down guessing
         return loginPage({ error: 'Şifre yanlış.' });
@@ -262,7 +260,7 @@ export default {
     }
 
     if (!(await hasSession(request, env))) {
-      if (p.startsWith('/admin/api/')) return new Response('Unauthorized', { status: 401, headers: securityHeaders });
+      if (p.startsWith('/admin/api/')) return new Response('Unauthorized', { status: 401, headers: { ...securityHeaders, 'X-Panel-Session': 'expired' } });
       return Response.redirect(`${url.origin}/admin/login`, 303);
     }
 

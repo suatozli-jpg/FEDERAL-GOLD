@@ -12,13 +12,18 @@ backend:
   graphql_api_root: __ORIGIN__/admin/api/gitlab/graphql
   auth_methods: [token]
   commit_messages:
-    update: "Vitrin: ürünler güncellendi"
-    uploadMedia: "Vitrin: fotoğraf yüklendi ({{path}})"
-    deleteMedia: "Vitrin: fotoğraf silindi ({{path}})"
+    create: "Panel: {{collection}} eklendi"
+    update: "Panel: {{collection}} güncellendi"
+    delete: "Panel: {{collection}} silindi"
+    uploadMedia: "Panel: fotoğraf yüklendi ({{path}})"
+    deleteMedia: "Panel: fotoğraf silindi ({{path}})"
 
 site_url: https://federalgold.org
 display_url: https://federalgold.org
-logo_url: /apple-touch-icon.png
+logo:
+  src: /assets/logo-mark.webp
+  show_in_header: true
+logout_redirect_url: /admin/logout
 
 media_folder: assets/products
 public_folder: /assets/products
@@ -91,6 +96,12 @@ collections:
                 label: '"Yeni" etiketi göster'
                 widget: boolean
                 default: false
+              - name: visible
+                label: Sitede göster
+                hint: Kapatırsan ürün silinmez, sadece sitede görünmez.
+                widget: boolean
+                default: true
+                required: false
 
   - name: site
     label: Site İçeriği
