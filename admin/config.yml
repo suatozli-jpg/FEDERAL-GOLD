@@ -75,7 +75,7 @@ collections:
                 widget: image
               - name: images
                 label: Ek fotoğraflar (isteğe bağlı)
-                hint: Önden, yandan, takılı hali gibi. Sitede ürün kartında "+N" görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                hint: Önden, yandan, takılı hali gibi. Birkaçını birden seçebilirsin; sitede "+N" olarak görünür.
                 widget: image
                 multiple: true
                 required: false
@@ -153,21 +153,21 @@ collections:
               - { name: kapalicarsi, label: "Kapalıçarşı şube fotoğrafı", widget: image, required: false }
               - name: kapalicarsiGaleri
                 label: "Kapalıçarşı şube – ek fotoğraflar"
-                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                hint: Birkaçını birden seçebilirsin. Sitede "+N fotoğraf" olarak görünür.
                 widget: image
                 multiple: true
                 required: false
               - { name: semdinli, label: "Şemdinli şube fotoğrafı", widget: image, required: false }
               - name: semdinliGaleri
                 label: "Şemdinli şube – ek fotoğraflar"
-                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                hint: Birkaçını birden seçebilirsin. Sitede "+N fotoğraf" olarak görünür.
                 widget: image
                 multiple: true
                 required: false
               - { name: van, label: "Van şube fotoğrafı", widget: image, required: false }
               - name: vanGaleri
                 label: "Van şube – ek fotoğraflar"
-                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                hint: Birkaçını birden seçebilirsin. Sitede "+N fotoğraf" olarak görünür.
                 widget: image
                 multiple: true
                 required: false
