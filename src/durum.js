@@ -1,5 +1,8 @@
 // Site health checks ("Site Durumu"). Run every hour by the cron trigger and on demand from the
 // panel. Results are kept in KV (binding DURUM): "latest" and a rolling 7-day "history".
+// When the send_email binding ALERT exists, a problem seen in two runs in a row is e-mailed, and so is the recovery.
+
+import { EmailMessage } from 'cloudflare:email';
 
 const SITE = 'https://federalgold.org';
 const REPO_API = 'https://gitlab.com/api/v4/projects/sozlu99-hue%2Ffederal-gold';
@@ -174,6 +177,9 @@ export async function runChecks(env, renderHome) {
   const worst = results.some((r) => r.status === 'err') ? 'err' : results.some((r) => r.status === 'warn') ? 'warn' : 'ok';
   const run = { time: new Date().toISOString(), status: worst, results };
   if (env.DURUM) {
+    let previous = null;
+    try { previous = JSON.parse((await env.DURUM.get('latest')) || 'null'); } catch { previous = null; }
+    await alertIfChanged(env, run, previous).catch((e) => console.warn('alert mail failed', e && e.message));
     await env.DURUM.put('latest', JSON.stringify(run));
     let history = [];
     try { history = JSON.parse((await env.DURUM.get('history')) || '[]'); } catch { history = []; }
@@ -181,6 +187,54 @@ export async function runChecks(env, renderHome) {
     await env.DURUM.put('history', JSON.stringify(history.slice(-24 * 8)));
   }
   return run;
+}
+
+// ---- e-mail alerts ----
+const ALERT_FROM = 'durum@federalgold.org';
+const b64 = (str) => {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (const x of bytes) bin += String.fromCharCode(x);
+  return btoa(bin);
+};
+
+async function sendMail(env, subject, text) {
+  const to = env.ALERT_TO || 'federalgold@hotmail.com';
+  const raw = [
+    `From: Federal Gold Site Durumu <${ALERT_FROM}>`,
+    `To: ${to}`,
+    `Subject: =?UTF-8?B?${b64(subject)}?=`,
+    `Message-ID: <${crypto.randomUUID()}@federalgold.org>`,
+    `Date: ${new Date().toUTCString()}`,
+    'MIME-Version: 1.0',
+    'Content-Type: text/plain; charset=UTF-8',
+    'Content-Transfer-Encoding: base64',
+    '',
+    b64(text).replace(/.{76}/g, '$&\r\n'),
+  ].join('\r\n');
+  await env.ALERT.send(new EmailMessage(ALERT_FROM, to, raw));
+}
+
+// Problems (warn/err) present in this run and the previous one; a single blip (e.g. Harem for one hour) is not mailed.
+async function alertIfChanged(env, run, previous) {
+  if (!env.ALERT || !env.DURUM) return;
+  const before = new Map(((previous && previous.results) || []).filter((r) => r.status !== 'ok').map((r) => [r.id, r.status]));
+  const problems = run.results.filter((r) => r.status !== 'ok' && before.has(r.id));
+  const sig = problems.map((r) => `${r.id}:${r.status}`).sort().join(',');
+  const last = (await env.DURUM.get('alerted')) || '';
+  if (sig === last) return;
+  if (sig) {
+    const worst = problems.some((r) => r.status === 'err');
+    await sendMail(env, `${worst ? '🔴' : '🟡'} federalgold.org: ${problems.length} sorun`, [
+      'Site Durumu kontrolünde şu sorunlar art arda iki kez görüldü:', '',
+      ...problems.map((r) => `${r.status === 'err' ? '✕' : '!'} ${r.title}: ${r.detail}`), '',
+      'Ayrıntılar: https://federalgold.org/admin/ (Site Durumu)',
+      'Sorun düzelince ayrıca haber verilir.',
+    ].join('\n'));
+  } else {
+    await sendMail(env, '🟢 federalgold.org: her şey yolunda', 'Önceki mailde bildirilen sorunlar düzeldi; bütün kontroller şu an yeşil.\n\nhttps://federalgold.org/admin/ (Site Durumu)');
+  }
+  await env.DURUM.put('alerted', sig);
 }
 
 export async function readStatus(env) {
