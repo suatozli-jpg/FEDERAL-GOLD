@@ -1,6 +1,10 @@
 // Runs before the panel loads. The password page has already set the session cookie, and the
 // site worker adds the real GitLab token to every request, so the panel only needs a placeholder.
 (() => {
+  // open on the welcome page ("Ana Sayfa") instead of the first collection
+  if (!location.hash || location.hash === '#' || location.hash === '#/' || location.hash === '#/collections') {
+    history.replaceState(null, '', `${location.pathname}${location.search}#/pages/anasayfa`);
+  }
   try {
     const key = 'sveltia-cms.user';
     const user = JSON.parse(localStorage.getItem(key) || 'null');

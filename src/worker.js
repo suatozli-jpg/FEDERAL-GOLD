@@ -97,22 +97,72 @@ function loginPage({ error = '', notConfigured = false, status = 200 } = {}) {
     ? '<p class="err">Panel henüz yapılandırılmadı (Cloudflare\'de PANEL_SIFRE ve GITLAB_TOKEN eksik).</p>'
     : error ? `<p class="err">${error}</p>` : '';
   const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex, nofollow">
 <title>Federal Gold — Panel Girişi</title><link rel="manifest" href="/assets/panel/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/panel/apple-touch-icon.png"><meta name="theme-color" content="#0b0a09"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FG Panel"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
-:root{--bg:#0b0a09;--s:#14120f;--l:#3a3022;--g:#d9b062;--gl:#f0d59a;--t:#f5f0e6;--m:#b9b0a2}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:24px 16px;background:var(--bg);color:var(--t);font:16px/1.5 -apple-system,'Segoe UI',Arial,sans-serif}
-form{width:100%;max-width:380px;background:var(--s);border:1px solid var(--l);border-radius:16px;padding:28px 22px}
-img{display:block;width:64px;height:64px;margin:0 auto 10px}h1{margin:0 0 4px;text-align:center;font:600 26px/1.2 Georgia,serif;color:var(--gl)}
-p.sub{margin:0 0 22px;text-align:center;color:var(--m);font-size:14px}label{display:block;font-size:14px;color:var(--m);margin-bottom:6px}
-input{width:100%;min-height:50px;padding:0 14px;border-radius:10px;border:1px solid var(--l);background:#0d0b09;color:var(--t);font-size:17px}
-input:focus{outline:none;border-color:var(--g)}button{width:100%;min-height:50px;margin-top:16px;border:0;border-radius:10px;background:var(--g);color:#1a1307;font-weight:700;font-size:16px}
-.err{margin:0 0 14px;padding:10px 12px;border-radius:10px;background:rgba(240,138,122,.12);border:1px solid rgba(240,138,122,.4);color:#f3b2a7;font-size:14px}
+:root{--bg:#0b0a09;--g:#d9b062;--gl:#f0d59a;--t:#f5f0e6;--m:#b9b0a2}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom));color:var(--t);font:16px/1.5 Manrope,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--bg);overflow-x:hidden}
+.bg{position:fixed;inset:-40px;background:url(/assets/magaza-1.webp) center 35%/cover no-repeat;filter:blur(6px) saturate(1.1);transform:scale(1.08);animation:drift 26s ease-in-out infinite alternate;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 30%,rgba(11,10,9,.55),rgba(11,10,9,.92) 70%),linear-gradient(180deg,rgba(11,10,9,.3),rgba(11,10,9,.95))}
+@keyframes drift{from{transform:scale(1.08) translate3d(0,0,0)}to{transform:scale(1.16) translate3d(-18px,-12px,0)}}
+.card{position:relative;width:100%;max-width:400px;padding:34px 26px 26px;border-radius:22px;background:rgba(20,18,15,.62);border:1px solid rgba(217,176,98,.28);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.04);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+.logo{position:relative;width:92px;height:92px;margin:0 auto 14px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px rgba(217,176,98,.35),0 0 40px rgba(217,176,98,.25);animation:glow 3.2s ease-in-out infinite}
+.logo img{display:block;width:100%;height:100%}
+.logo::after{content:"";position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 40%,rgba(255,240,200,.55) 50%,transparent 60%);transform:translateX(-120%);animation:shine 3.6s ease-in-out 1s infinite}
+@keyframes shine{0%{transform:translateX(-120%)}55%,100%{transform:translateX(120%)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 1px rgba(217,176,98,.35),0 0 30px rgba(217,176,98,.18)}50%{box-shadow:0 0 0 1px rgba(217,176,98,.55),0 0 56px rgba(217,176,98,.38)}}
+.hello{margin:0;text-align:center;font-size:14px;letter-spacing:.02em;color:var(--m)}
+h1{margin:2px 0 4px;text-align:center;font:600 34px/1.1 'Cormorant Garamond',Georgia,serif;background:linear-gradient(90deg,#c9963f,#f6e2a8 40%,#d9b062 60%,#b8862f);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:gold 6s linear infinite}
+@keyframes gold{to{background-position:200% center}}
+.sub{margin:0 0 20px;text-align:center;color:var(--m);font-size:13px}
+.ticker{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 0 22px;min-height:30px}
+.chip{display:inline-flex;align-items:baseline;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(217,176,98,.08);border:1px solid rgba(217,176,98,.28);font-size:13px;color:var(--m);opacity:0;animation:rise .6s ease both}
+.chip b{color:var(--gl);font-weight:700;font-variant-numeric:tabular-nums}
+label{display:block;font-size:13px;color:var(--m);margin-bottom:6px}
+.field{position:relative}
+input{width:100%;min-height:54px;padding:0 50px 0 16px;border-radius:14px;border:1px solid rgba(217,176,98,.3);background:rgba(11,10,9,.7);color:var(--t);font:500 17px Manrope,sans-serif;transition:border-color .2s,box-shadow .2s}
+input:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 4px rgba(217,176,98,.15)}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:42px;height:42px;border:0;border-radius:10px;background:transparent;color:var(--m);font-size:18px;cursor:pointer}
+button[type=submit]{position:relative;width:100%;min-height:54px;margin-top:16px;border:0;border-radius:14px;background:linear-gradient(135deg,#e7c47c,#c99a45);color:#1a1307;font:700 16px Manrope,sans-serif;letter-spacing:.02em;cursor:pointer;overflow:hidden;box-shadow:0 10px 30px rgba(217,176,98,.25);transition:transform .15s}
+button[type=submit]:active{transform:scale(.98)}
+button[type=submit]::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%);animation:shine 4s ease-in-out 2s infinite}
+.err{margin:0 0 14px;padding:10px 12px;border-radius:12px;background:rgba(240,138,122,.12);border:1px solid rgba(240,138,122,.4);color:#f3b2a7;font-size:14px;animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.foot{margin:18px 0 0;text-align:center;font-size:12px;color:rgba(185,176,162,.7)}
+@media (prefers-reduced-motion:reduce){*,*::after{animation:none!important}}
 </style></head><body>
-<form method="post" action="/admin/login" autocomplete="on">
-<img src="/assets/logo-mark.webp" alt=""><h1>Ürün Paneli</h1><p class="sub">Federal Gold</p>${msg}
-<label for="p">Şifre</label><input id="p" name="password" type="password" autocomplete="current-password" required autofocus>
-<button type="submit">Giriş yap</button></form></body></html>`;
+<div class="bg" aria-hidden="true"></div>
+<form class="card" method="post" action="/admin/login" autocomplete="on">
+<div class="logo"><img src="/assets/panel/apple-touch-icon.png" alt=""></div>
+<p class="hello" id="hello">Hoş geldin</p>
+<h1>Federal Gold</h1><p class="sub">Yönetim Paneli · Kapalıçarşı</p>
+<div class="ticker" id="ticker" aria-live="polite"></div>
+${msg}
+<label for="p">Şifre</label>
+<div class="field"><input id="p" name="password" type="password" autocomplete="current-password" required autofocus><button class="eye" type="button" aria-label="Şifreyi göster" onclick="var i=document.getElementById('p');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈'">👁</button></div>
+<button type="submit">Giriş yap</button>
+<p class="foot">© ${new Date().getFullYear()} Federal Gold Kuyumculuk</p>
+</form>
+<script>
+(function(){
+  var h=new Date().toLocaleString('en-US',{timeZone:'Europe/Istanbul',hour:'numeric',hour12:false})|0;
+  document.getElementById('hello').textContent=h<5?'İyi geceler':h<11?'Günaydın':h<17?'İyi günler':h<22?'İyi akşamlar':'İyi geceler';
+  var fmt=function(n){return new Intl.NumberFormat('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)+' ₺'};
+  fetch('https://finans.truncgil.com/v4/today.json',{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+    var t=document.getElementById('ticker');
+    [['Gram','GRA'],['Çeyrek','CEYREKALTIN'],['Dolar','USD']].forEach(function(x,i){
+      var v=d[x[1]]&&d[x[1]].Selling; if(!v)return;
+      var c=document.createElement('span');c.className='chip';c.style.animationDelay=(.15*i)+'s';
+      c.textContent=x[0]+' ';var b=document.createElement('b');b.textContent=fmt(v);c.appendChild(b);t.appendChild(c);
+    });
+  }).catch(function(){});
+})();
+</script></body></html>`;
   return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8', ...securityHeaders } });
 }
 

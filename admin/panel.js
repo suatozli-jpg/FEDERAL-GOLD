@@ -529,3 +529,161 @@
     reveal(e.data.fgEdit);
   });
 })();
+
+// ---- "Ana Sayfa": the panel opens on a welcome dashboard (live rates, today at a glance, quick actions) ----
+(() => {
+  const CMS = window.CMS;
+  if (!CMS || !CMS.React || !CMS.registerCustomPage) return;
+  const { React } = CMS;
+  const h = React.createElement;
+  const OWNER = window.__FG_ROLE__ !== 'abi';
+  const GOLD = '#d9b062';
+  const money = (n) => (n ? new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' ₺' : '—');
+  const RATES = [['Gram Altın', 'KULCEALTIN', 'GRA'], ['Çeyrek', 'CEYREK_YENI', 'CEYREKALTIN'], ['22 Ayar', 'AYAR22', 'YIA'], ['Dolar', 'USDTRY', 'USD'], ['Euro', 'EURTRY', 'EUR']];
+  const hello = () => {
+    const hr = Number(new Date().toLocaleString('en-US', { timeZone: 'Europe/Istanbul', hour: 'numeric', hour12: false })) % 24;
+    return hr < 5 ? 'İyi geceler' : hr < 11 ? 'Günaydın' : hr < 17 ? 'İyi günler' : hr < 22 ? 'İyi akşamlar' : 'İyi geceler';
+  };
+  const css = `
+  .fgd{max-width:980px;margin:0 auto;padding:28px 18px 60px;font-family:Manrope,system-ui,sans-serif;color:#f5f0e6}
+  .fgd *{box-sizing:border-box}
+  .fgd-hero{position:relative;overflow:hidden;border-radius:22px;padding:30px 26px;margin-bottom:18px;border:1px solid rgba(217,176,98,.3);
+    background:linear-gradient(120deg,rgba(11,10,9,.92),rgba(11,10,9,.55)),url(/assets/magaza-1.webp) center 35%/cover;animation:fgUp .7s cubic-bezier(.2,.8,.2,1) both}
+  .fgd-hero::after{content:"";position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 45%,rgba(255,236,190,.12) 50%,transparent 55%);animation:fgShine 5s ease-in-out 1s infinite}
+  .fgd-hi{margin:0;color:#b9b0a2;font-size:14px}
+  .fgd-title{margin:4px 0 6px;font:600 clamp(32px,6vw,46px)/1.05 'Cormorant Garamond',Georgia,serif;background:linear-gradient(90deg,#c9963f,#f6e2a8 40%,#d9b062 60%,#b8862f);
+    -webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:fgGold 6s linear infinite}
+  .fgd-date{margin:0;color:#b9b0a2;font-size:14px}
+  .fgd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+  .fgd-card{position:relative;padding:16px;border-radius:16px;background:#14120f;border:1px solid rgba(217,176,98,.22);animation:fgUp .6s cubic-bezier(.2,.8,.2,1) both}
+  .fgd-card small{display:block;color:#b9b0a2;font-size:12px;margin-bottom:4px}
+  .fgd-card b{display:block;font-size:22px;color:#f0d59a;font-variant-numeric:tabular-nums;transition:color .4s}
+  .fgd-card b.up{color:#7fd39b}.fgd-card b.down{color:#f08a7a}
+  .fgd-card i{font-style:normal;font-size:12px;color:#8f877b}
+  .fgd-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px}
+  .fgd-big{padding:18px;border-radius:18px;background:#14120f;border:1px solid rgba(217,176,98,.22);animation:fgUp .6s cubic-bezier(.2,.8,.2,1) both}
+  .fgd-big h3{margin:0 0 10px;font:600 20px/1.2 'Cormorant Garamond',Georgia,serif;color:#f0d59a}
+  .fgd-num{font-size:40px;font-weight:700;color:#f0d59a;line-height:1}
+  .fgd-muted{color:#b9b0a2;font-size:13px}
+  .fgd-thumbs{display:flex;gap:8px;margin-top:12px;overflow:hidden}
+  .fgd-thumbs img{flex:none}
+  @media (max-width:600px){.fgd-grid .fgd-card:nth-child(5){display:none}}
+  .fgd-thumbs img{width:56px;height:56px;border-radius:10px;object-fit:cover;border:1px solid rgba(217,176,98,.3)}
+  .fgd-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+  .fgd-btn{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:14px;border:1px solid rgba(217,176,98,.35);background:rgba(217,176,98,.07);
+    color:#f5f0e6;font:600 15px Manrope,sans-serif;cursor:pointer;text-align:left;transition:background .2s,transform .15s}
+  .fgd-btn:hover{background:rgba(217,176,98,.16)}.fgd-btn:active{transform:scale(.98)}
+  .fgd-btn.main{background:linear-gradient(135deg,#e7c47c,#c99a45);color:#1a1307;border-color:transparent}
+  .fgd-btn span{font-size:20px}
+  .fgd-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:#7fd39b;box-shadow:0 0 0 0 rgba(127,211,155,.6);animation:fgPulse 2s infinite}
+  @keyframes fgUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes fgShine{0%{transform:translateX(-60%)}60%,100%{transform:translateX(60%)}}
+  @keyframes fgGold{to{background-position:200% center}}
+  @keyframes fgPulse{70%{box-shadow:0 0 0 8px rgba(127,211,155,0)}100%{box-shadow:0 0 0 0 rgba(127,211,155,0)}}
+  @media (prefers-reduced-motion:reduce){.fgd *,.fgd-hero::after{animation:none!important}}`;
+
+  function useRates() {
+    const [rates, setRates] = React.useState({});
+    const [live, setLive] = React.useState(false);
+    React.useEffect(() => {
+      let ws, alive = true, data = {}, timer;
+      const backup = () => fetch('https://finans.truncgil.com/v4/today.json', { cache: 'no-store' }).then((r) => r.json()).then((d) => {
+        if (!alive || live) return;
+        const out = {};
+        RATES.forEach(([, , b]) => { if (d[b]) out[b] = { sell: Number(d[b].Selling) }; });
+        setRates((old) => (Object.keys(old).length ? old : Object.fromEntries(RATES.map(([, h0, b]) => [h0, out[b]]))));
+      }).catch(() => {});
+      try {
+        ws = new WebSocket('wss://hrmsocketonly.haremaltin.com/socket.io/?EIO=4&transport=websocket');
+        ws.onmessage = (e) => {
+          const m = String(e.data);
+          if (m === '2') return ws.send('3');
+          if (m[0] === '0') return ws.send('40');
+          if (!m.startsWith('42')) return;
+          try {
+            const [name, payload] = JSON.parse(m.slice(2));
+            if (name !== 'price_changed' || !payload || !payload.data) return;
+            Object.assign(data, payload.data);
+            setLive(true);
+            setRates((old) => {
+              const out = { ...old };
+              RATES.forEach(([, k]) => { const r = data[k]; if (r && Number(r.satis)) out[k] = { sell: Number(r.satis), prev: old[k] && old[k].sell }; });
+              return out;
+            });
+          } catch { /* ignore */ }
+        };
+      } catch { /* no websocket */ }
+      timer = setTimeout(backup, 5000);
+      return () => { alive = false; clearTimeout(timer); try { ws && ws.close(); } catch { /* closed */ } };
+    }, []);
+    return [rates, live];
+  }
+
+  function Home() {
+    const [rates, live] = useRates();
+    const [products, setProducts] = React.useState(null);
+    const [visits, setVisits] = React.useState(null);
+    const [status, setStatus] = React.useState(null);
+    const [last, setLast] = React.useState(null);
+    React.useEffect(() => {
+      fetch('/data/products.json', { cache: 'no-store' }).then((r) => r.json()).then(setProducts).catch(() => setProducts([]));
+      if (!OWNER) return;
+      fetch('/admin/api/visitors?gun=0', { credentials: 'same-origin' }).then((r) => (r.ok ? r.json() : null)).then(setVisits).catch(() => {});
+      fetch('/admin/api/status', { credentials: 'same-origin' }).then((r) => r.json()).then((d) => setStatus(d.latest)).catch(() => {});
+      fetch('/admin/api/gitlab/v4/projects/sozlu99-hue%2Ffederal-gold/repository/commits?ref_name=main&per_page=20', { credentials: 'same-origin' })
+        .then((r) => r.json()).then((list) => setLast((Array.isArray(list) ? list : []).find((c) => /^Panel:/.test(c.title || '')) || false)).catch(() => {});
+    }, []);
+
+    const go = (hash) => { location.hash = hash; };
+    const now = new Date().toLocaleDateString('tr-TR', { timeZone: 'Europe/Istanbul', weekday: 'long', day: 'numeric', month: 'long' });
+    const list = Array.isArray(products) ? products : [];
+    const shown = list.filter((p) => p && p.visible !== false);
+    const thumbs = shown.filter((p) => p.image).slice(0, 5);
+    const today = visits && visits.hours ? visits.hours.reduce((a, x) => a + x.visits, 0) : null;
+    const ago = (iso) => {
+      const m = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+      return m < 60 ? `${Math.max(1, m)} dk önce` : m < 1440 ? `${Math.round(m / 60)} saat önce` : `${Math.round(m / 1440)} gün önce`;
+    };
+
+    return h('div', { className: 'fgd' },
+      h('style', null, css),
+      h('div', { className: 'fgd-hero' },
+        h('p', { className: 'fgd-hi' }, `${hello()} 👋`),
+        h('div', { className: 'fgd-title' }, 'Federal Gold'),
+        h('p', { className: 'fgd-date' }, now.charAt(0).toUpperCase() + now.slice(1))),
+      h('div', { className: 'fgd-grid' }, RATES.map(([label, k], i) => {
+        const r = rates[k];
+        const dir = r && r.prev ? (r.sell > r.prev ? 'up' : r.sell < r.prev ? 'down' : '') : '';
+        return h('div', { key: k, className: 'fgd-card', style: { animationDelay: `${0.08 * i + 0.1}s` } },
+          h('small', null, i === 0 ? h('span', null, live && h('span', { className: 'fgd-dot' }), label) : label),
+          h('b', { className: dir }, r ? money(r.sell) : '…'),
+          h('i', null, 'satış'));
+      })),
+      h('div', { className: 'fgd-row' },
+        OWNER && h('div', { className: 'fgd-big', style: { animationDelay: '.45s' } },
+          h('h3', null, 'Bugün siteye gelen'),
+          h('div', { className: 'fgd-num' }, today == null ? '…' : today),
+          h('div', { className: 'fgd-muted' }, 'ziyaretçi · ', h('a', { href: '#/pages/ziyaretciler', style: { color: GOLD } }, 'ayrıntılar →'))),
+        h('div', { className: 'fgd-big', style: { animationDelay: '.55s' } },
+          h('h3', null, 'Vitrin'),
+          h('div', { className: 'fgd-num' }, products ? shown.length : '…'),
+          h('div', { className: 'fgd-muted' }, products ? `ürün sitede görünüyor${list.length > shown.length ? ` · ${list.length - shown.length} gizli` : ''}` : ''),
+          h('div', { className: 'fgd-thumbs' }, thumbs.map((p, i) => h('img', { key: i, src: p.image, alt: p.name || '' })))),
+        OWNER && h('div', { className: 'fgd-big', style: { animationDelay: '.65s' } },
+          h('h3', null, 'Site'),
+          status
+            ? h('div', null,
+              h('div', { style: { fontSize: '18px', fontWeight: 700, color: status.status === 'ok' ? '#7fd39b' : status.status === 'warn' ? '#e8b64a' : '#f08a7a' } },
+                status.status === 'ok' ? '● Her şey yolunda' : status.status === 'warn' ? '● Dikkat isteyen konu var' : '● Sorun var'),
+              h('div', { className: 'fgd-muted', style: { marginTop: '6px' } }, 'Son değişiklik: ', last ? `${String(last.title).replace(/^Panel:\s*/, '')} · ${ago(last.created_at)}` : last === false ? '—' : '…'),
+              h('a', { href: '#/pages/durum', style: { color: GOLD, fontSize: '13px' } }, 'Site Durumu →'))
+            : h('div', { className: 'fgd-muted' }, '…'))),
+      h('div', { className: 'fgd-actions' },
+        h('button', { className: 'fgd-btn main', onClick: () => go('#/collections/vitrin/entries/products') }, h('span', null, '💎'), 'Vitrine ürün ekle'),
+        h('button', { className: 'fgd-btn', onClick: () => go('#/collections/site/entries/site') }, h('span', null, '✍️'), 'Site yazıları'),
+        h('button', { className: 'fgd-btn', onClick: () => go('#/assets') }, h('span', null, '🖼️'), 'Fotoğraflar'),
+        h('button', { className: 'fgd-btn', onClick: () => window.open('/', '_blank') }, h('span', null, '🌐'), 'Siteyi aç')));
+  }
+
+  CMS.registerCustomPage({ id: 'anasayfa', label: 'Ana Sayfa', icon: 'home', component: Home });
+})();
