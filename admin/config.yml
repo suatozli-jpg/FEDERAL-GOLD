@@ -170,7 +170,7 @@ collections:
             widget: list
             collapsed: true
             add_to_top: false
-            summary: "{{kalem}}"
+            summary: "{{kalem}}{{goster | ternary('', ' · gizli')}}"
             hint: "Sitede görünecek kurlar ve sıraları (tutup sürükleyerek sıralarsın). Satışa/alışa yazdığın ₺ farkı Harem'in fiyatına eklenir; eksi yazarsan düşer. Ürünlerin otomatik fiyatı da bu fiyatlarla hesaplanır."
             fields:
               - name: kalem
