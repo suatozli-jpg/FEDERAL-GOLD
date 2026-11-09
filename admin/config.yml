@@ -1,0 +1,92 @@
+# Federal Gold product panel (Sveltia CMS) — https://federalgold.org/admin/
+# Sign in with the panel password (/admin/login). The site worker talks to GitLab
+# with its own token; saving commits to the repository and Cloudflare redeploys
+# the site in about a minute.
+
+backend:
+  name: gitlab
+  repo: sozlu99-hue/federal-gold
+  # filled in by the site worker: this host's proxy URLs, and main (live) or panel (preview)
+  branch: __BRANCH__
+  api_root: __ORIGIN__/admin/api/gitlab/v4
+  graphql_api_root: __ORIGIN__/admin/api/gitlab/graphql
+  commit_messages:
+    update: "Vitrin: ürünler güncellendi"
+    uploadMedia: "Vitrin: fotoğraf yüklendi ({{path}})"
+    deleteMedia: "Vitrin: fotoğraf silindi ({{path}})"
+
+site_url: https://federalgold.org
+display_url: https://federalgold.org
+logo_url: /apple-touch-icon.png
+
+media_folder: assets/products
+public_folder: /assets/products
+
+media_libraries:
+  default:
+    config:
+      max_file_size: 26214400
+      slugify_filename: true
+      transformations:
+        raster_image:
+          format: webp
+          quality: 82
+          width: 1600
+          height: 1600
+
+collections:
+  - name: vitrin
+    label: Vitrin
+    description: Sitedeki "Mağazamızdan seçmeler" bölümündeki ürünler. Sıralama sitedeki sıradır.
+    files:
+      - name: products
+        label: Vitrin Ürünleri
+        file: data/products.json
+        format: json
+        fields:
+          - name: products
+            label: Ürünler
+            label_singular: Ürün
+            widget: list
+            root: true
+            summary: "{{name}}"
+            add_to_top: true
+            fields:
+              - name: name
+                label: Ürün adı
+                widget: string
+              - name: nameEn
+                label: İngilizce ad (site EN'deyken görünür)
+                widget: string
+                required: false
+              - name: image
+                label: Fotoğraf
+                widget: image
+              - name: category
+                label: Kategori
+                widget: select
+                options:
+                  - { label: Bilezik, value: bracelets }
+                  - { label: Yüzük, value: rings }
+                  - { label: Kolye, value: necklaces }
+                  - { label: Küpe, value: earrings }
+                  - { label: Saat, value: watches }
+                  - { label: Diğer, value: other }
+              - name: karat
+                label: Ayar
+                widget: select
+                required: false
+                options: ["8", "14", "18", "21", "22", "24"]
+              - name: weight
+                label: Gram (örn. 20,5)
+                widget: string
+                required: false
+              - name: price
+                label: Fiyat ₺ (boş bırakılırsa sitede görünmez)
+                widget: number
+                value_type: float
+                required: false
+              - name: isNew
+                label: '"Yeni" etiketi göster'
+                widget: boolean
+                default: false

@@ -1,9 +1,12 @@
-// Cloudflare Workers config: serves this repository as a static site.
+// Cloudflare Workers config: static site, plus a small worker for the /admin panel.
 {
   "name": "federal-gold",
+  "main": "src/worker.js",
   "compatibility_date": "2026-11-07",
   "assets": {
     "directory": "./",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/admin", "/admin/*"]
   }
 }
