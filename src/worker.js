@@ -62,7 +62,7 @@ function loginPage({ error = '', notConfigured = false } = {}) {
     : error ? `<p class="err">${error}</p>` : '';
   const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
-<title>Federal Gold — Panel Girişi</title><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<title>Federal Gold — Panel Girişi</title><link rel="manifest" href="/assets/panel/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/panel/apple-touch-icon.png"><meta name="theme-color" content="#0b0a09"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FG Panel"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <style>
 :root{--bg:#0b0a09;--s:#14120f;--l:#3a3022;--g:#d9b062;--gl:#f0d59a;--t:#f5f0e6;--m:#b9b0a2}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:24px 16px;background:var(--bg);color:var(--t);font:16px/1.5 -apple-system,'Segoe UI',Arial,sans-serif}
