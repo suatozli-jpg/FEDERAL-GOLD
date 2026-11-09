@@ -3,6 +3,7 @@
 // When the send_email binding ALERT exists, a problem seen in two runs in a row is e-mailed, and so is the recovery.
 
 import { EmailMessage } from 'cloudflare:email';
+import { visitors } from './ziyaret.js';
 
 const SITE = 'https://federalgold.org';
 const REPO_API = 'https://gitlab.com/api/v4/projects/sozlu99-hue%2Ffederal-gold';
@@ -153,6 +154,18 @@ async function checkFiles(env) {
     : ok('dosya', 'Sitemap · robots · ikon', 'Hepsi yerinde');
 }
 
+async function checkVisitors(env) {
+  const res = await timed(() => visitors(new Request(`${SITE}/admin/api/visitors?gun=1`), env));
+  const d = await res.json();
+  if (res.ok) {
+    const today = (d.days || []).slice(-1)[0] || { visits: 0 };
+    return ok('ziyaret', 'Ziyaretçi sayacı', `Çalışıyor · bugün ${today.visits} ziyaret`);
+  }
+  if (d.error === 'missing_token') return warn('ziyaret', 'Ziyaretçi sayacı', 'Cloudflare anahtarı (CF_ANALYTICS_TOKEN) eklenmemiş');
+  if (d.error === 'bad_token') return err('ziyaret', 'Ziyaretçi sayacı', `Cloudflare anahtarı çalışmıyor (${d.detail || ''}) · yenilenmeli`);
+  return warn('ziyaret', 'Ziyaretçi sayacı', `Sayılar alınamadı (${d.detail || d.error})`);
+}
+
 async function checkDomain() {
   try {
     const d = await (await timed(() => fetch(RDAP, { headers: { Accept: 'application/rdap+json' } }))).json();
@@ -178,6 +191,7 @@ export async function runChecks(env, renderHome) {
     settle(() => checkPanel(env), 'panel', 'Ürün paneli'),
     settle(() => checkFiles(env), 'dosya', 'Sitemap · robots · ikon'),
     settle(checkDomain, 'alanadi', 'Alan adı'),
+    settle(() => checkVisitors(env), 'ziyaret', 'Ziyaretçi sayacı'),
   ]);
   const results = parts.flat();
   const worst = results.some((r) => r.status === 'err') ? 'err' : results.some((r) => r.status === 'warn') ? 'warn' : 'ok';
