@@ -100,8 +100,9 @@ collections:
         label: Site İçeriği
         file: data/site.json
         format: json
-        media_folder: /assets/site
-        public_folder: /assets/site
+        # the site photos live directly in assets/ (hero.webp, founder.webp, store-*.webp, …)
+        media_folder: /assets
+        public_folder: /assets
         fields:
           - name: iletisim
             label: İletişim bilgileri
