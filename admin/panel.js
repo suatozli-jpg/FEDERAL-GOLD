@@ -202,9 +202,78 @@
           if (!item.get('category')) { data = data.setIn([...key, i, 'category'], 'other'); changed = true; }
         }
       }
+      const translated = await translateChanged(data, key).catch((e) => { console.warn('Otomatik çeviri yapılamadı', e); return null; });
+      if (translated) { data = translated; changed = true; }
       return changed ? data : undefined;
     },
   });
+
+  // ---- Turkish → English: whatever was changed in Turkish gets its English side translated on save ----
+  // Compared with the published files; an English text the user edited by hand in the same save is left alone.
+  const published = async (path) => {
+    const res = await fetch(path, { cache: 'no-store', credentials: 'same-origin' });
+    if (!res.ok) throw new Error(`${path} ${res.status}`);
+    return res.json();
+  };
+  const translate = async (texts) => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 40000);
+    try {
+      const res = await fetch('/admin/api/translate', {
+        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texts }), signal: ctrl.signal,
+      });
+      if (!res.ok) throw new Error(`translate ${res.status}`);
+      return (await res.json()).translations || {};
+    } finally { clearTimeout(timer); }
+  };
+  const at = (obj, path) => path.reduce((o, k) => (o && typeof o === 'object' ? o[k] : undefined), obj);
+  const leaves = (obj, path = [], out = []) => {
+    for (const [k, v] of Object.entries(obj || {})) {
+      if (v && typeof v === 'object' && !Array.isArray(v)) leaves(v, [...path, k], out);
+      else if (typeof v === 'string') out.push([...path, k]);
+    }
+    return out;
+  };
+
+  async function translateChanged(data, key) {
+    const jobs = []; // [path to the English value, Turkish text]
+    if (data.get('tr') && data.get('en')) {
+      const now = data.toJS();
+      const old = await published('/data/site.json');
+      for (const path of leaves(now.tr)) {
+        const tr = at(now.tr, path), en = at(now.en, path);
+        const oldTr = at(old.tr, path), oldEn = at(old.en, path);
+        const enUntouched = en === oldEn || en == null || en === '';
+        if (tr !== oldTr && enUntouched) jobs.push([['en', ...path], tr]);
+      }
+    } else {
+      const list = (key.length ? data.getIn(key) : data);
+      const items = list && list.toJS ? list.toJS() : [];
+      let old = [];
+      try { old = await published('/data/products.json'); } catch { /* new items only */ }
+      items.forEach((p, i) => {
+        if (!p || !String(p.name || '').trim()) return;
+        const before = Array.isArray(old) ? old.find((o) => o && o.image === p.image) : null;
+        const enEmpty = !String(p.nameEn || '').trim();
+        const renamed = before && before.name !== p.name && (p.nameEn || '') === (before.nameEn || '');
+        if (enEmpty || renamed) jobs.push([[...key, i, 'nameEn'], p.name]);
+      });
+    }
+    if (!jobs.length) return null;
+    // an emptied Turkish text empties the English one too; the rest go to the translator
+    let out = data, done = 0;
+    const texts = {};
+    jobs.forEach(([path, tr], n) => {
+      if (String(tr || '').trim()) texts[`t${n}`] = tr;
+      else { out = out.setIn(path, ''); done++; }
+    });
+    if (Object.keys(texts).length) {
+      const result = await translate(texts);
+      jobs.forEach(([path], n) => { if (result[`t${n}`]) { out = out.setIn(path, result[`t${n}`]); done++; } });
+    }
+    return done ? out : null;
+  }
 })();
 
 // ---- "Site Durumu" page: results of the hourly checks run by the site worker ----
