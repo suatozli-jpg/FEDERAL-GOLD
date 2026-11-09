@@ -347,6 +347,111 @@
   CMS.registerCustomPage({ id: 'durum', label: 'Site Durumu', icon: 'monitor_heart', component: Status });
 })();
 
+// ---- "Ziyaretçiler" page: Cloudflare Web Analytics numbers (real browsers; bots and panel pages left out) ----
+(() => {
+  const CMS = window.CMS;
+  if (!CMS || !CMS.React || !CMS.registerCustomPage) return;
+  const { React } = CMS;
+  const h = React.createElement;
+  const GOLD = '#d9b062';
+  const fmt = (n) => new Intl.NumberFormat('tr-TR').format(n || 0);
+  let regionNames = null;
+  try { regionNames = new Intl.DisplayNames(['tr'], { type: 'region' }); } catch { /* old browser */ }
+  const country = (code) => {
+    const flag = /^[A-Z]{2}$/.test(code || '') ? String.fromCodePoint(...[...code].map((c) => 0x1f1a5 + c.charCodeAt(0))) : '🌐';
+    let name = code || 'Bilinmiyor';
+    try { if (regionNames && code) name = regionNames.of(code) || code; } catch { /* keep the code */ }
+    return `${flag} ${name}`;
+  };
+  const source = (host) => {
+    const h0 = String(host || '').toLowerCase();
+    if (!h0) return 'Doğrudan (link, WhatsApp, uygulama)';
+    if (/(^|\.)google\./.test(h0)) return 'Google';
+    if (/instagram/.test(h0)) return 'Instagram';
+    if (/facebook|fb\.com/.test(h0)) return 'Facebook';
+    if (/(^|\.)(t\.co|x\.com|twitter\.com)$/.test(h0)) return 'X (Twitter)';
+    if (/bing\./.test(h0)) return 'Bing';
+    if (/yandex\./.test(h0)) return 'Yandex';
+    if (/whatsapp/.test(h0)) return 'WhatsApp';
+    return h0.replace(/^www\./, '');
+  };
+  const DEVICE = { mobile: 'Telefon', desktop: 'Bilgisayar', tablet: 'Tablet' };
+
+  function Visitors() {
+    const [gun, setGun] = React.useState(7);
+    const [data, setData] = React.useState(null);
+    const [err, setErr] = React.useState('');
+    React.useEffect(() => {
+      let live = true;
+      setData(null); setErr('');
+      fetch(`/admin/api/visitors?gun=${gun}`, { credentials: 'same-origin' })
+        .then(async (r) => { const j = await r.json().catch(() => ({})); if (!r.ok) throw Object.assign(new Error(j.error || r.status), { code: j.error, detail: j.detail }); return j; })
+        .then((j) => { if (live) setData(j); })
+        .catch((e) => { if (live) setErr(e.code || e.message); });
+      return () => { live = false; };
+    }, [gun]);
+
+    const box = { maxWidth: '760px', margin: '0 auto', padding: '24px 16px', fontSize: '15px', lineHeight: 1.5 };
+    const card = { border: '1px solid rgba(217,176,98,.25)', borderRadius: '14px', padding: '16px', marginBottom: '16px', background: 'rgba(255,255,255,.02)' };
+    const tab = (on) => ({ padding: '8px 14px', borderRadius: '999px', border: `1px solid ${on ? GOLD : 'rgba(128,128,128,.4)'}`, background: on ? GOLD : 'transparent', color: on ? '#14120f' : 'inherit', fontWeight: 600, cursor: 'pointer', font: 'inherit' });
+    const title = (t) => h('div', { style: { fontWeight: 600, marginBottom: '10px' } }, t);
+    const bars = (rows, label) => {
+      const total = rows.reduce((a, r) => a + r.visits, 0) || 1;
+      return rows.map((r) => h('div', { key: r.key, style: { margin: '8px 0' } },
+        h('div', { style: { display: 'flex', justifyContent: 'space-between', gap: '12px', fontSize: '14px' } },
+          h('span', null, label(r.key)), h('b', null, `${fmt(r.visits)} · %${Math.round(r.visits / total * 100)}`)),
+        h('div', { style: { height: '6px', borderRadius: '3px', background: 'rgba(128,128,128,.2)', marginTop: '4px' } },
+          h('div', { style: { width: `${Math.max(2, r.visits / total * 100)}%`, height: '100%', borderRadius: '3px', background: GOLD } }))));
+    };
+
+    let body;
+    if (err === 'missing_token') {
+      body = h('div', { style: card }, h('b', null, 'Ziyaretçi anahtarı henüz eklenmemiş.'),
+        h('p', { style: { margin: '8px 0 0', opacity: 0.8 } }, 'Cloudflare → Workers & Pages → federal-gold → Settings → Variables and Secrets → Add: Type "Secret", isim CF_ANALYTICS_TOKEN, değer olarak "Account Analytics: Read" yetkili anahtarı yapıştırıp Deploy\'a bas.'));
+    } else if (err) {
+      body = h('div', { style: card }, h('b', null, err === 'bad_token' ? 'Ziyaretçi anahtarı çalışmıyor.' : 'Sayılar şu an alınamadı.'),
+        h('p', { style: { margin: '8px 0 0', opacity: 0.8 } }, err === 'bad_token' ? 'Anahtarın "Account Analytics: Read" yetkisi olduğundan emin ol ya da yeni bir anahtar ekle.' : 'Biraz sonra tekrar dene.'));
+    } else if (!data) {
+      body = h('p', null, 'Yükleniyor…');
+    } else {
+      const days = data.days || [];
+      const today = days[days.length - 1] || { visits: 0, views: 0 };
+      const yesterday = days[days.length - 2] || { visits: 0, views: 0 };
+      const sum = days.reduce((a, d) => ({ visits: a.visits + d.visits, views: a.views + d.views }), { visits: 0, views: 0 });
+      const max = Math.max(1, ...days.map((d) => d.visits));
+      const stat = (label, v) => h('div', { style: { ...card, flex: '1 1 150px', marginBottom: 0 } },
+        h('div', { style: { fontSize: '13px', opacity: 0.7 } }, label),
+        h('div', { style: { fontSize: '30px', fontWeight: 700, color: GOLD, lineHeight: 1.2 } }, fmt(v.visits)),
+        h('div', { style: { fontSize: '13px', opacity: 0.7 } }, `ziyaret · ${fmt(v.views)} sayfa görüntüleme`));
+      const refs = (data.refs || []).filter((r) => r.visits > 0 && !/(^|\.)federalgold\.org$/.test(r.key));
+      body = [
+        h('div', { key: 'stats', style: { display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' } },
+          stat('Bugün', today), stat('Dün', yesterday), stat(`Son ${gun} gün`, sum)),
+        h('div', { key: 'chart', style: card }, title('Günlük ziyaret'),
+          h('div', { style: { display: 'flex', alignItems: 'flex-end', gap: gun > 7 ? '3px' : '10px', height: '150px' } }, days.map((d, i) =>
+            h('div', { key: d.key, title: `${d.key}: ${d.visits} ziyaret`, style: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%', gap: '4px', fontSize: '11px' } },
+              gun <= 7 && h('span', { style: { opacity: 0.85 } }, fmt(d.visits)),
+              h('div', { style: { width: '100%', maxWidth: '38px', height: `${Math.max(2, d.visits / max * 110)}px`, borderRadius: '6px 6px 2px 2px', background: i === days.length - 1 ? GOLD : 'rgba(217,176,98,.55)' } }),
+              (gun <= 7 || i % 5 === 0 || i === days.length - 1) && h('span', { style: { opacity: 0.7, whiteSpace: 'nowrap' } },
+                i === days.length - 1 ? 'Bugün' : new Date(`${d.key}T12:00:00Z`).toLocaleDateString('tr-TR', gun <= 7 ? { weekday: 'short' } : { day: 'numeric', month: 'numeric' })))))),
+        h('div', { key: 'countries', style: card }, title('Ülkeler'), (data.countries || []).length ? bars(data.countries, country) : h('p', { style: { margin: 0, opacity: 0.7 } }, 'Henüz veri yok.')),
+        h('div', { key: 'refs', style: card }, title('Nereden geldiler'), refs.length ? bars(refs, source) : h('p', { style: { margin: 0, opacity: 0.7 } }, 'Henüz veri yok.')),
+        h('div', { key: 'devices', style: card }, title('Cihaz'), (data.devices || []).length ? bars(data.devices, (k) => DEVICE[k] || k) : h('p', { style: { margin: 0, opacity: 0.7 } }, 'Henüz veri yok.')),
+      ];
+    }
+
+    return h('div', { style: box },
+      h('h2', { style: { margin: '0 0 6px', fontSize: '22px' } }, 'Ziyaretçiler'),
+      h('p', { style: { margin: '0 0 14px', opacity: 0.75 } }, 'Siteyi gerçekten açan kişiler. Botlar ve panel sayılmaz; sayılar birkaç dakika gecikmeli gelir.'),
+      h('div', { style: { display: 'flex', gap: '8px', marginBottom: '16px' } },
+        h('button', { style: tab(gun === 7), onClick: () => setGun(7) }, '7 gün'),
+        h('button', { style: tab(gun === 30), onClick: () => setGun(30) }, '30 gün')),
+      body);
+  }
+
+  CMS.registerCustomPage({ id: 'ziyaretciler', label: 'Ziyaretçiler', icon: 'group', component: Visitors });
+})();
+
 // ---- Click in the preview → open that field in the editor ----
 (() => {
   const ENTRY = { site: '#/collections/site/entries/site', vitrin: '#/collections/vitrin/entries/products' };

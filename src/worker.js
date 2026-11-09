@@ -1,5 +1,6 @@
 import { runChecks, readStatus } from './durum.js';
 import { translateTexts } from './ceviri.js';
+import { visitors } from './ziyaret.js';
 
 // Federal Gold site worker.
 // Everything is served from static assets, except /admin:
@@ -376,6 +377,7 @@ export default {
     if (p.startsWith('/admin/api/gitlab/')) return proxyGitLab(request, env, url);
     if (p === '/admin/api/describe' && request.method === 'POST') return describeProduct(request, env);
     if (p === '/admin/api/translate' && request.method === 'POST') return translateTexts(request, env);
+    if (p === '/admin/api/visitors' && request.method === 'GET') return visitors(request, env);
     if (p === '/admin/api/status' && request.method === 'GET') return Response.json(await readStatus(env), { headers: securityHeaders });
     if (p === '/admin/api/status/run' && request.method === 'POST') return Response.json(await runChecks(env, renderHome), { headers: securityHeaders });
     if (p === '/admin/api/preview' && request.method === 'POST') {

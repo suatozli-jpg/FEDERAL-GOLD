@@ -234,11 +234,11 @@ async function alertIfChanged(env, run, previous) {
     await sendMail(env, `${worst ? '🔴' : '🟡'} federalgold.org: ${problems.length} sorun`, [
       'Site Durumu kontrolünde şu sorunlar art arda iki kez görüldü:', '',
       ...problems.map((r) => `${r.status === 'err' ? '✕' : '!'} ${r.title}: ${r.detail}`), '',
-      'Ayrıntılar: https://federalgold.org/admin/ (Site Durumu)',
+      'Ayrıntılar: https://federalgold.org/admin/#/pages/durum',
       'Sorun düzelince ayrıca haber verilir.',
     ].join('\n'));
   } else {
-    await sendMail(env, '🟢 federalgold.org: her şey yolunda', 'Önceki mailde bildirilen sorunlar düzeldi; bütün kontroller şu an yeşil.\n\nhttps://federalgold.org/admin/ (Site Durumu)');
+    await sendMail(env, '🟢 federalgold.org: her şey yolunda', 'Önceki mailde bildirilen sorunlar düzeldi; bütün kontroller şu an yeşil.\n\nhttps://federalgold.org/admin/#/pages/durum');
   }
   await env.DURUM.put('alerted', sig);
 }
