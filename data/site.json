@@ -8,6 +8,98 @@
     "instagram": "federalgoldd",
     "instagram2": "federal_goldd2"
   },
+  "kurTablosu": [
+    {
+      "kalem": "Has Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Gram Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "22 Ayar Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "18 Ayar Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "14 Ayar Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Çeyrek Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Yarım Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Tam Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Cumhuriyet Altını",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Ata Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Gremse Altın",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Dolar",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Euro",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Sterlin",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    },
+    {
+      "kalem": "Gümüş",
+      "goster": true,
+      "satisFark": 0,
+      "alisFark": 0
+    }
+  ],
   "fotograflar": {
     "anaEkran": "/assets/hero.webp",
     "hakkimizda": "/assets/founder.webp",

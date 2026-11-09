@@ -235,7 +235,11 @@ async function renderHome(request, env, preview = null) {
     if (!f[key] && list.length) { f[key] = list[0]; list = list.slice(1); }
     if (list.length) galeri[key] = list;
   }
-  const json = JSON.stringify({ tr, en, galeri }).replace(/</g, '\\u003c');
+  // rate table settings from the panel: which rows, in which order, and the shop's own margin (₺)
+  const fark = (v) => { const n = Number(v); return Number.isFinite(n) && Math.abs(n) < 1e7 ? n : 0; };
+  const kur = (Array.isArray(site.kurTablosu) ? site.kurTablosu : []).filter((k) => k && typeof k.kalem === 'string')
+    .slice(0, 30).map((k) => ({ kalem: k.kalem.slice(0, 40), goster: k.goster !== false, satis: fark(k.satisFark), alis: fark(k.alisFark) }));
+  const json = JSON.stringify({ tr, en, galeri, kur }).replace(/</g, '\\u003c');
   const photo = (key) => (f[key] === '' || f[key] == null) ? '' : safePath(f[key], pv);
 
   // Panel preview only: clicking a text, photo, number or product opens that field in the editor

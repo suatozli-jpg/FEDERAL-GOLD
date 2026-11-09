@@ -102,9 +102,31 @@ collections:
                 required: false
               - name: price
                 label: Fiyat ₺ (boş bırakılırsa sitede görünmez)
+                hint: Aşağıdaki "kura göre hesapla" açıksa bu alan kullanılmaz.
                 widget: number
                 value_type: float
                 required: false
+              - name: otomatikFiyat
+                label: Fiyatı kura göre otomatik hesapla
+                hint: Ayar ve gram dolu olmalı. Fiyat = gram × o ayarın satış kuru + işçilik; kur değiştikçe sitede kendiliğinden güncellenir.
+                widget: boolean
+                default: false
+                required: false
+              - name: iscilik
+                label: İşçilik
+                hint: Boş bırakırsan işçilik eklenmez.
+                widget: number
+                value_type: float
+                required: false
+              - name: iscilikTipi
+                label: İşçilik nasıl hesaplansın
+                widget: select
+                default: milyem
+                required: false
+                options:
+                  - { label: "Gram başına milyem (örn. 20 → gram başına 0,020 gr has)", value: milyem }
+                  - { label: "Gram başına ₺", value: tl_gram }
+                  - { label: "Ürünün tamamı için ₺", value: tl }
               - name: isNew
                 label: '"Yeni" etiketi göster'
                 widget: boolean
@@ -142,6 +164,22 @@ collections:
               - { name: eposta, label: "E-posta", widget: string }
               - { name: instagram, label: "Instagram (Kapalıçarşı)", widget: string, hint: "@ işareti olmadan" }
               - { name: instagram2, label: "Instagram (Şemdinli)", widget: string, hint: "@ işareti olmadan" }
+          - name: kurTablosu
+            label: Kur tablosu
+            label_singular: Kalem
+            widget: list
+            collapsed: true
+            add_to_top: false
+            summary: "{{kalem}}"
+            hint: "Sitede görünecek kurlar ve sıraları (tutup sürükleyerek sıralarsın). Satışa/alışa yazdığın ₺ farkı Harem'in fiyatına eklenir; eksi yazarsan düşer. Ürünlerin otomatik fiyatı da bu fiyatlarla hesaplanır."
+            fields:
+              - name: kalem
+                label: Kalem
+                widget: select
+                options: ["Has Altın", "Gram Altın", "22 Ayar Altın", "18 Ayar Altın", "14 Ayar Altın", "Çeyrek Altın", "Yarım Altın", "Tam Altın", "Cumhuriyet Altını", "Ata Altın", "Gremse Altın", "Dolar", "Euro", "Sterlin", "Gümüş"]
+              - { name: goster, label: Sitede göster, widget: boolean, default: true, required: false }
+              - { name: satisFark, label: "Satışa ekle (₺)", widget: number, value_type: float, required: false, hint: "Örnek: 50 yazarsan satış fiyatı 50 ₺ fazla görünür" }
+              - { name: alisFark, label: "Alışa ekle (₺)", widget: number, value_type: float, required: false, hint: "Örnek: -30 yazarsan alış fiyatı 30 ₺ düşük görünür" }
           - name: fotograflar
             label: Fotoğraflar
             widget: object
