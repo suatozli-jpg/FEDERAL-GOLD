@@ -117,7 +117,7 @@
     "weight": "",
     "price": null,
     "isNew": false,
-    "visible": true
+    "visible": false
   },
   {
     "name": "Hasır ve Gurmet Bilezikler",
@@ -141,6 +141,6 @@
     "weight": "",
     "price": null,
     "isNew": false,
-    "visible": true
+    "visible": false
   }
 ]
