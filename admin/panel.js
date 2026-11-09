@@ -107,7 +107,8 @@
         const withFiles = await Promise.all(commits.map(async (c) => {
           const diff = await getJSON(`${API}/repository/commits/${c.id}/diff?per_page=100`).catch(() => []);
           const paths = diff.map((d) => d.new_path || d.old_path);
-          return { ...c, paths, panel: paths.length > 0 && paths.every((p) => PANEL_PATH.test(p)) };
+          // only saves made in the panel itself (their message starts with "Panel:")
+          return { ...c, paths, panel: /^Panel:/.test(c.title || '') && paths.length > 0 && paths.every((p) => PANEL_PATH.test(p)) };
         }));
         setItems(withFiles.filter((c) => c.panel).slice(0, 20));
       } catch (e) { setMsg(`Geçmiş yüklenemedi: ${e.message}`); setItems([]); }
