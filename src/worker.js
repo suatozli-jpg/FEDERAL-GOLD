@@ -188,6 +188,14 @@ async function proxyGitLab(request, env, url, role = 'owner') {
   const out = new Headers(res.headers);
   out.delete('Set-Cookie');
   out.set('Cache-Control', 'no-store');
+  // the panel shows the signed-in account: show the shop, not the GitLab account behind the panel
+  if (rest === '/v4/user' && res.ok) {
+    const u = await res.json().catch(() => ({}));
+    out.delete('Content-Length'); out.delete('Content-Encoding'); out.delete('ETag');
+    const shown = { ...(role === 'abi' ? {} : u), id: u.id, username: 'federalgold', name: 'Federal Gold', email: 'panel@federalgold.org',
+      public_email: '', commit_email: 'panel@federalgold.org', avatar_url: `${url.origin}/assets/panel/icon-192.png`, web_url: `https://${LIVE_HOST}`, state: 'active' };
+    return new Response(JSON.stringify(shown), { status: res.status, headers: out });
+  }
   if (role === 'abi' && (out.get('Content-Type') || '').includes('json')) {
     const data = await res.json().catch(() => null);
     out.delete('Content-Length'); out.delete('Content-Encoding'); out.delete('ETag');
