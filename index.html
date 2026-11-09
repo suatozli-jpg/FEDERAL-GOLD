@@ -1212,7 +1212,7 @@
       const vitrinEl = $('#vitrin');
       let products = [], vitrinFilter = 'all';
       const safeImage = (src) => (window.__PRODUCTS__ && typeof src === 'string' && /^blob:https?:\/\/[^/]+\/[\w-]+$/.test(src)) ? src // unsaved photo in the panel preview
-        : typeof src === 'string' && /^\/?assets\/[\w\-./]+\.(webp|jpe?g|png|gif|avif)$/i.test(src) && !src.includes('..') ? src.replace(/^\//, '') : null;
+        : typeof src === 'string' && /^\/?assets\/[\p{L}\p{N}\-./_ ]+\.(webp|jpe?g|png|gif|avif)$/iu.test(src) && !src.includes('..') ? src.replace(/^\//, '') : null;
       const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
       renderVitrin = () => {
         if (!products.length) return;

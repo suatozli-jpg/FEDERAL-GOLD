@@ -139,7 +139,9 @@ const rel = (p) => String(p || '').replace(/^https?:\/\/[^/]+/, '').replace(/^\/
 const safePath = (p, preview = false) => {
   // in the panel preview, not-yet-saved uploads arrive as blob: URLs of the panel page
   if (preview && /^blob:https:\/\/[A-Za-z0-9.-]+\/[A-Za-z0-9-]+$/.test(String(p || ''))) return String(p);
-  return /^\/?assets\/[A-Za-z0-9/_.,()-]+\.(webp|jpe?g|png|gif|avif)$/i.test(rel('/' + rel(p))) ? rel(p) : '';
+  // letters of any language are fine (a phone may name an upload "ımg_2911.png"); no ".." or odd characters
+  const r = rel('/' + rel(p));
+  return /^\/?assets\/[\p{L}\p{N}/_.,() -]+\.(webp|jpe?g|png|gif|avif)$/iu.test(r) && !r.includes('..') ? rel(p) : '';
 };
 
 function flatten(lang) {

@@ -43,4 +43,18 @@
       else m.addedNodes.forEach(swap);
     }
   }).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
+
+  // A preview copy of the panel (any address other than federalgold.org) saves to its preview only: say so, always on screen
+  if (!/(^|\.)federalgold\.org$/.test(location.hostname)) {
+    const show = () => {
+      if (document.getElementById('fg-preview-bar')) return;
+      const bar = document.createElement('a');
+      bar.id = 'fg-preview-bar';
+      bar.href = 'https://federalgold.org/admin/';
+      bar.textContent = '⚠ ÖNİZLEME PANELİ — burada kaydettiklerin canlı siteye geçmez. Gerçek panel: federalgold.org/admin (dokun)';
+      bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:2147483647;display:block;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#b3261e;color:#fff;font:600 14px/1.35 Manrope,system-ui,sans-serif;text-align:center;text-decoration:none';
+      document.body.append(bar);
+    };
+    if (document.body) show(); else document.addEventListener('DOMContentLoaded', show);
+  }
 })();
