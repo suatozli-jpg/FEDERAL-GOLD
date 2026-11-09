@@ -7,3 +7,5 @@ Kuyumculuk (Kapalıçarşı, Şemdinli, Van).
 - `data/products.json` — showcase (vitrin) products
 - `assets/` — images
 - Hosted on Cloudflare Workers static assets.
+
+Editing products: https://federalgold.org/admin/ (GitLab sign-in).
