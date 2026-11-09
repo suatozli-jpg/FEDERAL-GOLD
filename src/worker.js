@@ -133,7 +133,11 @@ const digits = (s) => String(s || '').replace(/\D/g, '');
 const intl = (s) => { let d = digits(s); if (d.startsWith('0')) d = '9' + d; else if (d.length === 10) d = '90' + d; return d; };
 const htmlEsc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const rel = (p) => String(p || '').replace(/^https?:\/\/[^/]+/, '').replace(/^\//, '');
-const safePath = (p) => /^\/?assets\/[A-Za-z0-9/_.,()-]+\.(webp|jpe?g|png|gif|avif)$/i.test(rel('/' + rel(p))) ? rel(p) : '';
+const safePath = (p, preview = false) => {
+  // in the panel preview, not-yet-saved uploads arrive as blob: URLs of the panel page
+  if (preview && /^blob:https:\/\/[A-Za-z0-9.-]+\/[A-Za-z0-9-]+$/.test(String(p || ''))) return String(p);
+  return /^\/?assets\/[A-Za-z0-9/_.,()-]+\.(webp|jpe?g|png|gif|avif)$/i.test(rel('/' + rel(p))) ? rel(p) : '';
+};
 
 function flatten(lang) {
   const out = {};
@@ -143,16 +147,20 @@ function flatten(lang) {
   return out;
 }
 
-async function renderHome(request, env) {
-  const res = await env.ASSETS.fetch(request);
+async function renderHome(request, env, preview = null) {
+  const res = await env.ASSETS.fetch(preview ? new Request(new URL('/', request.url)) : request);
   const type = res.headers.get('Content-Type') || '';
   if (!res.ok || !type.includes('text/html')) return res;
-  let site;
-  try {
-    const r = await env.ASSETS.fetch(new Request(new URL('/data/site.json', request.url)));
-    site = r.ok ? await r.json() : null;
-  } catch { site = null; }
-  if (!site) return res;
+  let site = preview && preview.site && typeof preview.site === 'object' ? preview.site : null;
+  if (!site) {
+    try {
+      const r = await env.ASSETS.fetch(new Request(new URL('/data/site.json', request.url)));
+      site = r.ok ? await r.json() : null;
+    } catch { site = null; }
+  }
+  if (!site && !preview) return res;
+  site = site || {};
+  const pv = Boolean(preview);
 
   let html = await res.text();
   const c = { ...DEFAULTS.iletisim, ...(site.iletisim || {}) };
@@ -175,16 +183,21 @@ async function renderHome(request, env) {
   }
   // photos that are always shown: swap the path everywhere (CSS, preload, structured data)
   for (const key of ['anaEkran', 'bilezikler', 'yuzukler', 'kolyeler', 'kupeler']) {
-    const from = rel(DEFAULTS.fotograflar[key]), to = safePath(f[key]);
+    const from = rel(DEFAULTS.fotograflar[key]), to = safePath(f[key], pv);
     if (to && to !== from) html = html.split(from).join(to);
   }
 
   const tr = flatten(site.tr), en = flatten(site.en);
   const json = JSON.stringify({ tr, en }).replace(/</g, '\\u003c');
-  const photo = (key) => (f[key] === '' || f[key] == null) ? '' : safePath(f[key]);
+  const photo = (key) => (f[key] === '' || f[key] == null) ? '' : safePath(f[key], pv);
 
+  const products = preview && Array.isArray(preview.products)
+    ? `<script>window.__PRODUCTS__=${JSON.stringify(preview.products).replace(/</g, '\\u003c')}</script>` : '';
   let rw = new HTMLRewriter()
-    .on('head', { element(e) { e.append(`<script>window.__SITE__=${json}</script>`, { html: true }); } })
+    .on('head', { element(e) {
+      if (pv) e.prepend('<base href="/" target="_blank"><meta name="robots" content="noindex">', { html: true });
+      e.append(`<script>window.__SITE__=${json}</script>${products}`, { html: true });
+    } })
     .on('[data-i18n]', { element(e) { const k = e.getAttribute('data-i18n'); if (tr[k] != null) e.setInnerContent(tr[k]); } })
     .on('[data-i18n-alt]', { element(e) { const k = e.getAttribute('data-i18n-alt'); if (tr[k] != null) e.setAttribute('alt', tr[k]); } })
     .on('title', { element(e) { if (tr.title) e.setInnerContent(tr.title); } })
@@ -212,6 +225,7 @@ async function renderHome(request, env) {
 
   const headers = new Headers(res.headers);
   headers.delete('Content-Length');
+  if (pv) for (const [k, v] of Object.entries(securityHeaders)) if (k !== 'X-Frame-Options') headers.set(k, v);
   return rw.transform(new Response(html, { status: res.status, headers }));
 }
 
@@ -253,6 +267,13 @@ export default {
     }
 
     if (p.startsWith('/admin/api/gitlab/')) return proxyGitLab(request, env, url);
+    if (p === '/admin/api/preview' && request.method === 'POST') {
+      // Live preview for the panel: the home page rendered with the unsaved entry data
+      let body;
+      try { body = await request.json(); } catch { return new Response('Bad request', { status: 400, headers: securityHeaders }); }
+      if (JSON.stringify(body).length > 500000) return new Response('Too large', { status: 413, headers: securityHeaders });
+      return renderHome(request, env, { site: body.site, products: body.products });
+    }
     if (p === '/admin/config.yml') return panelConfig(request, env, url);
 
     const res = await env.ASSETS.fetch(request);

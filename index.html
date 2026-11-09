@@ -1246,8 +1246,8 @@
         });
         vitrinEl.hidden = false;
       };
-      fetch('data/products.json', { cache: 'no-cache' })
-        .then(r => r.ok ? r.json() : [])
+      // window.__PRODUCTS__ is set only in the panel's live preview
+      (window.__PRODUCTS__ ? Promise.resolve(window.__PRODUCTS__) : fetch('data/products.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : []))
         .then(list => {
           products = (Array.isArray(list) ? list : []).map(p => {
             if (!p || typeof p !== 'object') return null;
