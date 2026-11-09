@@ -9,6 +9,12 @@
     }
   } catch { /* storage blocked: the token sign-in button still works */ }
 
+  // Dark theme like the site, unless the user picked a theme in the panel settings
+  try {
+    const prefs = JSON.parse(localStorage.getItem('sveltia-cms.prefs') || '{}') || {};
+    if (!prefs.theme || prefs.theme === 'auto') { prefs.theme = 'dark'; localStorage.setItem('sveltia-cms.prefs', JSON.stringify(prefs)); }
+  } catch { /* ignore */ }
+
   // Session expired: go back to the password page instead of showing a GitLab error
   const origFetch = window.fetch.bind(window);
   window.fetch = async (...args) => {

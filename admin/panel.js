@@ -54,7 +54,7 @@
     return h('iframe', { srcDoc: html, style, title: 'Sitenin önizlemesi', sandbox: 'allow-scripts allow-same-origin allow-popups' });
   };
 
-  CMS.registerPreviewStyle('html,body{margin:0;padding:0;background:#0b0a09}');
+  CMS.registerPreviewStyle('html,body{margin:0;padding:0;background:#0b0a09}', { raw: true });
   const sitePreview = makePreview('site');
   const productsPreview = makePreview('products');
   for (const name of ['site']) CMS.registerPreviewTemplate(name, sitePreview);

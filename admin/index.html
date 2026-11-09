@@ -6,14 +6,53 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Federal Gold Paneli</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
   <style>
-    /* Federal Gold colours for the panel (gold accent instead of blue) */
-    :root, :root[data-theme] { --sui-base-hue: 38 !important; }
+    /* ---- Federal Gold look for the panel: the site's dark background, gold accent and fonts ---- */
+    :root, :root[data-theme] {
+      --sui-base-hue: 36 !important;
+      --sui-font-family-default: 'Manrope', system-ui, sans-serif !important;
+    }
+    :root[data-theme="dark"] {
+      --sui-primary-background-color: #0b0a09 !important;
+      --sui-secondary-background-color: #14120f !important;
+      --sui-tertiary-background-color: #1c1914 !important;
+      --sui-primary-accent-color: #d9b062 !important;
+      --sui-primary-accent-color-text: #1a1307 !important;
+      --sui-primary-accent-color-light: #f0d59a !important;
+      --sui-focus-ring-color: #d9b062 !important;
+    }
+    body { font-family: 'Manrope', system-ui, sans-serif; }
     /* sections are always there: no required star on group headers */
     section.field[data-field-type="object"] > header .required, section.field[data-field-type="list"] > header .required { display: none; }
+
+    /* Vitrin: products as a grid of cards, like on the site; an opened product spans the full width */
+    section.field[data-key-path="products"] div:has(> .item-wrapper) {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; align-items: start;
+    }
+    section.field[data-key-path="products"] .item-wrapper:has(> .item > .header button[aria-expanded="true"]) { grid-column: 1 / -1; }
+    section.field[data-key-path="products"] .item {
+      margin: 0 !important; border-radius: 14px; overflow: hidden;
+      border: 1px solid #3a3022 !important; background: #14120f;
+    }
+    section.field[data-key-path="products"] .item > .header { background: transparent !important; min-height: 36px; }
+    section.field[data-key-path="products"] .item .summary {
+      display: flex !important; flex-direction: column; align-items: stretch; gap: 0; padding: 0 !important; cursor: pointer;
+    }
+    section.field[data-key-path="products"] .item .summary .preview.icon {
+      width: 100% !important; height: auto !important; aspect-ratio: 1 / 1; border-radius: 0 !important; margin: 0 !important;
+    }
+    section.field[data-key-path="products"] .item .summary .preview.icon img { width: 100%; height: 100%; object-fit: cover; }
+    section.field[data-key-path="products"] .item .summary .truncated-text {
+      padding: 12px 14px 14px; font: 600 20px/1.2 'Cormorant Garamond', Georgia, serif; color: #f5f0e6;
+      -webkit-line-clamp: 2 !important; white-space: normal; min-height: calc(2.4em + 26px);
+    }
+
     /* field opened from a click in the preview */
     .fg-flash { animation: fg-flash 2.2s ease-out; border-radius: 10px; }
-    @keyframes fg-flash { 0%, 45% { box-shadow: 0 0 0 3px hsl(38 85% 50%), 0 0 0 9px hsl(38 85% 50% / .18); } 100% { box-shadow: none; } }
+    @keyframes fg-flash { 0%, 45% { box-shadow: 0 0 0 3px #d9b062, 0 0 0 9px rgba(217,176,98,.18); } 100% { box-shadow: none; } }
   </style>
 </head>
 <body>

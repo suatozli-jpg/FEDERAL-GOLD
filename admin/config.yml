@@ -156,7 +156,7 @@ collections:
             widget: object
             collapsed: true
             summary: "Sitedeki tüm Türkçe yazılar, bölüm bölüm"
-            hint: "İpucu: sağdaki önizlemede bir yazıya dokunursan doğrudan o alan açılır."
+            hint: "İpucu: önizlemede bir yazıya ya da fotoğrafa dokunursan doğrudan o alan açılır."
             fields:
               - name: anaEkran
                 label: "Ana ekran"
