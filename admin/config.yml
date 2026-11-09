@@ -212,7 +212,7 @@ collections:
                 required: false
               - name: magaza
                 label: "Mağazamız – raf fotoğrafları"
-                hint: Vitrin'in altındaki "Raflarımızdan" bölümü. 4 fotoğraf olunca mozaik görünür; hepsini silersen bölüm gizlenir.
+                hint: Vitrin'in altındaki "Mağazamız" bölümü. 4 fotoğraf olunca mozaik görünür; hepsini silersen bölüm gizlenir.
                 widget: image
                 multiple: true
                 required: false
@@ -304,7 +304,6 @@ collections:
                 widget: object
                 collapsed: true
                 fields:
-                  - { name: shopEyebrow, label: "Küçük başlık", widget: string, required: false }
                   - { name: shopTitle, label: "Başlık", widget: string, required: false }
                   - { name: shopText, label: "Açıklama", widget: string, required: false }
               - name: hizmetler
@@ -463,7 +462,6 @@ collections:
                 widget: object
                 collapsed: true
                 fields:
-                  - { name: shopEyebrow, label: "Küçük başlık", widget: string, required: false }
                   - { name: shopTitle, label: "Başlık", widget: string, required: false }
                   - { name: shopText, label: "Açıklama", widget: string, required: false }
               - name: hizmetler
