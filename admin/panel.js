@@ -530,45 +530,116 @@
   });
 })();
 
-// ---- "Ana Sayfa": the panel opens on a welcome dashboard (live rates, today at a glance, quick actions) ----
+// ---- Live rates shared by "Ana Sayfa" and "Fiyat Hesapla": Harem's live stream, the backup source if Harem is silent,
+// and the shop's own margins from Site İçeriği → Kur tablosu (so the panel shows the same prices as the site) ----
+window.FGRates = (() => {
+  const subs = new Set();
+  const state = { data: {}, live: false, margins: {} };
+  const MARGIN_KEYS = { 'Has Altın': 'ALTIN', 'Gram Altın': 'KULCEALTIN', '22 Ayar Altın': 'AYAR22', '18 Ayar Altın': 'AYAR18', '14 Ayar Altın': 'AYAR14',
+    'Çeyrek Altın': 'CEYREK_YENI', 'Yarım Altın': 'YARIM_YENI', 'Tam Altın': 'TEK_YENI', 'Ata Altın': 'ATA_YENI', 'Dolar': 'USDTRY', 'Euro': 'EURTRY' };
+  const BACKUP = { KULCEALTIN: 'GRA', AYAR22: 'YIA', AYAR18: '18AYARALTIN', AYAR14: '14AYARALTIN', CEYREK_YENI: 'CEYREKALTIN', YARIM_YENI: 'YARIMALTIN',
+    TEK_YENI: 'TAMALTIN', ATA_YENI: 'ATAALTIN', USDTRY: 'USD', EURTRY: 'EUR' };
+  let started = false;
+  const emit = () => subs.forEach((f) => f({ ...state }));
+  const withMargin = (k, r) => {
+    const m = state.margins[k];
+    return m ? { ...r, sell: r.sell + m.sell, buy: r.buy ? r.buy + m.buy : r.buy } : r;
+  };
+  const set = (k, r) => { if (r && r.sell > 0) state.data = { ...state.data, [k]: withMargin(k, r) }; };
+  const connect = () => {
+    let ws;
+    try { ws = new WebSocket('wss://hrmsocketonly.haremaltin.com/socket.io/?EIO=4&transport=websocket'); } catch { return; }
+    const raw = {};
+    ws.onmessage = (e) => {
+      const m = String(e.data);
+      if (m === '2') return ws.send('3');
+      if (m[0] === '0') return ws.send('40');
+      if (!m.startsWith('42')) return;
+      try {
+        const [name, payload] = JSON.parse(m.slice(2));
+        if (name !== 'price_changed' || !payload || !payload.data) return;
+        Object.assign(raw, payload.data);
+        for (const [k, r] of Object.entries(raw)) {
+          const sell = Number(r.satis), buy = Number(r.alis), close = Number(r.kapanis);
+          if (sell) set(k, { sell, buy, chg: close ? (sell - close) / close * 100 : null, prev: state.data[k] && state.data[k].sell });
+        }
+        state.live = true; emit();
+      } catch { /* ignore */ }
+    };
+    ws.onclose = () => { state.live = false; emit(); setTimeout(connect, 15000); };
+  };
+  const backup = () => fetch('https://finans.truncgil.com/v4/today.json', { cache: 'no-store' }).then((r) => r.json()).then((d) => {
+    if (state.live) return;
+    for (const [k, b] of Object.entries(BACKUP)) if (d[b]) set(k, { sell: Number(d[b].Selling), buy: Number(d[b].Buying), chg: Number(d[b].Change) });
+    emit();
+  }).catch(() => {});
+  const start = () => {
+    if (started) return; started = true;
+    fetch('/data/site.json', { cache: 'no-store' }).then((r) => r.json()).then((site) => {
+      for (const k of (site && site.kurTablosu) || []) {
+        const key = MARGIN_KEYS[k && k.kalem];
+        if (key && (k.satisFark || k.alisFark)) state.margins[key] = { sell: Number(k.satisFark) || 0, buy: Number(k.alisFark) || 0 };
+      }
+    }).catch(() => {}).finally(() => { connect(); setTimeout(backup, 5000); });
+  };
+  return { subscribe(f) { subs.add(f); start(); f({ ...state }); return () => subs.delete(f); } };
+})();
+
+// ---- "Ana Sayfa": the panel opens on a welcome dashboard (greeting, today's summary, live rates, quick actions) ----
 (() => {
   const CMS = window.CMS;
   if (!CMS || !CMS.React || !CMS.registerCustomPage) return;
   const { React } = CMS;
   const h = React.createElement;
   const OWNER = window.__FG_ROLE__ !== 'abi';
+  const WHO = OWNER ? 'Patron' : 'Abi';
   const GOLD = '#d9b062';
   const money = (n) => (n ? new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + ' ₺' : '—');
-  const RATES = [['Gram Altın', 'KULCEALTIN', 'GRA'], ['Çeyrek', 'CEYREK_YENI', 'CEYREKALTIN'], ['22 Ayar', 'AYAR22', 'YIA'], ['Dolar', 'USDTRY', 'USD'], ['Euro', 'EURTRY', 'EUR']];
+  const pct = (n) => new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 1 }).format(Math.abs(n));
+  const RATES = [['Gram Altın', 'KULCEALTIN'], ['Çeyrek', 'CEYREK_YENI'], ['22 Ayar', 'AYAR22'], ['Dolar', 'USDTRY'], ['Euro', 'EURTRY']];
   const hello = () => {
     const hr = Number(new Date().toLocaleString('en-US', { timeZone: 'Europe/Istanbul', hour: 'numeric', hour12: false })) % 24;
     return hr < 5 ? 'İyi geceler' : hr < 11 ? 'Günaydın' : hr < 17 ? 'İyi günler' : hr < 22 ? 'İyi akşamlar' : 'İyi geceler';
   };
+  const sourceName = (host) => {
+    const x = String(host || '').toLowerCase();
+    if (!x) return 'doğrudan link (WhatsApp, kayıtlı adres)';
+    if (/(^|\.)google\./.test(x)) return 'Google';
+    if (/instagram/.test(x)) return 'Instagram';
+    if (/facebook/.test(x)) return 'Facebook';
+    return x.replace(/^www\./, '');
+  };
+  window.FGUseRates = () => {
+    const [st, setSt] = React.useState({ data: {}, live: false });
+    React.useEffect(() => window.FGRates.subscribe(setSt), []);
+    return st;
+  };
   const css = `
   .fgd{max-width:980px;margin:0 auto;padding:28px 18px 60px;font-family:Manrope,system-ui,sans-serif;color:#f5f0e6}
   .fgd *{box-sizing:border-box}
-  .fgd-hero{position:relative;overflow:hidden;border-radius:22px;padding:30px 26px;margin-bottom:18px;border:1px solid rgba(217,176,98,.3);
-    background:linear-gradient(120deg,rgba(11,10,9,.92),rgba(11,10,9,.55)),url(/assets/magaza-1.webp) center 35%/cover;animation:fgUp .7s cubic-bezier(.2,.8,.2,1) both}
-  .fgd-hero::after{content:"";position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 45%,rgba(255,236,190,.12) 50%,transparent 55%);animation:fgShine 5s ease-in-out 1s infinite}
+  .fgd-hero{position:relative;overflow:hidden;border-radius:22px;padding:28px 26px;margin-bottom:18px;border:1px solid rgba(217,176,98,.3);
+    background:linear-gradient(120deg,rgba(11,10,9,.94),rgba(11,10,9,.6)),url(/assets/magaza-1.webp) center 35%/cover;animation:fgUp .7s cubic-bezier(.2,.8,.2,1) both}
+  .fgd-hero::after{content:"";position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 45%,rgba(255,236,190,.12) 50%,transparent 55%);animation:fgShine 5s ease-in-out 1s infinite;pointer-events:none}
   .fgd-hi{margin:0;color:#b9b0a2;font-size:14px}
-  .fgd-title{margin:4px 0 6px;font:600 clamp(32px,6vw,46px)/1.05 'Cormorant Garamond',Georgia,serif;background:linear-gradient(90deg,#c9963f,#f6e2a8 40%,#d9b062 60%,#b8862f);
-    -webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:fgGold 6s linear infinite}
-  .fgd-date{margin:0;color:#b9b0a2;font-size:14px}
+  .fgd-title{position:relative;z-index:1;display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;margin:6px 0 10px;font:600 clamp(32px,6vw,48px)/1.05 'Cormorant Garamond',Georgia,serif}
+  .fgd-tt{background:linear-gradient(90deg,#c9963f,#f6e2a8 40%,#d9b062 60%,#b8862f);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:fgGold 6s linear infinite}
+  .fgd-crown{display:inline-block;font-size:.75em;animation:fgBob 3s ease-in-out infinite}
+  .fgd-summary{position:relative;z-index:1;margin:0;max-width:640px;color:#e9e1d2;font-size:15px;line-height:1.6;min-height:1.6em}
+  .fgd-summary b{color:#f0d59a}
   .fgd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
   .fgd-card{position:relative;padding:16px;border-radius:16px;background:#14120f;border:1px solid rgba(217,176,98,.22);animation:fgUp .6s cubic-bezier(.2,.8,.2,1) both}
   .fgd-card small{display:block;color:#b9b0a2;font-size:12px;margin-bottom:4px}
   .fgd-card b{display:block;font-size:22px;color:#f0d59a;font-variant-numeric:tabular-nums;transition:color .4s}
   .fgd-card b.up{color:#7fd39b}.fgd-card b.down{color:#f08a7a}
   .fgd-card i{font-style:normal;font-size:12px;color:#8f877b}
+  .fgd-card i.up{color:#7fd39b}.fgd-card i.down{color:#f08a7a}
   .fgd-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px}
-  .fgd-big{padding:18px;border-radius:18px;background:#14120f;border:1px solid rgba(217,176,98,.22);animation:fgUp .6s cubic-bezier(.2,.8,.2,1) both}
+  .fgd-big{padding:18px;border-radius:18px;background:#14120f;border:1px solid rgba(217,176,98,.22);animation:fgUp .6s cubic-bezier(.2,.8,.2,1) both;min-width:0}
   .fgd-big h3{margin:0 0 10px;font:600 20px/1.2 'Cormorant Garamond',Georgia,serif;color:#f0d59a}
   .fgd-num{font-size:40px;font-weight:700;color:#f0d59a;line-height:1}
   .fgd-muted{color:#b9b0a2;font-size:13px}
   .fgd-thumbs{display:flex;gap:8px;margin-top:12px;overflow:hidden}
-  .fgd-thumbs img{flex:none}
-  @media (max-width:600px){.fgd-grid .fgd-card:nth-child(5){display:none}}
-  .fgd-thumbs img{width:56px;height:56px;border-radius:10px;object-fit:cover;border:1px solid rgba(217,176,98,.3)}
+  .fgd-thumbs img{flex:none;width:56px;height:56px;border-radius:10px;object-fit:cover;border:1px solid rgba(217,176,98,.3)}
   .fgd-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
   .fgd-btn{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:14px;border:1px solid rgba(217,176,98,.35);background:rgba(217,176,98,.07);
     color:#f5f0e6;font:600 15px Manrope,sans-serif;cursor:pointer;text-align:left;transition:background .2s,transform .15s}
@@ -576,51 +647,17 @@
   .fgd-btn.main{background:linear-gradient(135deg,#e7c47c,#c99a45);color:#1a1307;border-color:transparent}
   .fgd-btn span{font-size:20px}
   .fgd-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:#7fd39b;box-shadow:0 0 0 0 rgba(127,211,155,.6);animation:fgPulse 2s infinite}
+  @media (max-width:600px){.fgd-grid .fgd-card:nth-child(5){display:none}}
   @keyframes fgUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
   @keyframes fgShine{0%{transform:translateX(-60%)}60%,100%{transform:translateX(60%)}}
   @keyframes fgGold{to{background-position:200% center}}
+  @keyframes fgBob{50%{transform:translateY(-4px) rotate(-6deg)}}
   @keyframes fgPulse{70%{box-shadow:0 0 0 8px rgba(127,211,155,0)}100%{box-shadow:0 0 0 0 rgba(127,211,155,0)}}
   @media (prefers-reduced-motion:reduce){.fgd *,.fgd-hero::after{animation:none!important}}`;
-
-  function useRates() {
-    const [rates, setRates] = React.useState({});
-    const [live, setLive] = React.useState(false);
-    React.useEffect(() => {
-      let ws, alive = true, data = {}, timer;
-      const backup = () => fetch('https://finans.truncgil.com/v4/today.json', { cache: 'no-store' }).then((r) => r.json()).then((d) => {
-        if (!alive || live) return;
-        const out = {};
-        RATES.forEach(([, , b]) => { if (d[b]) out[b] = { sell: Number(d[b].Selling) }; });
-        setRates((old) => (Object.keys(old).length ? old : Object.fromEntries(RATES.map(([, h0, b]) => [h0, out[b]]))));
-      }).catch(() => {});
-      try {
-        ws = new WebSocket('wss://hrmsocketonly.haremaltin.com/socket.io/?EIO=4&transport=websocket');
-        ws.onmessage = (e) => {
-          const m = String(e.data);
-          if (m === '2') return ws.send('3');
-          if (m[0] === '0') return ws.send('40');
-          if (!m.startsWith('42')) return;
-          try {
-            const [name, payload] = JSON.parse(m.slice(2));
-            if (name !== 'price_changed' || !payload || !payload.data) return;
-            Object.assign(data, payload.data);
-            setLive(true);
-            setRates((old) => {
-              const out = { ...old };
-              RATES.forEach(([, k]) => { const r = data[k]; if (r && Number(r.satis)) out[k] = { sell: Number(r.satis), prev: old[k] && old[k].sell }; });
-              return out;
-            });
-          } catch { /* ignore */ }
-        };
-      } catch { /* no websocket */ }
-      timer = setTimeout(backup, 5000);
-      return () => { alive = false; clearTimeout(timer); try { ws && ws.close(); } catch { /* closed */ } };
-    }, []);
-    return [rates, live];
-  }
+  window.FGPanelCss = css;
 
   function Home() {
-    const [rates, live] = useRates();
+    const { data: rates, live } = window.FGUseRates();
     const [products, setProducts] = React.useState(null);
     const [visits, setVisits] = React.useState(null);
     const [status, setStatus] = React.useState(null);
@@ -645,19 +682,36 @@
       return m < 60 ? `${Math.max(1, m)} dk önce` : m < 1440 ? `${Math.round(m / 60)} saat önce` : `${Math.round(m / 1440)} gün önce`;
     };
 
+    // the day in one or two sentences
+    const summary = [];
+    if (OWNER && today != null) {
+      const refs = ((visits && visits.refs) || []).filter((r) => r.visits > 0 && !/(^|\.)federalgold\.org$/.test(r.key));
+      const total = refs.reduce((a, r) => a + r.visits, 0);
+      const top = refs[0];
+      summary.push(h('span', { key: 'v' }, 'Bugün siteye ', h('b', null, `${today} kişi`), ' baktı',
+        top && total ? [', en çok ', h('b', { key: 't' }, sourceName(top.key)), ` üzerinden geldiler (%${Math.round(top.visits / total * 100)})`] : '', '. '));
+    }
+    const g = rates.KULCEALTIN;
+    if (g && g.chg != null && Number.isFinite(g.chg)) {
+      summary.push(h('span', { key: 'g' }, 'Gram altın bugün ', Math.abs(g.chg) < 0.05 ? h('b', null, 'yerinde sayıyor') :
+        [h('b', { key: 'p', style: { color: g.chg > 0 ? '#7fd39b' : '#f08a7a' } }, `%${pct(g.chg)} ${g.chg > 0 ? 'yükseldi ↑' : 'düştü ↓'}`)], '. '));
+    }
+    if (!OWNER && products) summary.push(h('span', { key: 'p' }, 'Vitrinde ', h('b', null, `${shown.length} ürün`), ' sergileniyor.'));
+
     return h('div', { className: 'fgd' },
       h('style', null, css),
       h('div', { className: 'fgd-hero' },
-        h('p', { className: 'fgd-hi' }, `${hello()} 👋`),
-        h('div', { className: 'fgd-title' }, 'Federal Gold'),
-        h('p', { className: 'fgd-date' }, now.charAt(0).toUpperCase() + now.slice(1))),
+        h('p', { className: 'fgd-hi' }, `${hello()} · ${now.charAt(0).toUpperCase() + now.slice(1)}`),
+        h('div', { className: 'fgd-title' }, h('span', { className: 'fgd-tt' }, `Hoş geldin ${WHO}`), h('span', { className: 'fgd-crown' }, OWNER ? '👑' : '👋')),
+        h('p', { className: 'fgd-summary' }, summary.length ? summary : '…')),
       h('div', { className: 'fgd-grid' }, RATES.map(([label, k], i) => {
         const r = rates[k];
         const dir = r && r.prev ? (r.sell > r.prev ? 'up' : r.sell < r.prev ? 'down' : '') : '';
+        const c = r && r.chg != null && Number.isFinite(r.chg) ? r.chg : null;
         return h('div', { key: k, className: 'fgd-card', style: { animationDelay: `${0.08 * i + 0.1}s` } },
           h('small', null, i === 0 ? h('span', null, live && h('span', { className: 'fgd-dot' }), label) : label),
           h('b', { className: dir }, r ? money(r.sell) : '…'),
-          h('i', null, 'satış'));
+          h('i', { className: c > 0 ? 'up' : c < 0 ? 'down' : '' }, c == null ? 'satış' : `satış · ${c > 0 ? '↑' : c < 0 ? '↓' : ''} %${pct(c)}`));
       })),
       h('div', { className: 'fgd-row' },
         OWNER && h('div', { className: 'fgd-big', style: { animationDelay: '.45s' } },
@@ -679,11 +733,126 @@
               h('a', { href: '#/pages/durum', style: { color: GOLD, fontSize: '13px' } }, 'Site Durumu →'))
             : h('div', { className: 'fgd-muted' }, '…'))),
       h('div', { className: 'fgd-actions' },
-        h('button', { className: 'fgd-btn main', onClick: () => go('#/collections/vitrin/entries/products') }, h('span', null, '💎'), 'Vitrine ürün ekle'),
+        h('button', { className: 'fgd-btn main', onClick: () => go('#/pages/hesap') }, h('span', null, '🧮'), 'Fiyat hesapla'),
+        h('button', { className: 'fgd-btn', onClick: () => go('#/collections/vitrin/entries/products') }, h('span', null, '💎'), 'Vitrine ürün ekle'),
         h('button', { className: 'fgd-btn', onClick: () => go('#/collections/site/entries/site') }, h('span', null, '✍️'), 'Site yazıları'),
         h('button', { className: 'fgd-btn', onClick: () => go('#/assets') }, h('span', null, '🖼️'), 'Fotoğraflar'),
         h('button', { className: 'fgd-btn', onClick: () => window.open('/', '_blank') }, h('span', null, '🌐'), 'Siteyi aç')));
   }
 
   CMS.registerCustomPage({ id: 'anasayfa', label: 'Ana Sayfa', icon: 'home', component: Home });
+})();
+
+// ---- "Fiyat Hesapla": the shop calculator — karat, grams and craftsmanship → the price to tell the customer, at the live rate ----
+(() => {
+  const CMS = window.CMS;
+  if (!CMS || !CMS.React || !CMS.registerCustomPage) return;
+  const { React } = CMS;
+  const h = React.createElement;
+  const tl = (n, d = 0) => new Intl.NumberFormat('tr-TR', { minimumFractionDigits: d, maximumFractionDigits: d }).format(n) + ' ₺';
+  const num = (v) => { const s = String(v || '').trim().replace(/\s/g, ''); const n = parseFloat(/,\d+$/.test(s) ? s.replace(/\./g, '').replace(',', '.') : s.replace(',', '.')); return Number.isFinite(n) ? n : 0; };
+  const KARATS = [['22', 'AYAR22', 0.916], ['18', 'AYAR18', 0.750], ['14', 'AYAR14', 0.585], ['24', 'KULCEALTIN', 0.995], ['8', null, 0.333]];
+  const COINS = [['Çeyrek', 'CEYREK_YENI'], ['Yarım', 'YARIM_YENI'], ['Tam', 'TEK_YENI'], ['Ata', 'ATA_YENI']];
+  const ISCILIK = [['milyem', 'Milyem'], ['tl_gram', '₺ / gram'], ['tl', '₺ toplam']];
+  const load = () => { try { return JSON.parse(localStorage.getItem('fg-hesap') || '{}') || {}; } catch { return {}; } };
+  const css = `
+  .fgc{max-width:620px;margin:0 auto;padding:24px 16px 60px;font-family:Manrope,system-ui,sans-serif;color:#f5f0e6}
+  .fgc *{box-sizing:border-box}
+  .fgc h2{margin:0 0 4px;font:600 34px/1.1 'Cormorant Garamond',Georgia,serif;color:#f0d59a}
+  .fgc p.sub{margin:0 0 18px;color:#b9b0a2;font-size:14px}
+  .fgc-tabs,.fgc-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .fgc-live{display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:50%;background:#7fd39b}
+  @media (max-width:600px){.fgc-chip{padding:8px 13px!important;font-size:14px!important}.fgc input{min-height:52px!important;font-size:22px!important}}
+  .fgc-chip{padding:10px 16px;border-radius:999px;border:1px solid rgba(217,176,98,.35);background:transparent;color:#f5f0e6;font:600 15px Manrope,sans-serif;cursor:pointer}
+  .fgc-chip.on{background:linear-gradient(135deg,#e7c47c,#c99a45);color:#1a1307;border-color:transparent}
+  .fgc label{display:block;margin:6px 0 6px;color:#b9b0a2;font-size:13px}
+  .fgc input{width:100%;min-height:58px;padding:0 16px;border-radius:14px;border:1px solid rgba(217,176,98,.3);background:#0d0b09;color:#f5f0e6;font:600 24px Manrope,sans-serif;font-variant-numeric:tabular-nums}
+  .fgc input:focus{outline:none;border-color:#d9b062;box-shadow:0 0 0 4px rgba(217,176,98,.15)}
+  .fgc-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fgc-bar{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 -4px 16px;padding:12px 16px;border-radius:14px;
+    background:rgba(20,18,15,.96);border:1px solid rgba(217,176,98,.45);box-shadow:0 8px 24px rgba(0,0,0,.45);backdrop-filter:blur(8px)}
+  .fgc-bar span{color:#b9b0a2;font-size:13px}.fgc-bar b{color:#f0d59a;font-size:24px;font-variant-numeric:tabular-nums}
+  .fgc-out{margin:20px 0 0;padding:22px 20px;border-radius:20px;border:1px solid rgba(217,176,98,.4);
+    background:radial-gradient(120% 120% at 0% 0%,rgba(217,176,98,.18),rgba(20,18,15,.95) 60%);animation:fgcIn .4s ease both}
+  .fgc-out small{display:block;color:#b9b0a2;font-size:13px}
+  .fgc-price{margin:4px 0 14px;font:700 clamp(36px,9vw,52px)/1.05 Manrope,sans-serif;color:#f0d59a;font-variant-numeric:tabular-nums}
+  .fgc-line{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-top:1px solid rgba(217,176,98,.15);font-size:14px;color:#e9e1d2;font-variant-numeric:tabular-nums}
+  .fgc-acts{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .fgc-act{flex:1 1 140px;padding:13px 14px;border-radius:12px;border:1px solid rgba(217,176,98,.35);background:rgba(217,176,98,.08);color:#f5f0e6;font:600 15px Manrope,sans-serif;cursor:pointer}
+  .fgc-note{margin-top:12px;font-size:12px;color:#8f877b}
+  @keyframes fgcIn{from{opacity:.4;transform:scale(.99)}to{opacity:1;transform:none}}`;
+
+  function Calc() {
+    const { data: rates, live } = window.FGUseRates();
+    const saved = load();
+    const [mode, setMode] = React.useState(saved.mode || 'taki');
+    const [karat, setKarat] = React.useState(saved.karat || '22');
+    const [gram, setGram] = React.useState(saved.gram || '');
+    const [isc, setIsc] = React.useState(saved.isc || '');
+    const [tip, setTip] = React.useState(saved.tip || 'milyem');
+    const [coin, setCoin] = React.useState(saved.coin || 'CEYREK_YENI');
+    const [adet, setAdet] = React.useState(saved.adet || '1');
+    const [copied, setCopied] = React.useState(false);
+    React.useEffect(() => { try { localStorage.setItem('fg-hesap', JSON.stringify({ mode, karat, gram, isc, tip, coin, adet })); } catch { /* private mode */ } },
+      [mode, karat, gram, isc, tip, coin, adet]);
+
+    const has = rates.ALTIN ? rates.ALTIN : rates.KULCEALTIN ? { sell: rates.KULCEALTIN.sell / 0.995, buy: rates.KULCEALTIN.buy / 0.995 } : null;
+    let result = null;
+    if (mode === 'taki') {
+      const [k, key, mil] = KARATS.find((x) => x[0] === karat) || KARATS[0];
+      const g = num(gram), w = num(isc);
+      const row = key && rates[key] ? rates[key] : has ? { sell: has.sell * mil, buy: has.buy * mil } : null;
+      if (row && g > 0) {
+        const gold = g * row.sell;
+        const work = !w ? 0 : tip === 'milyem' ? (has ? g * w / 1000 * has.sell : 0) : tip === 'tl_gram' ? g * w : w;
+        const total = Math.round((gold + work) / 10) * 10;
+        result = { total, lines: [[`Altın (${String(g).replace('.', ',')} gr × ${tl(row.sell, 2)})`, tl(gold)], ...(work ? [['İşçilik', tl(work)]] : [])],
+          buy: row.buy ? Math.floor(g * row.buy / 10) * 10 : null, text: `${k} ayar · ${String(g).replace('.', ',')} gr` };
+      }
+    } else {
+      const r = rates[coin], n = Math.max(0, Math.round(num(adet)));
+      const name = (COINS.find((c) => c[1] === coin) || [''])[0];
+      if (r && n > 0) result = { total: Math.round(n * r.sell / 10) * 10, lines: [[`${n} × ${name} (${tl(r.sell, 2)})`, tl(n * r.sell)]],
+        buy: r.buy ? Math.floor(n * r.buy / 10) * 10 : null, text: `${n} adet ${name} altın` };
+    }
+    const message = result ? `Federal Gold · ${result.text}: ${tl(result.total)} (güncel kurla)` : '';
+    const resultCard = () => h('div', { className: 'fgc-out', key: 'out' },
+      h('small', null, 'Müşteriye satış fiyatı'),
+      h('div', { className: 'fgc-price' }, result ? tl(result.total) : '— ₺'),
+      result ? [
+        ...result.lines.map(([a, b]) => h('div', { key: a, className: 'fgc-line' }, h('span', null, a), h('span', null, b))),
+        result.buy ? h('div', { key: 'buy', className: 'fgc-line' }, h('span', null, 'Müşteriden alış (bozdurma)'), h('span', null, tl(result.buy))) : null,
+        h('div', { key: 'acts', className: 'fgc-acts' },
+          h('button', { className: 'fgc-act', onClick: () => window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank') }, '💬 WhatsApp\'la gönder'),
+          h('button', { className: 'fgc-act', onClick: () => { navigator.clipboard && navigator.clipboard.writeText(message).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }); } },
+            copied ? '✓ Kopyalandı' : '📋 Kopyala')),
+      ] : h('div', { className: 'fgc-line' }, h('span', null, mode === 'taki' ? 'Gramı yaz, fiyat anında çıksın' : 'Adedi yaz, fiyat anında çıksın')));
+
+    return h('div', { className: 'fgc' },
+      h('style', null, css),
+      h('h2', null, 'Fiyat Hesapla'),
+      h('p', { className: 'sub' }, live ? [h('span', { key: 'd', className: 'fgc-live' }), 'Canlı kurla, sitedeki fiyatlarınla hesaplanır'] : 'Kurlar yükleniyor…'),
+      h('div', { key: 'bar', className: 'fgc-bar' }, h('span', null, result ? result.text : 'Fiyat'), h('b', null, result ? tl(result.total) : '— ₺')),
+      h('div', { className: 'fgc-tabs' },
+        h('button', { className: `fgc-chip${mode === 'taki' ? ' on' : ''}`, onClick: () => setMode('taki') }, '💍 Takı (gram)'),
+        h('button', { className: `fgc-chip${mode === 'ziynet' ? ' on' : ''}`, onClick: () => setMode('ziynet') }, '🪙 Ziynet (adet)')),
+      mode === 'taki' ? [
+        h('label', { key: 'kl' }, 'Ayar'),
+        h('div', { key: 'k', className: 'fgc-chips' }, KARATS.map(([k]) => h('button', { key: k, className: `fgc-chip${karat === k ? ' on' : ''}`, onClick: () => setKarat(k) }, `${k} ayar`))),
+        h('div', { key: 'two', className: 'fgc-two' },
+          h('div', null, h('label', null, 'Gram'), h('input', { inputMode: 'decimal', placeholder: '0', value: gram, onChange: (e) => setGram(e.target.value) })),
+          h('div', null, h('label', null, 'İşçilik'), h('input', { inputMode: 'decimal', placeholder: '0', value: isc, onChange: (e) => setIsc(e.target.value) }))),
+        h('label', { key: 'tl' }, 'İşçilik nasıl'),
+        h('div', { key: 't', className: 'fgc-chips' }, ISCILIK.map(([v, l]) => h('button', { key: v, className: `fgc-chip${tip === v ? ' on' : ''}`, onClick: () => setTip(v) }, l))),
+      ] : [
+        h('label', { key: 'cl' }, 'Cins'),
+        h('div', { key: 'c', className: 'fgc-chips' }, COINS.map(([l, k]) => h('button', { key: k, className: `fgc-chip${coin === k ? ' on' : ''}`, onClick: () => setCoin(k) }, l))),
+        h('label', { key: 'al' }, 'Adet'),
+        h('input', { key: 'a', inputMode: 'numeric', value: adet, onChange: (e) => setAdet(e.target.value) }),
+      ],
+      resultCard(),
+      h('div', { className: 'fgc-note' }, 'En yakın 10 ₺\'ye yuvarlanır. Kurlar Harem\'den anlık gelir; Kur tablosuna yazdığın farklar dahildir.'));
+  }
+
+  CMS.registerCustomPage({ id: 'hesap', label: 'Fiyat Hesapla', icon: 'calculate', component: Calc });
 })();
