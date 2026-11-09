@@ -105,15 +105,21 @@ async function checkHarem() {
 }
 
 async function checkBackup() {
-  const t0 = Date.now();
-  try {
-    const res = await timed(() => fetch(BACKUP_URL, { headers: { Accept: 'application/json' } }));
-    const d = await res.json();
-    if (!res.ok || !d || !d.GRA) throw new Error(`yanıt ${res.status}`);
-    return ok('yedek', 'Yedek kur kaynağı', `Çalışıyor · ${Date.now() - t0} ms`);
-  } catch (e) {
-    return warn('yedek', 'Yedek kur kaynağı', `Yanıt vermiyor (${e.message})`);
+  // the backup server sometimes drops a single connection from Cloudflare: try up to three times before warning
+  let lastErr = '';
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const t0 = Date.now();
+    try {
+      const res = await timed(() => fetch(`${BACKUP_URL}?t=${Date.now()}`, { headers: { Accept: 'application/json' } }));
+      const d = await res.json();
+      if (!res.ok || !d || !d.GRA) throw new Error(`yanıt ${res.status}`);
+      return ok('yedek', 'Yedek kur kaynağı', `Çalışıyor · ${Date.now() - t0} ms${attempt > 1 ? ` · ${attempt}. denemede` : ''}`);
+    } catch (e) {
+      lastErr = e.message;
+      if (attempt < 3) await new Promise((r) => setTimeout(r, 1500));
+    }
   }
+  return warn('yedek', 'Yedek kur kaynağı', `3 denemede de yanıt vermedi (${lastErr}) · site Harem'le çalışmaya devam ediyor`);
 }
 
 async function checkPanel(env) {
