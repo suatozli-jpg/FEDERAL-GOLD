@@ -44,6 +44,36 @@
     }
   }).observe(document.documentElement, { subtree: true, childList: true, characterData: true });
 
+  // ---- Account menu: only what the shop needs (no repository link, CMS internals or the CMS maker's help links) ----
+  const HIDE = new Set(['Git Reposu', 'Git Repository', 'CMS Yapılandırması', 'CMS Configuration', 'Yardım', 'Help', 'Dokümantasyon', 'Documentation',
+    'Versiyon Notları', 'Release Notes', 'Duyurular', 'Announcements', 'Sorun Bildir', 'Report Issue', 'Geri Bildirim Paylaş', 'Share Feedback',
+    'Yardım Al', 'Get Help', 'Bağış Yap', 'Donate', 'Sponsor', 'Bluesky’da Bizi Takip Edin', "Bluesky'da Bizi Takip Edin", 'Follow us on Bluesky',
+    'Discord’da Bize Katılın', "Discord'da Bize Katılın", 'Join us on Discord', 'Klavye Kısayolları', 'Keyboard Shortcuts', 'Geliştirici Modu', 'Developer Mode']);
+  // visible words only: icon names (material symbols such as "open_in_new") and version badges are left out
+  const label = (el) => {
+    let t = el.textContent;
+    el.querySelectorAll('.material-symbols-outlined, .icon, .badge').forEach((i) => { t = t.replace(i.textContent, ' '); });
+    return t.replace(/\s+/g, ' ').trim().replace(/\s*v?\d+\.\d[\d.]*$/, '');
+  };
+  const tidyMenu = () => {
+    document.querySelectorAll('h3, h4').forEach((h) => { if (h.textContent.trim() === 'Pages') h.textContent = 'Sayfalar'; });
+    document.querySelectorAll('button, a, h1, h2, h3, h4, [role="heading"], [role="menuitem"], [role="option"]').forEach((el) => {
+      if (el.dataset.fgHidden || !HIDE.has(label(el))) return;
+      // the row around the item (the item itself can carry role="menuitem")
+      const box = el.closest('.sui.menuitem') || el.closest('li, [role="listitem"]') || el;
+      box.style.display = 'none'; el.dataset.fgHidden = '1';
+    });
+    // dividers with nothing visible after them
+    document.querySelectorAll('[role="separator"]').forEach((sep) => {
+      let n = sep.nextElementSibling, visible = false;
+      while (n && n.getAttribute('role') !== 'separator') { if (n.style.display !== 'none') visible = true; n = n.nextElementSibling; }
+      sep.style.display = visible ? '' : 'none';
+    });
+  };
+  let tidyQueued = false;
+  new MutationObserver(() => { if (!tidyQueued) { tidyQueued = true; requestAnimationFrame(() => { tidyQueued = false; tidyMenu(); }); } })
+    .observe(document.documentElement, { subtree: true, childList: true });
+
   // ---- Photos: shrink big ones (max 1600 px, WebP or JPEG) and give them a plain file name before the panel sees them ----
   // (phones send 3–5 MB photos and names like "IMG_2911" that some steps turn into "ımg_2911")
   const MAX_SIDE = 1600, MAX_BYTES = 600 * 1024;
