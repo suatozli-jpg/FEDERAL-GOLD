@@ -60,7 +60,9 @@ collections:
             fields:
               - name: name
                 label: Ürün adı
+                hint: Boş bırakırsan, kaydederken fotoğrafa bakılıp ad, İngilizce ad ve kategori otomatik yazılır.
                 widget: string
+                required: false
               - name: nameEn
                 label: İngilizce ad (site EN'deyken görünür)
                 widget: string
@@ -71,6 +73,7 @@ collections:
               - name: category
                 label: Kategori
                 widget: select
+                required: false
                 options:
                   - { label: Bilezik, value: bracelets }
                   - { label: Yüzük, value: rings }

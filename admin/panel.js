@@ -148,3 +148,132 @@
 
   CMS.registerCustomPage({ id: 'gecmis', label: 'Değişiklik Geçmişi', icon: 'history', component: History });
 })();
+
+// ---- Product name from the photo ----
+// When a Vitrin product is saved without a name, the photo is sent (resized) to the site worker,
+// which asks an image model for a Turkish name, an English name and the category.
+(() => {
+  const CMS = window.CMS;
+  if (!CMS || !CMS.registerEventListener) return;
+
+  const toDataUrl = async (src) => {
+    const blob = await (await fetch(src, { credentials: 'same-origin' })).blob();
+    const bmp = await createImageBitmap(blob);
+    const scale = Math.min(1, 768 / Math.max(bmp.width, bmp.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bmp.width * scale); canvas.height = Math.round(bmp.height * scale);
+    canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.85);
+  };
+
+  const describe = async (src) => {
+    const res = await fetch('/admin/api/describe', {
+      method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: await toDataUrl(src) }),
+    });
+    if (!res.ok) throw new Error(`describe ${res.status}`);
+    return res.json();
+  };
+
+  CMS.registerEventListener({
+    name: 'preSave',
+    handler: async ({ entry }) => {
+      let data = entry.get('data');
+      if (!data || !data.get) return undefined;
+      const key = data.get('products') ? ['products'] : [];
+      const list = key.length ? data.get('products') : data;
+      if (!list || typeof list.size !== 'number' || !list.get) return undefined;
+      let changed = false;
+      for (let i = 0; i < list.size; i++) {
+        const item = list.get(i);
+        if (!item || !item.get) continue;
+        const name = String(item.get('name') || '').trim();
+        const image = item.get('image');
+        if (name || !image) continue;
+        try {
+          const d = await describe(image);
+          const at = [...key, i];
+          data = data.setIn([...at, 'name'], d.name);
+          if (!String(item.get('nameEn') || '').trim() && d.nameEn) data = data.setIn([...at, 'nameEn'], d.nameEn);
+          if (!item.get('category') && d.category) data = data.setIn([...at, 'category'], d.category);
+          changed = true;
+        } catch (e) {
+          console.warn('Ürün adı fotoğraftan çıkarılamadı', e);
+          if (!item.get('category')) { data = data.setIn([...key, i, 'category'], 'other'); changed = true; }
+        }
+      }
+      return changed ? data : undefined;
+    },
+  });
+})();
+
+// ---- "Site Durumu" page: results of the hourly checks run by the site worker ----
+(() => {
+  const CMS = window.CMS;
+  if (!CMS || !CMS.React || !CMS.registerCustomPage) return;
+  const { React } = CMS;
+  const h = React.createElement;
+  const ICON = { ok: '✓', warn: '!', err: '✕' };
+  const COLOR = { ok: '#2e9e5b', warn: '#c98a06', err: '#d0442f' };
+  const when = (iso) => new Date(iso).toLocaleString('tr-TR', { day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' });
+
+  function Status() {
+    const [data, setData] = React.useState(null);
+    const [busy, setBusy] = React.useState(false);
+    const [msg, setMsg] = React.useState('');
+    const load = React.useCallback(async () => {
+      try { setData(await (await fetch('/admin/api/status', { credentials: 'same-origin' })).json()); }
+      catch (e) { setMsg(`Durum okunamadı: ${e.message}`); }
+    }, []);
+    React.useEffect(() => { load(); }, [load]);
+    const runNow = async () => {
+      setBusy(true); setMsg('');
+      try {
+        const res = await fetch('/admin/api/status/run', { method: 'POST', credentials: 'same-origin' });
+        if (!res.ok) throw new Error(res.status);
+        await load();
+      } catch (e) { setMsg(`Kontrol çalıştırılamadı (${e.message})`); }
+      setBusy(false);
+    };
+
+    const latest = data && data.latest;
+    const counts = latest ? latest.results.reduce((a, r) => ((a[r.status] = (a[r.status] || 0) + 1), a), {}) : {};
+    // last 7 days: worst status per day
+    const daysRow = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i);
+      const runs = ((data && data.history) || []).filter((x) => { const t = new Date(x.time); return t >= d && t < new Date(d.getTime() + 864e5); });
+      const worst = runs.some((x) => x.status === 'err') ? 'err' : runs.some((x) => x.status === 'warn') ? 'warn' : runs.length ? 'ok' : '';
+      daysRow.push({ label: i === 0 ? 'Bugün' : d.toLocaleDateString('tr-TR', { weekday: 'short' }), worst });
+    }
+
+    const box = { maxWidth: '760px', margin: '0 auto', padding: '24px 16px', fontSize: '15px', lineHeight: 1.5 };
+    const card = { border: '1px solid rgba(128,128,128,.3)', borderRadius: '12px', overflow: 'hidden', marginBottom: '18px' };
+    const btn = { padding: '10px 16px', borderRadius: '8px', border: '1px solid currentColor', background: 'transparent', color: 'inherit', cursor: 'pointer', font: 'inherit' };
+
+    return h('div', { style: box },
+      h('h2', { style: { margin: '0 0 6px', fontSize: '22px' } }, 'Site Durumu'),
+      h('p', { style: { margin: '0 0 16px', opacity: 0.75 } }, 'Site her saat kendiliğinden kontrol edilir. Bir sorun olursa burada kırmızı ya da sarı görünür.'),
+      msg && h('p', { style: { padding: '10px 14px', borderRadius: '8px', background: 'rgba(208,68,47,.12)' } }, msg),
+      !data ? h('p', null, 'Yükleniyor…') : !latest ? h('p', null, 'Henüz kontrol yapılmadı. "Şimdi kontrol et"e bas.') : [
+        h('div', { key: 'sum', style: { ...card, padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' } },
+          h('span', { style: { width: '42px', height: '42px', borderRadius: '50%', display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: '20px', color: '#fff', background: COLOR[latest.status] } }, ICON[latest.status]),
+          h('div', null,
+            h('div', { style: { fontWeight: 600, fontSize: '17px' } },
+              latest.status === 'ok' ? 'Her şey yolunda' : latest.status === 'warn' ? `${counts.warn} konu dikkat istiyor` : `${counts.err} sorun var`),
+            h('div', { style: { fontSize: '13px', opacity: 0.7 } }, `Son kontrol: ${when(latest.time)} · ${counts.ok || 0} kontrol sorunsuz`))),
+        h('div', { key: 'list', style: card }, latest.results.map((r) =>
+          h('div', { key: r.id, style: { display: 'flex', gap: '12px', padding: '12px 16px', borderTop: '1px solid rgba(128,128,128,.2)' } },
+            h('span', { style: { flex: 'none', width: '24px', height: '24px', borderRadius: '50%', display: 'grid', placeItems: 'center', fontSize: '13px', fontWeight: 700, color: '#fff', background: COLOR[r.status] } }, ICON[r.status]),
+            h('div', null, h('div', { style: { fontWeight: 600 } }, r.title), h('div', { style: { fontSize: '13px', opacity: 0.75 } }, r.detail))))),
+        h('div', { key: 'days', style: { ...card, padding: '14px 16px' } },
+          h('div', { style: { fontWeight: 600, marginBottom: '10px' } }, 'Son 7 gün'),
+          h('div', { style: { display: 'flex', justifyContent: 'space-between' } }, daysRow.map((d) =>
+            h('div', { key: d.label, style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', fontSize: '12px', opacity: 0.85 } },
+              h('span', { style: { width: '24px', height: '34px', borderRadius: '6px', background: d.worst ? COLOR[d.worst] : 'rgba(128,128,128,.25)' } }), d.label)))),
+      ],
+      h('button', { style: btn, disabled: busy, onClick: runNow }, busy ? 'Kontrol ediliyor…' : 'Şimdi kontrol et'));
+  }
+
+  CMS.registerCustomPage({ id: 'durum', label: 'Site Durumu', icon: 'monitor_heart', component: Status });
+})();

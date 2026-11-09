@@ -3,6 +3,9 @@
   "name": "federal-gold",
   "main": "src/worker.js",
   "compatibility_date": "2026-11-07",
+  "ai": { "binding": "AI" },
+  "kv_namespaces": [{ "binding": "DURUM", "id": "741eca98b480496fa60379aca0b166d9" }],
+  "triggers": { "crons": ["17 * * * *"] },
   "assets": {
     "directory": "./",
     "binding": "ASSETS",

@@ -1,3 +1,5 @@
+import { runChecks, readStatus } from './durum.js';
+
 // Federal Gold site worker.
 // Everything is served from static assets, except /admin:
 //   /admin/login   password form (secret PANEL_SIFRE), sets a signed session cookie
@@ -229,6 +231,48 @@ async function renderHome(request, env, preview = null) {
   return rw.transform(new Response(html, { status: res.status, headers }));
 }
 
+// ---- Product name from photo (Workers AI, used by the panel when a product has no name) ----
+const CATEGORIES = ['bracelets', 'rings', 'necklaces', 'earrings', 'watches', 'other'];
+const DESCRIBE_PROMPT = `Sen Kapalıçarşı'da bir kuyumcunun vitrin ürünlerine isim veren bir asistansın.
+Önce fotoğrafta en çok yer kaplayan ürün türüne bak: bilekte takılan halkalar bilezik/kelepçedir, boyna takılan
+kolye/gerdanlık/zincirdir, parmakta yüzük, kulakta küpe; düz külçe ve sikkeler "other" kategorisidir.
+Kuyumcu diliyle adlandır (bilezik, kelepçe, burma, hasır, gurmet, kolye, gerdanlık, set, zincir, yüzük, tektaş,
+alyans, küpe, halka, çeyrek, külçe, saat). Ayar, gram, fiyat, marka ve "güzel", "şık" gibi sıfatlar YAZMA.
+Emin olmadığın taş veya motif adı uydurma. Sadece şu JSON'u yaz, başka hiçbir şey yazma:
+{"name": "2-4 kelimelik Türkçe ürün adı, Baş Harfleri Büyük", "nameEn": "English name", "category": "bracelets|rings|necklaces|earrings|watches|other"}`;
+const DESCRIBE_MODELS = ['@cf/mistralai/mistral-small-3.1-24b-instruct', '@cf/meta/llama-4-scout-17b-16e-instruct'];
+
+function parseDescription(out) {
+  let r = out && (out.response ?? (out.choices && out.choices[0] && out.choices[0].message && out.choices[0].message.content) ?? out.result ?? out);
+  if (r && typeof r === 'object' && r.name) return r;
+  const m = String(typeof r === 'object' ? JSON.stringify(r) : r || '').match(/\{[^{}]*"name"[^{}]*\}/);
+  return m ? JSON.parse(m[0]) : null;
+}
+
+async function describeProduct(request, env) {
+  if (!env.AI) return Response.json({ error: 'AI kullanılamıyor' }, { status: 503, headers: securityHeaders });
+  let body;
+  try { body = await request.json(); } catch { return new Response('Bad request', { status: 400, headers: securityHeaders }); }
+  const image = String(body && body.image || '');
+  if (!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(image) || image.length > 2_000_000) {
+    return new Response('Bad image', { status: 400, headers: securityHeaders });
+  }
+  let lastErr = '';
+  // each model twice: the image models occasionally fail on a single call
+  for (const model of [...DESCRIBE_MODELS, ...DESCRIBE_MODELS]) {
+    try {
+      const out = await env.AI.run(model, { max_tokens: 160, messages: [{ role: 'user', content: [
+        { type: 'text', text: DESCRIBE_PROMPT }, { type: 'image_url', image_url: { url: image } }] }] });
+      const d = parseDescription(out);
+      if (!d || !d.name) { lastErr = 'unparsed: ' + JSON.stringify(out).slice(0, 300); continue; }
+      const clean = (v) => String(v || '').replace(/["<>]/g, '').replace(/\bfederal\s*gold\b/ig, '').replace(/\s+/g, ' ').trim().slice(0, 80);
+      return Response.json({ name: clean(d.name), nameEn: clean(d.nameEn), category: CATEGORIES.includes(d.category) ? d.category : 'other' },
+        { headers: securityHeaders });
+    } catch (e) { lastErr = String(e && e.message || e).slice(0, 300); /* try the next model */ }
+  }
+  return Response.json({ error: 'Fotoğraftan isim çıkarılamadı', detail: lastErr }, { status: 502, headers: securityHeaders });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -265,6 +309,9 @@ export default {
     }
 
     if (p.startsWith('/admin/api/gitlab/')) return proxyGitLab(request, env, url);
+    if (p === '/admin/api/describe' && request.method === 'POST') return describeProduct(request, env);
+    if (p === '/admin/api/status' && request.method === 'GET') return Response.json(await readStatus(env), { headers: securityHeaders });
+    if (p === '/admin/api/status/run' && request.method === 'POST') return Response.json(await runChecks(env, renderHome), { headers: securityHeaders });
     if (p === '/admin/api/preview' && request.method === 'POST') {
       // Live preview for the panel: the home page rendered with the unsaved entry data
       let body;
@@ -278,5 +325,8 @@ export default {
     const out = new Response(res.body, res);
     for (const [k, v] of Object.entries(securityHeaders)) out.headers.set(k, v);
     return out;
+  },
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runChecks(env, renderHome));
   },
 };
