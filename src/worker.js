@@ -33,8 +33,8 @@ function safeEqual(a, b) {
   return diff === 0;
 }
 
-// Two kinds of sign-in: the owner (PANEL_SIFRE, everything) and "abi" (PANEL_SIFRE_ABI: only Vitrin,
-// no history, status, visitors or site texts, and nothing from the repository's history).
+// Two kinds of sign-in: the owner (PANEL_SIFRE, everything) and "abi" (PANEL_SIFRE_ABI: Vitrin and Site İçeriği,
+// but no history, status or visitor pages, and nothing from the repository's history).
 async function makeSession(env, role = 'owner') {
   const exp = String(Date.now() + SESSION_DAYS * 864e5);
   const payload = role === 'owner' ? exp : `${exp}~${role}`;
@@ -125,7 +125,7 @@ function allowedGitLabPath(path) {
 }
 
 // For "abi": only what the Vitrin editor needs, and every name, e-mail or note from the repository history is hidden
-const ABI_FILES = /^(data\/products\.json|assets\/products\/[^/]+)$/;
+const ABI_FILES = /^(data\/(products|site)\.json|assets\/(products\/)?[^/]+\.(webp|jpe?g|png|gif|avif))$/i;
 const scrub = (v) => {
   if (typeof v === 'string') {
     return v.replace(/(^|\n)(Co-Authored-By|Claude-Session|Signed-off-by):[^\n]*/gi, '')
@@ -205,8 +205,6 @@ async function panelConfig(request, env, url, role = 'owner') {
   let text = (await res.text())
     .replaceAll('__ORIGIN__', url.origin)
     .replaceAll('__BRANCH__', branch);
-  // abi: only the Vitrin collection (Site İçeriği is the last collection in the file)
-  if (role === 'abi') text = text.replace(/\n  - name: site\n[\s\S]*$/, '\n');
   return new Response(text, { headers: { 'Content-Type': 'text/yaml; charset=utf-8', ...securityHeaders } });
 }
 
