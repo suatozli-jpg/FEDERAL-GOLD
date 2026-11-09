@@ -72,7 +72,7 @@
       "vitrinEyebrow": "Vitrin",
       "vitrinTitle": "Mağazamızdan seçmeler",
       "vitrinText": "Kapalıçarşı’daki mağazamızın vitrininden.",
-      "vitrinAskShort": "Bilgi al →"
+      "vitrinAskShort": "Bilgi al"
     },
     "hizmetler": {
       "servicesEyebrow": "Hizmetlerimiz",
@@ -82,7 +82,7 @@
       "svc2": "Özel sipariş",
       "svc2Text": "İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.",
       "svc3": "Anlık fiyat",
-      "svc3Text": "LBMA bazlı, güne ve ana göre güncel altın fiyatı.",
+      "svc3Text": "LBMA bazlı güne ve ana göre güncel altın fiyatı.",
       "svc4": "Ödeme kolaylığı",
       "svc4Text": "Kredi kartı veya havale / EFT (T/T) ile ödeme."
     },
