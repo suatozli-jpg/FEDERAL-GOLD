@@ -763,7 +763,7 @@
         <p class="eyebrow" data-i18n="visitEyebrow">Ziyaret &amp; iletişim</p>
         <h2 class="title" data-i18n="visitTitle">Mağazalarımızı ziyaret edin</h2>
         <div class="visit-grid">
-          <article class="visit-card">
+          <article class="visit-card" data-store="kapalicarsi">
             <figure class="store-photo"><img src="assets/store-kapalicarsi.webp" width="840" height="1120" alt="Federal Gold Kapalıçarşı mağazasının vitrini" data-i18n-alt="aboutImg" loading="lazy"></figure>
             <header class="store-head"><h3 data-i18n="store1Name">Kapalıçarşı</h3><span class="store-tag" data-i18n="store1Tag">Merkez · İstanbul</span></header>
             <span class="visit-label" data-i18n="addressLabel">Adres</span>
@@ -792,7 +792,7 @@
               <iframe title="Federal Gold Kapalıçarşı konumu" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=41.010554,28.969386&amp;z=18&amp;hl=tr&amp;output=embed"></iframe>
             </div>
           </article>
-          <article class="visit-card">
+          <article class="visit-card" data-store="semdinli">
             <figure class="store-photo"><img src="assets/store-semdinli.webp" width="1147" height="1064" alt="Federal Gold Şemdinli mağazasının cephesi" data-i18n-alt="store2Img" loading="lazy"></figure>
             <header class="store-head"><h3 data-i18n="store2Name">Şemdinli</h3><span class="store-tag" data-i18n="store2Tag">Federal Gold 2 · Hakkari</span></header>
             <span class="visit-label" data-i18n="addressLabel">Adres</span>
@@ -819,7 +819,7 @@
               <iframe title="Federal Gold 2 Şemdinli konumu" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Cumhuriyet%20Caddesi%2046/A%2C%20%C5%9Eemdinli%2C%20Hakkari&amp;z=16&amp;hl=tr&amp;output=embed"></iframe>
             </div>
           </article>
-          <article class="visit-card">
+          <article class="visit-card" data-store="van">
             <header class="store-head"><h3 data-i18n="store3Name">Van</h3><span class="store-tag" data-i18n="store3Tag">Şube · Van</span></header>
             <span class="visit-label" data-i18n="addressLabel">Adres</span>
             <span class="visit-value" data-i18n="addressFull3">Cumhuriyet Caddesi, Değer İş Merkezi Kat: 3 No: 6, 65130 Van</span>
@@ -965,6 +965,8 @@
       const $$ = (s, r = document) => [...r.querySelectorAll(s)];
       const toggle = $('#menu-toggle');
       const mobileMenu = $('#mobile-menu');
+      // Texts edited in the panel (data/site.json) are injected by the site worker
+      if (window.__SITE__) ['tr', 'en'].forEach(l => Object.assign(dictionary[l], window.__SITE__[l] || {}));
       const t = () => dictionary[document.documentElement.lang] || dictionary.tr;
       const setMenu = (open) => {
         mobileMenu.classList.toggle('open', open);

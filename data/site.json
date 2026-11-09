@@ -1,0 +1,242 @@
+{
+  "iletisim": {
+    "magazaTel": "+90 212 511 74 28",
+    "whatsapp": "+90 542 390 59 67",
+    "semdinliTel": "+90 549 405 05 00",
+    "vanTel": "+90 532 442 17 84",
+    "eposta": "federalgold@hotmail.com",
+    "instagram": "federalgoldd",
+    "instagram2": "federal_goldd2"
+  },
+  "fotograflar": {
+    "anaEkran": "/assets/hero.webp",
+    "hakkimizda": "/assets/founder.webp",
+    "kapalicarsi": "/assets/store-kapalicarsi.webp",
+    "semdinli": "/assets/store-semdinli.webp",
+    "van": "",
+    "bilezikler": "/assets/bracelets.webp",
+    "yuzukler": "/assets/rings.webp",
+    "kolyeler": "/assets/necklaces.webp",
+    "kupeler": "/assets/earrings.webp"
+  },
+  "tr": {
+    "anaEkran": {
+      "heroEyebrow": "Kapalıçarşı · İstanbul",
+      "heroFirst": "Kapalıçarşı’dan",
+      "heroSecond": "Dünyaya",
+      "heroIntro": "Bilezik, yüzük, kolye ve küpede özenle seçilmiş altın ve mücevher tasarımları. Model, gram ve güncel fiyat için bize doğrudan ulaşın.",
+      "explore": "Koleksiyonları incele",
+      "askPrice": "Detaylı bilgi için"
+    },
+    "ust": {
+      "location": "Kapalıçarşı, Muhafazacılar Sk. No:12/1, Fatih / İstanbul",
+      "hoursShort": "Pzt – Cmt 09:00 – 18:00 · Pazar kapalı",
+      "brandSub": "KUYUMCULUK",
+      "navHome": "Ana sayfa",
+      "navMarket": "Canlı kur",
+      "navCollections": "Koleksiyonlar",
+      "navAbout": "Hakkımızda",
+      "navContact": "Ziyaret & iletişim"
+    },
+    "guven": {
+      "trust1": "Kapalıçarşı’da mağaza",
+      "trust1Sub": "Gelin, görün, deneyin",
+      "trust2": "Seçkin tasarımlar",
+      "trust2Sub": "Altın ve mücevher koleksiyonları",
+      "trust3": "Üç şube",
+      "trust3Sub": "Kapalıçarşı · Şemdinli · Van"
+    },
+    "kur": {
+      "marketEyebrow": "Canlı piyasa",
+      "marketTitle": "Güncel altın ve döviz kurları",
+      "marketNote": "Piyasa verileri bilgi amaçlıdır. Mağaza alış-satış fiyatları ve işçilik farklılık gösterebilir; kesin fiyat için bize ulaşın.",
+      "marketAsk": "WhatsApp’tan fiyat al",
+      "calcTitle": "Altın hesaplama",
+      "calcNote": "İşçilik hariçtir; sonuç bilgi amaçlıdır."
+    },
+    "koleksiyonlar": {
+      "collectionsEyebrow": "Koleksiyonlar",
+      "collectionsTitle": "Her an için bir parça",
+      "collectionsText": "Günlük kullanım, düğün ve hediye için.",
+      "bracelets": "Bilezikler",
+      "braceletsSub": "Burma, kelepçe, hasır",
+      "rings": "Yüzükler",
+      "ringsSub": "Tektaş, alyans, günlük",
+      "necklaces": "Kolyeler",
+      "necklacesSub": "Zincir, damla, set",
+      "earrings": "Küpeler",
+      "earringsSub": "Halka, sallantı, taşlı",
+      "imageDisclaimer": "Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz."
+    },
+    "vitrin": {
+      "vitrinEyebrow": "Vitrin",
+      "vitrinTitle": "Mağazamızdan seçmeler",
+      "vitrinText": "Kapalıçarşı’daki mağazamızın vitrininden.",
+      "vitrinAskShort": "Bilgi al →"
+    },
+    "hizmetler": {
+      "servicesEyebrow": "Hizmetlerimiz",
+      "servicesTitle": "Kapalıçarşı’dan kapınıza",
+      "svc1": "Sigortalı gönderim",
+      "svc1Text": "Siparişleriniz sigortalı olarak, güvenle adresinize ulaştırılır.",
+      "svc2": "Özel sipariş",
+      "svc2Text": "İstediğiniz model, ayar ve gramajda size özel üretim yapıyoruz.",
+      "svc3": "Anlık fiyat",
+      "svc3Text": "LBMA bazlı, güne ve ana göre güncel altın fiyatı.",
+      "svc4": "Ödeme kolaylığı",
+      "svc4Text": "Kredi kartı veya havale / EFT (T/T) ile ödeme."
+    },
+    "hakkimizda": {
+      "aboutEyebrow": "Hakkımızda",
+      "aboutTitle1": "Altın ve mücevherin",
+      "aboutTitle2": "zarif dünyası",
+      "aboutText1": "Federal Gold, merkez mağazasıyla İstanbul’un tarihi Kapalıçarşı’sında, Muhafazacılar Sokak’ta; şubeleriyle Şemdinli ve Van’da hizmet veriyor. Çarşının köklü kuyumculuk geleneğini özenle seçilmiş tasarımlarla buluşturuyoruz.",
+      "aboutText2": "Bilezikten alyansa, günlük takıdan özel gün parçalarına kadar ürünlerimizi mağazalarımızda yakından görebilirsiniz."
+    },
+    "subeler": {
+      "visitEyebrow": "Ziyaret & iletişim",
+      "visitTitle": "Mağazalarımızı ziyaret edin",
+      "store1Name": "Kapalıçarşı",
+      "store1Tag": "Merkez · İstanbul",
+      "addressFull": "Beyazıt Mah. Muhafazacılar Sk. No:12/1 (Kılıççılar Kapısı), Kapalıçarşı, 34126 Fatih / İstanbul",
+      "store2Name": "Şemdinli",
+      "store2Tag": "Federal Gold 2 · Hakkari",
+      "addressFull2": "Cumhuriyet Caddesi No:46/A, Şemdinli / Hakkari",
+      "store3Name": "Van",
+      "store3Tag": "Şube · Van",
+      "addressFull3": "Cumhuriyet Caddesi, Değer İş Merkezi Kat: 3 No: 6, 65130 Van",
+      "weekdays": "Pazartesi – Cumartesi",
+      "open": "09:00 – 18:00",
+      "sunday": "Pazar",
+      "closed": "Kapalı",
+      "hoursNote": "Resmi ve dini bayramlarda çalışma saatleri değişebilir.",
+      "directions": "Yol tarifi al",
+      "callNow": "Hemen ara"
+    },
+    "alt": {
+      "footerLoc": "Kapalıçarşı, Muhafazacılar Sk. No:12/1 · Fatih / İstanbul",
+      "footerLoc2": "Cumhuriyet Cd. No:46/A · Şemdinli / Hakkari",
+      "footerLoc3": "Değer İş Merkezi Kat:3 No:6, Cumhuriyet Cd. · Van",
+      "rights": "Tüm hakları saklıdır."
+    },
+    "whatsapp": {
+      "waMessage": "Merhaba Federal Gold, ürünleriniz hakkında bilgi almak istiyorum."
+    },
+    "google": {
+      "title": "Federal Gold Kuyumculuk | Kapalıçarşı’dan Dünyaya",
+      "meta": "Federal Gold Kuyumculuk: Kapalıçarşı'da bilezik, yüzük, kolye ve küpe koleksiyonları. Model, gram ve fiyat bilgisi için WhatsApp'tan yazın.",
+      "ogTitle": "Federal Gold | Kapalıçarşı’dan Dünyaya",
+      "ogDesc": "Altın ve mücevherin zarafeti Federal Gold'da. Koleksiyonları keşfedin, WhatsApp üzerinden bize ulaşın."
+    }
+  },
+  "en": {
+    "anaEkran": {
+      "heroEyebrow": "Grand Bazaar · Istanbul",
+      "heroFirst": "From the Grand Bazaar",
+      "heroSecond": "to the World",
+      "heroIntro": "Carefully selected gold and jewellery designs — bracelets, rings, necklaces and earrings. Contact us directly for models, weights and current prices.",
+      "explore": "Explore collections",
+      "askPrice": "For more information"
+    },
+    "ust": {
+      "location": "Grand Bazaar, Muhafazacılar St. No:12/1, Fatih / Istanbul",
+      "hoursShort": "Mon – Sat 09:00 – 18:00 · Closed Sunday",
+      "brandSub": "JEWELLERY",
+      "navHome": "Home",
+      "navMarket": "Live rates",
+      "navCollections": "Collections",
+      "navAbout": "About",
+      "navContact": "Visit & contact"
+    },
+    "guven": {
+      "trust1": "Store in the Grand Bazaar",
+      "trust1Sub": "Come, see, try on",
+      "trust2": "Selected designs",
+      "trust2Sub": "Gold and jewellery collections",
+      "trust3": "Three stores",
+      "trust3Sub": "Grand Bazaar · Şemdinli · Van"
+    },
+    "kur": {
+      "marketEyebrow": "Live market",
+      "marketTitle": "Current gold and currency rates",
+      "marketNote": "Market data is for information only. In-store buying/selling prices and craftsmanship fees may differ; contact us for an exact price.",
+      "marketAsk": "Get a price on WhatsApp",
+      "calcTitle": "Gold calculator",
+      "calcNote": "Excludes craftsmanship; for information only."
+    },
+    "koleksiyonlar": {
+      "collectionsEyebrow": "Collections",
+      "collectionsTitle": "A piece for every moment",
+      "collectionsText": "For everyday wear, weddings and gifts.",
+      "bracelets": "Bracelets",
+      "braceletsSub": "Twisted, cuff, woven",
+      "rings": "Rings",
+      "ringsSub": "Solitaire, wedding, everyday",
+      "necklaces": "Necklaces",
+      "necklacesSub": "Chains, drops, sets",
+      "earrings": "Earrings",
+      "earringsSub": "Hoops, drops, stones",
+      "imageDisclaimer": "Images are illustrative. Contact us for stock, weights and current prices."
+    },
+    "vitrin": {
+      "vitrinEyebrow": "Showcase",
+      "vitrinTitle": "Selected pieces from our store",
+      "vitrinText": "Straight from our Grand Bazaar showcase.",
+      "vitrinAskShort": "Enquire →"
+    },
+    "hizmetler": {
+      "servicesEyebrow": "Our services",
+      "servicesTitle": "From the Grand Bazaar to your door",
+      "svc1": "Insured delivery",
+      "svc1Text": "Your order is insured and delivered safely to your address.",
+      "svc2": "Special orders",
+      "svc2Text": "Pieces made to order in the model, karat and weight you want.",
+      "svc3": "Instant pricing",
+      "svc3Text": "Up-to-the-minute gold prices based on LBMA.",
+      "svc4": "Easy payment",
+      "svc4Text": "Pay by credit card or bank transfer (T/T)."
+    },
+    "hakkimizda": {
+      "aboutEyebrow": "About us",
+      "aboutTitle1": "The elegant world of",
+      "aboutTitle2": "gold and jewellery",
+      "aboutText1": "Federal Gold has its main store on Muhafazacılar Street in Istanbul's historic Grand Bazaar, with branches in Şemdinli and Van. We bring the bazaar's long jewellery tradition together with carefully selected designs.",
+      "aboutText2": "From bracelets to wedding bands, everyday pieces to special-occasion jewellery, you can see our pieces up close in our stores."
+    },
+    "subeler": {
+      "visitEyebrow": "Visit & contact",
+      "visitTitle": "Visit our stores",
+      "store1Name": "Grand Bazaar",
+      "store1Tag": "Main store · Istanbul",
+      "addressFull": "Muhafazacılar St. No:12/1 (Kılıççılar Gate), Grand Bazaar, Beyazıt, 34126 Fatih / Istanbul",
+      "store2Name": "Şemdinli",
+      "store2Tag": "Federal Gold 2 · Hakkari",
+      "addressFull2": "Cumhuriyet Street No:46/A, Şemdinli / Hakkari",
+      "store3Name": "Van",
+      "store3Tag": "Branch · Van",
+      "addressFull3": "Cumhuriyet Street, Değer Business Centre Floor 3 No 6, 65130 Van",
+      "weekdays": "Monday – Saturday",
+      "open": "09:00 – 18:00",
+      "sunday": "Sunday",
+      "closed": "Closed",
+      "hoursNote": "Opening hours may vary on public and religious holidays.",
+      "directions": "Get directions",
+      "callNow": "Call now"
+    },
+    "alt": {
+      "footerLoc": "Grand Bazaar, Muhafazacılar St. No:12/1 · Fatih / Istanbul",
+      "footerLoc2": "Cumhuriyet St. No:46/A · Şemdinli / Hakkari",
+      "footerLoc3": "Değer Business Centre Floor 3 No 6, Cumhuriyet St. · Van",
+      "rights": "All rights reserved."
+    },
+    "whatsapp": {
+      "waMessage": "Hello Federal Gold, I would like to know more about your jewellery."
+    },
+    "google": {
+      "title": "Federal Gold Jewellery | From the Grand Bazaar to the World",
+      "meta": "Discover bracelets, rings, necklaces and earrings at Federal Gold in Istanbul's Grand Bazaar. Message us on WhatsApp for models and prices.",
+      "ogTitle": "Federal Gold | From the Grand Bazaar to the World",
+      "ogDesc": "The elegance of gold and jewellery at Federal Gold. Explore our collections and reach us on WhatsApp."
+    }
+  }
+}

@@ -10,6 +10,7 @@ backend:
   branch: __BRANCH__
   api_root: __ORIGIN__/admin/api/gitlab/v4
   graphql_api_root: __ORIGIN__/admin/api/gitlab/graphql
+  auth_methods: [token]
   commit_messages:
     update: "Vitrin: ürünler güncellendi"
     uploadMedia: "Vitrin: fotoğraf yüklendi ({{path}})"
@@ -90,3 +91,340 @@ collections:
                 label: '"Yeni" etiketi göster'
                 widget: boolean
                 default: false
+
+  - name: site
+    label: Site İçeriği
+    description: Sitedeki yazılar, telefonlar, adresler ve fotoğraflar. Kaydedince yaklaşık 1 dakikada sitede görünür.
+    files:
+      - name: site
+        label: Site İçeriği
+        file: data/site.json
+        format: json
+        media_folder: /assets/site
+        public_folder: /assets/site
+        fields:
+          - name: iletisim
+            label: İletişim bilgileri
+            widget: object
+            fields:
+              - { name: magazaTel, label: "Kapalıçarşı mağaza telefonu", widget: string, hint: "Örnek: +90 212 511 74 28" }
+              - { name: whatsapp, label: "Kapalıçarşı cep · WhatsApp", widget: string, hint: "Sitedeki tüm WhatsApp butonları bu numaraya gider" }
+              - { name: semdinliTel, label: "Şemdinli telefonu (WhatsApp)", widget: string }
+              - { name: vanTel, label: "Van telefonu (WhatsApp)", widget: string }
+              - { name: eposta, label: "E-posta", widget: string }
+              - { name: instagram, label: "Instagram (Kapalıçarşı)", widget: string, hint: "@ işareti olmadan" }
+              - { name: instagram2, label: "Instagram (Şemdinli)", widget: string, hint: "@ işareti olmadan" }
+          - name: fotograflar
+            label: Fotoğraflar
+            widget: object
+            hint: Fotoğrafı silersen (Hakkımızda ve şube fotoğrafları) o fotoğraf sitede görünmez.
+            fields:
+              - { name: anaEkran, label: "Ana ekran arka planı", widget: image, required: false }
+              - { name: hakkimizda, label: "Hakkımızda fotoğrafı", widget: image, required: false }
+              - { name: kapalicarsi, label: "Kapalıçarşı şube fotoğrafı", widget: image, required: false }
+              - { name: semdinli, label: "Şemdinli şube fotoğrafı", widget: image, required: false }
+              - { name: van, label: "Van şube fotoğrafı", widget: image, required: false }
+              - { name: bilezikler, label: "Koleksiyon: 1. kart fotoğrafı", widget: image, required: false }
+              - { name: yuzukler, label: "Koleksiyon: 2. kart fotoğrafı", widget: image, required: false }
+              - { name: kolyeler, label: "Koleksiyon: 3. kart fotoğrafı", widget: image, required: false }
+              - { name: kupeler, label: "Koleksiyon: 4. kart fotoğrafı", widget: image, required: false }
+          - name: tr
+            label: "Yazılar (Türkçe)"
+            widget: object
+            collapsed: false
+            hint: "Sitedeki tüm Türkçe yazılar, bölüm bölüm."
+            fields:
+              - name: anaEkran
+                label: "Ana ekran"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: heroEyebrow, label: "Üstteki küçük yazı", widget: string, required: false }
+                  - { name: heroFirst, label: "Büyük başlık – 1. satır", widget: string, required: false }
+                  - { name: heroSecond, label: "Büyük başlık – 2. satır (altın renkli)", widget: string, required: false }
+                  - { name: heroIntro, label: "Açıklama", widget: text, required: false }
+                  - { name: explore, label: "1. buton", widget: string, required: false }
+                  - { name: askPrice, label: "2. buton (WhatsApp)", widget: string, required: false }
+              - name: ust
+                label: "Üst şerit ve menü"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: location, label: "Üst şeritteki adres", widget: string, required: false }
+                  - { name: hoursShort, label: "Üst şeritteki saatler", widget: string, required: false }
+                  - { name: brandSub, label: "Logonun altındaki yazı", widget: string, required: false }
+                  - { name: navHome, label: "Menü: Ana sayfa", widget: string, required: false }
+                  - { name: navMarket, label: "Menü: Canlı kur", widget: string, required: false }
+                  - { name: navCollections, label: "Menü: Koleksiyonlar", widget: string, required: false }
+                  - { name: navAbout, label: "Menü: Hakkımızda", widget: string, required: false }
+                  - { name: navContact, label: "Menü: İletişim", widget: string, required: false }
+              - name: guven
+                label: "Ana ekranın altındaki 3 madde"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: trust1, label: "1. madde", widget: string, required: false }
+                  - { name: trust1Sub, label: "1. madde alt yazı", widget: string, required: false }
+                  - { name: trust2, label: "2. madde", widget: string, required: false }
+                  - { name: trust2Sub, label: "2. madde alt yazı", widget: string, required: false }
+                  - { name: trust3, label: "3. madde", widget: string, required: false }
+                  - { name: trust3Sub, label: "3. madde alt yazı", widget: string, required: false }
+              - name: kur
+                label: "Canlı kur ve hesaplama"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: marketEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: marketTitle, label: "Başlık", widget: string, required: false }
+                  - { name: marketNote, label: "Tablonun altındaki not", widget: text, required: false }
+                  - { name: marketAsk, label: "WhatsApp link yazısı", widget: string, required: false }
+                  - { name: calcTitle, label: "Hesaplama başlığı", widget: string, required: false }
+                  - { name: calcNote, label: "Hesaplama notu", widget: string, required: false }
+              - name: koleksiyonlar
+                label: "Koleksiyonlar"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: collectionsEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: collectionsTitle, label: "Başlık", widget: string, required: false }
+                  - { name: collectionsText, label: "Açıklama", widget: string, required: false }
+                  - { name: bracelets, label: "1. kart adı", widget: string, required: false }
+                  - { name: braceletsSub, label: "1. kart alt yazı", widget: string, required: false }
+                  - { name: rings, label: "2. kart adı", widget: string, required: false }
+                  - { name: ringsSub, label: "2. kart alt yazı", widget: string, required: false }
+                  - { name: necklaces, label: "3. kart adı", widget: string, required: false }
+                  - { name: necklacesSub, label: "3. kart alt yazı", widget: string, required: false }
+                  - { name: earrings, label: "4. kart adı", widget: string, required: false }
+                  - { name: earringsSub, label: "4. kart alt yazı", widget: string, required: false }
+                  - { name: imageDisclaimer, label: "Kartların altındaki not", widget: string, required: false }
+              - name: vitrin
+                label: "Vitrin"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: vitrinEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: vitrinTitle, label: "Başlık", widget: string, required: false }
+                  - { name: vitrinText, label: "Açıklama", widget: string, required: false }
+                  - { name: vitrinAskShort, label: "Ürün altındaki link yazısı", widget: string, required: false }
+              - name: hizmetler
+                label: "Hizmetlerimiz"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: servicesEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: servicesTitle, label: "Başlık", widget: string, required: false }
+                  - { name: svc1, label: "1. hizmet", widget: string, required: false }
+                  - { name: svc1Text, label: "1. hizmet açıklama", widget: text, required: false }
+                  - { name: svc2, label: "2. hizmet", widget: string, required: false }
+                  - { name: svc2Text, label: "2. hizmet açıklama", widget: text, required: false }
+                  - { name: svc3, label: "3. hizmet", widget: string, required: false }
+                  - { name: svc3Text, label: "3. hizmet açıklama", widget: text, required: false }
+                  - { name: svc4, label: "4. hizmet", widget: string, required: false }
+                  - { name: svc4Text, label: "4. hizmet açıklama", widget: text, required: false }
+              - name: hakkimizda
+                label: "Hakkımızda"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: aboutEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: aboutTitle1, label: "Başlık – 1. kısım", widget: string, required: false }
+                  - { name: aboutTitle2, label: "Başlık – 2. kısım (altın renkli)", widget: string, required: false }
+                  - { name: aboutText1, label: "1. paragraf", widget: text, required: false }
+                  - { name: aboutText2, label: "2. paragraf", widget: text, required: false }
+              - name: subeler
+                label: "Şubeler ve çalışma saatleri"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: visitEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: visitTitle, label: "Başlık", widget: string, required: false }
+                  - { name: store1Name, label: "1. şube adı", widget: string, required: false }
+                  - { name: store1Tag, label: "1. şube etiketi", widget: string, required: false }
+                  - { name: addressFull, label: "1. şube adresi", widget: text, required: false }
+                  - { name: store2Name, label: "2. şube adı", widget: string, required: false }
+                  - { name: store2Tag, label: "2. şube etiketi", widget: string, required: false }
+                  - { name: addressFull2, label: "2. şube adresi", widget: text, required: false }
+                  - { name: store3Name, label: "3. şube adı", widget: string, required: false }
+                  - { name: store3Tag, label: "3. şube etiketi", widget: string, required: false }
+                  - { name: addressFull3, label: "3. şube adresi", widget: text, required: false }
+                  - { name: weekdays, label: "Açık günler", widget: string, required: false }
+                  - { name: open, label: "Açık saatler", widget: string, required: false }
+                  - { name: sunday, label: "Kapalı gün", widget: string, required: false }
+                  - { name: closed, label: "Kapalı yazısı", widget: string, required: false }
+                  - { name: hoursNote, label: "Saatlerin altındaki not", widget: string, required: false }
+                  - { name: directions, label: "Yol tarifi butonu", widget: string, required: false }
+                  - { name: callNow, label: "Arama butonu", widget: string, required: false }
+              - name: alt
+                label: "Sayfanın en altı"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: footerLoc, label: "1. şube kısa adres", widget: string, required: false }
+                  - { name: footerLoc2, label: "2. şube kısa adres", widget: string, required: false }
+                  - { name: footerLoc3, label: "3. şube kısa adres", widget: string, required: false }
+                  - { name: rights, label: "Telif yazısı", widget: string, required: false }
+              - name: whatsapp
+                label: "WhatsApp mesajı"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: waMessage, label: "WhatsApp'a basınca hazır gelen mesaj", widget: text, required: false }
+              - name: google
+                label: "Google'da görünen"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: title, label: "Sekme / Google başlığı", widget: string, required: false }
+                  - { name: meta, label: "Google açıklaması", widget: text, required: false }
+                  - { name: ogTitle, label: "Paylaşım başlığı (WhatsApp, Instagram)", widget: string, required: false }
+                  - { name: ogDesc, label: "Paylaşım açıklaması", widget: text, required: false }
+          - name: en
+            label: "Yazılar (İngilizce)"
+            widget: object
+            collapsed: true
+            hint: "Site EN modundayken görünen yazılar. Türkçeyi değiştirdiysen buradaki karşılığını da güncelle."
+            fields:
+              - name: anaEkran
+                label: "Ana ekran"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: heroEyebrow, label: "Üstteki küçük yazı", widget: string, required: false }
+                  - { name: heroFirst, label: "Büyük başlık – 1. satır", widget: string, required: false }
+                  - { name: heroSecond, label: "Büyük başlık – 2. satır (altın renkli)", widget: string, required: false }
+                  - { name: heroIntro, label: "Açıklama", widget: text, required: false }
+                  - { name: explore, label: "1. buton", widget: string, required: false }
+                  - { name: askPrice, label: "2. buton (WhatsApp)", widget: string, required: false }
+              - name: ust
+                label: "Üst şerit ve menü"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: location, label: "Üst şeritteki adres", widget: string, required: false }
+                  - { name: hoursShort, label: "Üst şeritteki saatler", widget: string, required: false }
+                  - { name: brandSub, label: "Logonun altındaki yazı", widget: string, required: false }
+                  - { name: navHome, label: "Menü: Ana sayfa", widget: string, required: false }
+                  - { name: navMarket, label: "Menü: Canlı kur", widget: string, required: false }
+                  - { name: navCollections, label: "Menü: Koleksiyonlar", widget: string, required: false }
+                  - { name: navAbout, label: "Menü: Hakkımızda", widget: string, required: false }
+                  - { name: navContact, label: "Menü: İletişim", widget: string, required: false }
+              - name: guven
+                label: "Ana ekranın altındaki 3 madde"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: trust1, label: "1. madde", widget: string, required: false }
+                  - { name: trust1Sub, label: "1. madde alt yazı", widget: string, required: false }
+                  - { name: trust2, label: "2. madde", widget: string, required: false }
+                  - { name: trust2Sub, label: "2. madde alt yazı", widget: string, required: false }
+                  - { name: trust3, label: "3. madde", widget: string, required: false }
+                  - { name: trust3Sub, label: "3. madde alt yazı", widget: string, required: false }
+              - name: kur
+                label: "Canlı kur ve hesaplama"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: marketEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: marketTitle, label: "Başlık", widget: string, required: false }
+                  - { name: marketNote, label: "Tablonun altındaki not", widget: text, required: false }
+                  - { name: marketAsk, label: "WhatsApp link yazısı", widget: string, required: false }
+                  - { name: calcTitle, label: "Hesaplama başlığı", widget: string, required: false }
+                  - { name: calcNote, label: "Hesaplama notu", widget: string, required: false }
+              - name: koleksiyonlar
+                label: "Koleksiyonlar"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: collectionsEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: collectionsTitle, label: "Başlık", widget: string, required: false }
+                  - { name: collectionsText, label: "Açıklama", widget: string, required: false }
+                  - { name: bracelets, label: "1. kart adı", widget: string, required: false }
+                  - { name: braceletsSub, label: "1. kart alt yazı", widget: string, required: false }
+                  - { name: rings, label: "2. kart adı", widget: string, required: false }
+                  - { name: ringsSub, label: "2. kart alt yazı", widget: string, required: false }
+                  - { name: necklaces, label: "3. kart adı", widget: string, required: false }
+                  - { name: necklacesSub, label: "3. kart alt yazı", widget: string, required: false }
+                  - { name: earrings, label: "4. kart adı", widget: string, required: false }
+                  - { name: earringsSub, label: "4. kart alt yazı", widget: string, required: false }
+                  - { name: imageDisclaimer, label: "Kartların altındaki not", widget: string, required: false }
+              - name: vitrin
+                label: "Vitrin"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: vitrinEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: vitrinTitle, label: "Başlık", widget: string, required: false }
+                  - { name: vitrinText, label: "Açıklama", widget: string, required: false }
+                  - { name: vitrinAskShort, label: "Ürün altındaki link yazısı", widget: string, required: false }
+              - name: hizmetler
+                label: "Hizmetlerimiz"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: servicesEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: servicesTitle, label: "Başlık", widget: string, required: false }
+                  - { name: svc1, label: "1. hizmet", widget: string, required: false }
+                  - { name: svc1Text, label: "1. hizmet açıklama", widget: text, required: false }
+                  - { name: svc2, label: "2. hizmet", widget: string, required: false }
+                  - { name: svc2Text, label: "2. hizmet açıklama", widget: text, required: false }
+                  - { name: svc3, label: "3. hizmet", widget: string, required: false }
+                  - { name: svc3Text, label: "3. hizmet açıklama", widget: text, required: false }
+                  - { name: svc4, label: "4. hizmet", widget: string, required: false }
+                  - { name: svc4Text, label: "4. hizmet açıklama", widget: text, required: false }
+              - name: hakkimizda
+                label: "Hakkımızda"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: aboutEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: aboutTitle1, label: "Başlık – 1. kısım", widget: string, required: false }
+                  - { name: aboutTitle2, label: "Başlık – 2. kısım (altın renkli)", widget: string, required: false }
+                  - { name: aboutText1, label: "1. paragraf", widget: text, required: false }
+                  - { name: aboutText2, label: "2. paragraf", widget: text, required: false }
+              - name: subeler
+                label: "Şubeler ve çalışma saatleri"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: visitEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: visitTitle, label: "Başlık", widget: string, required: false }
+                  - { name: store1Name, label: "1. şube adı", widget: string, required: false }
+                  - { name: store1Tag, label: "1. şube etiketi", widget: string, required: false }
+                  - { name: addressFull, label: "1. şube adresi", widget: text, required: false }
+                  - { name: store2Name, label: "2. şube adı", widget: string, required: false }
+                  - { name: store2Tag, label: "2. şube etiketi", widget: string, required: false }
+                  - { name: addressFull2, label: "2. şube adresi", widget: text, required: false }
+                  - { name: store3Name, label: "3. şube adı", widget: string, required: false }
+                  - { name: store3Tag, label: "3. şube etiketi", widget: string, required: false }
+                  - { name: addressFull3, label: "3. şube adresi", widget: text, required: false }
+                  - { name: weekdays, label: "Açık günler", widget: string, required: false }
+                  - { name: open, label: "Açık saatler", widget: string, required: false }
+                  - { name: sunday, label: "Kapalı gün", widget: string, required: false }
+                  - { name: closed, label: "Kapalı yazısı", widget: string, required: false }
+                  - { name: hoursNote, label: "Saatlerin altındaki not", widget: string, required: false }
+                  - { name: directions, label: "Yol tarifi butonu", widget: string, required: false }
+                  - { name: callNow, label: "Arama butonu", widget: string, required: false }
+              - name: alt
+                label: "Sayfanın en altı"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: footerLoc, label: "1. şube kısa adres", widget: string, required: false }
+                  - { name: footerLoc2, label: "2. şube kısa adres", widget: string, required: false }
+                  - { name: footerLoc3, label: "3. şube kısa adres", widget: string, required: false }
+                  - { name: rights, label: "Telif yazısı", widget: string, required: false }
+              - name: whatsapp
+                label: "WhatsApp mesajı"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: waMessage, label: "WhatsApp'a basınca hazır gelen mesaj", widget: text, required: false }
+              - name: google
+                label: "Google'da görünen"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: title, label: "Sekme / Google başlığı", widget: string, required: false }
+                  - { name: meta, label: "Google açıklaması", widget: text, required: false }
+                  - { name: ogTitle, label: "Paylaşım başlığı (WhatsApp, Instagram)", widget: string, required: false }
+                  - { name: ogDesc, label: "Paylaşım açıklaması", widget: text, required: false }
