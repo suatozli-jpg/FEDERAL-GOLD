@@ -50,14 +50,41 @@ async function hasSession(request, env) {
 const cookieHeader = (value, maxAge) =>
   `${COOKIE}=${value}; Path=/admin; HttpOnly; Secure; SameSite=Strict; Max-Age=${maxAge}`;
 
+// browsers remember to use https only (6 months); subdomains are left alone
+const HSTS = 'max-age=15552000';
 const securityHeaders = {
+  'Strict-Transport-Security': HSTS,
   'Cache-Control': 'no-store',
   'X-Robots-Tag': 'noindex, nofollow',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'same-origin',
 };
 
-function loginPage({ error = '', notConfigured = false } = {}) {
+// ---- Wrong-password limit: 5 wrong tries per address, then 15 minutes locked ----
+// Kept in the Cloudflare cache (per data centre), so it costs no storage writes.
+const LOCK_TRIES = 5, LOCK_SECONDS = 900;
+const lockKey = (request) => new Request(`https://login-lock.federalgold.internal/${encodeURIComponent(request.headers.get('CF-Connecting-IP') || 'unknown')}`);
+async function failedTries(request) {
+  try { const r = await caches.default.match(lockKey(request)); return r ? Number(await r.text()) || 0 : 0; } catch { return 0; }
+}
+async function setFailedTries(request, n) {
+  try {
+    if (n <= 0) await caches.default.delete(lockKey(request));
+    else await caches.default.put(lockKey(request), new Response(String(n), { headers: { 'Cache-Control': `max-age=${LOCK_SECONDS}` } }));
+  } catch { /* the delay below still slows guessing */ }
+}
+
+// Panel only on the real address; preview copies (*.workers.dev) show the site but not the panel
+function panelElsewherePage() {
+  const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><title>Federal Gold Paneli</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#0b0a09;color:#f5f0e6;font:16px/1.5 -apple-system,'Segoe UI',Arial,sans-serif;text-align:center}
+a{display:inline-block;margin-top:14px;padding:12px 20px;border-radius:10px;background:#d9b062;color:#1a1307;font-weight:700;text-decoration:none}</style></head>
+<body><div><p>Bu adres bir önizleme. Panel sadece gerçek sitede açılır.</p><a href="https://${LIVE_HOST}/admin/">federalgold.org/admin</a></div></body></html>`;
+  return new Response(html, { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8', ...securityHeaders } });
+}
+
+function loginPage({ error = '', notConfigured = false, status = 200 } = {}) {
   const msg = notConfigured
     ? '<p class="err">Panel henüz yapılandırılmadı (Cloudflare\'de PANEL_SIFRE ve GITLAB_TOKEN eksik).</p>'
     : error ? `<p class="err">${error}</p>` : '';
@@ -78,7 +105,7 @@ input:focus{outline:none;border-color:var(--g)}button{width:100%;min-height:50px
 <img src="/assets/logo-mark.webp" alt=""><h1>Ürün Paneli</h1><p class="sub">Federal Gold</p>${msg}
 <label for="p">Şifre</label><input id="p" name="password" type="password" autocomplete="current-password" required autofocus>
 <button type="submit">Giriş yap</button></form></body></html>`;
-  return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', ...securityHeaders } });
+  return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8', ...securityHeaders } });
 }
 
 function allowedGitLabPath(path) {
@@ -293,6 +320,7 @@ async function renderHome(request, env, preview = null) {
 
   const headers = new Headers(res.headers);
   headers.delete('Content-Length');
+  headers.set('Strict-Transport-Security', HSTS);
   if (pv) for (const [k, v] of Object.entries(securityHeaders)) if (k !== 'X-Frame-Options') headers.set(k, v);
   return rw.transform(new Response(html, { status: res.status, headers }));
 }
@@ -343,23 +371,34 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const p = url.pathname;
+    // one address for the site: www → federalgold.org
+    if (url.hostname === `www.${LIVE_HOST}`) return Response.redirect(`https://${LIVE_HOST}${p}${url.search}`, 301);
     if (p === '/' && (request.method === 'GET' || request.method === 'HEAD')) return renderHome(request, env);
     if (p !== '/admin' && !p.startsWith('/admin/')) return env.ASSETS.fetch(request);
+    if (url.hostname !== LIVE_HOST && !['localhost', '127.0.0.1'].includes(url.hostname)) return panelElsewherePage();
 
     const configured = Boolean(env.PANEL_SIFRE && env.GITLAB_TOKEN);
 
     if (p === '/admin/login') {
       if (!configured) return loginPage({ notConfigured: true });
       if (request.method === 'POST') {
+        const tries = await failedTries(request);
+        if (tries >= LOCK_TRIES) {
+          await new Promise((r) => setTimeout(r, 1500));
+          return loginPage({ error: 'Çok fazla yanlış deneme. 15 dakika sonra tekrar dene.', status: 429 });
+        }
         const form = await request.formData().catch(() => null);
         const given = form ? String(form.get('password') || '') : '';
         if (given && safeEqual(given, env.PANEL_SIFRE)) {
+          if (tries) await setFailedTries(request, 0);
           // The panel signs itself in (admin/boot.js); the real GitLab token never leaves this worker.
           return new Response(null, { status: 303, headers: {
             Location: '/admin/', 'Set-Cookie': cookieHeader(await makeSession(env), SESSION_DAYS * 86400), ...securityHeaders } });
         }
+        await setFailedTries(request, tries + 1);
         await new Promise((r) => setTimeout(r, 1500)); // slow down guessing
-        return loginPage({ error: 'Şifre yanlış.' });
+        const left = LOCK_TRIES - tries - 1;
+        return loginPage({ error: left > 0 ? `Şifre yanlış. (${left} deneme hakkın kaldı)` : 'Şifre yanlış. 15 dakika boyunca giriş kapalı.' });
       }
       if (await hasSession(request, env)) return Response.redirect(`${url.origin}/admin/`, 303);
       return loginPage();

@@ -60,16 +60,19 @@ async function checkProductsAndPhotos(env) {
   const paths = new Set(products.flatMap((p) => (p ? [p.image, ...[].concat(p.images || [])] : [])).filter(Boolean));
   for (const v of Object.values((site && site.fotograflar) || {})) for (const x of [].concat(v || [])) if (x) paths.add(typeof x === 'object' ? x.foto : x);
   ['/assets/hero.webp', '/assets/logo-full.webp', '/assets/logo-mark.webp'].forEach((p) => paths.add(p));
-  const broken = [];
+  const broken = [], big = [];
   await Promise.all([...paths].map(async (p) => {
     try {
       const r = await asset(env, p.startsWith('/') ? p : `/${p}`, 'HEAD');
       if (!r.ok || !(r.headers.get('Content-Type') || '').startsWith('image/')) broken.push(p);
+      else if (Number(r.headers.get('Content-Length')) > 1024 * 1024) big.push(`${p.split('/').pop()} (${(Number(r.headers.get('Content-Length')) / 1048576).toFixed(1)} MB)`);
     } catch { broken.push(p); }
   }));
   out.push(broken.length
     ? err('foto', 'Fotoğraflar', `${broken.length} kırık fotoğraf: ${broken.slice(0, 3).join(', ')}`)
-    : ok('foto', 'Fotoğraflar', `${paths.size} fotoğraf kontrol edildi · kırık yok`));
+    : big.length
+      ? warn('foto', 'Fotoğraflar', `${big.length} fotoğraf çok büyük, siteyi yavaşlatır: ${big.slice(0, 3).join(', ')} · panelden yeniden yükle`)
+      : ok('foto', 'Fotoğraflar', `${paths.size} fotoğraf kontrol edildi · kırık ya da büyük fotoğraf yok`));
   return out;
 }
 
