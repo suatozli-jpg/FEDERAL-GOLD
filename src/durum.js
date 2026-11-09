@@ -54,7 +54,7 @@ async function checkProductsAndPhotos(env) {
   let site = {};
   try { site = await (await asset(env, '/data/site.json')).json(); } catch { /* defaults */ }
   const paths = new Set(products.map((p) => p && p.image).filter(Boolean));
-  for (const v of Object.values((site && site.fotograflar) || {})) if (v) paths.add(v);
+  for (const v of Object.values((site && site.fotograflar) || {})) for (const x of [].concat(v || [])) if (x) paths.add(typeof x === 'object' ? x.foto : x);
   ['/assets/hero.webp', '/assets/logo-full.webp', '/assets/logo-mark.webp'].forEach((p) => paths.add(p));
   const broken = [];
   await Promise.all([...paths].map(async (p) => {

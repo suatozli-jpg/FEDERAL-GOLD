@@ -225,7 +225,16 @@ async function renderHome(request, env, preview = null) {
   }
 
   const tr = flatten(site.tr), en = flatten(site.en);
-  const json = JSON.stringify({ tr, en }).replace(/</g, '\\u003c');
+  // extra store photos ("+N fotoğraf"); a store without a main photo uses its first extra photo
+  const galeri = {};
+  for (const key of ['kapalicarsi', 'semdinli', 'van']) {
+    let list = (Array.isArray(f[key + 'Galeri']) ? f[key + 'Galeri'] : [])
+      .map((x) => safePath(x && typeof x === 'object' ? x.foto : x, pv)).filter(Boolean)
+      .map((x) => (/^blob:/.test(x) ? x : '/' + x));
+    if (!f[key] && list.length) { f[key] = list[0]; list = list.slice(1); }
+    if (list.length) galeri[key] = list;
+  }
+  const json = JSON.stringify({ tr, en, galeri }).replace(/</g, '\\u003c');
   const photo = (key) => (f[key] === '' || f[key] == null) ? '' : safePath(f[key], pv);
 
   // Panel preview only: clicking a text, photo, number or product opens that field in the editor

@@ -145,8 +145,29 @@ collections:
               - { name: anaEkran, label: "Ana ekran arka planı", widget: image, required: false }
               - { name: hakkimizda, label: "Hakkımızda fotoğrafı", widget: image, required: false }
               - { name: kapalicarsi, label: "Kapalıçarşı şube fotoğrafı", widget: image, required: false }
+              - name: kapalicarsiGaleri
+                label: "Kapalıçarşı şube – ek fotoğraflar"
+                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir.
+                widget: list
+                required: false
+                add_to_top: false
+                field: { name: foto, label: Fotoğraf, widget: image }
               - { name: semdinli, label: "Şemdinli şube fotoğrafı", widget: image, required: false }
+              - name: semdinliGaleri
+                label: "Şemdinli şube – ek fotoğraflar"
+                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir.
+                widget: list
+                required: false
+                add_to_top: false
+                field: { name: foto, label: Fotoğraf, widget: image }
               - { name: van, label: "Van şube fotoğrafı", widget: image, required: false }
+              - name: vanGaleri
+                label: "Van şube – ek fotoğraflar"
+                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir.
+                widget: list
+                required: false
+                add_to_top: false
+                field: { name: foto, label: Fotoğraf, widget: image }
               - { name: bilezikler, label: "Koleksiyon: 1. kart fotoğrafı", widget: image, required: false }
               - { name: yuzukler, label: "Koleksiyon: 2. kart fotoğrafı", widget: image, required: false }
               - { name: kolyeler, label: "Koleksiyon: 3. kart fotoğrafı", widget: image, required: false }

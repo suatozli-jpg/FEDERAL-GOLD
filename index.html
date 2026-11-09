@@ -390,7 +390,8 @@
     .visit { padding-block: 96px; }
     .visit .title { margin-bottom: 40px; }
     .visit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: stretch; }
-    .store-photo { margin: -32px -32px 24px; aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 1px solid var(--line-strong); }
+    .store-photo { position: relative; margin: -32px -32px 24px; aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 1px solid var(--line-strong); }
+    .store-more { position: absolute; right: 12px; bottom: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(11,10,9,.78); border: 1px solid rgba(217,176,98,.5); color: var(--gold-light); font-size: 13px; font-weight: 600; pointer-events: none; }
     .store-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
     .store-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--line-strong); }
     .store-head h3 { margin: 0; font: 500 32px/1.1 var(--serif); }
@@ -1416,12 +1417,24 @@
       });
       window.addEventListener('resize', () => { if (lb.open) zoomApply(false); });
 
-      // Store and about photos open on their own
+      // Store and about photos open in the lightbox; a store with extra photos (added in the panel) gets a "+N" badge
+      const galleries = (window.__SITE__ && window.__SITE__.galeri) || {};
       $$('.store-photo img, .about-photo img').forEach(img => {
         img.classList.add('zoomable');
         img.tabIndex = 0;
         img.setAttribute('role', 'button');
-        const open = () => openLightbox([{ src: img.currentSrc || img.src, alt: img.alt }], 0);
+        const card = img.closest('.visit-card[data-store]');
+        const extra = (card && Array.isArray(galleries[card.dataset.store]) && galleries[card.dataset.store]) || [];
+        if (extra.length) {
+          const badge = el('span', 'store-more');
+          const label = () => { badge.textContent = `+${extra.length} ${document.documentElement.lang === 'en' ? (extra.length === 1 ? 'photo' : 'photos') : 'fotoğraf'}`; };
+          label(); img.parentElement.append(badge);
+          $$('[data-lang]').forEach(b => b.addEventListener('click', label));
+        }
+        const open = () => {
+          const title = card ? card.querySelector('.store-head h3').textContent : '';
+          openLightbox([img.currentSrc || img.src, ...extra].map(src => ({ src, alt: img.alt, title })), 0);
+        };
         img.addEventListener('click', open);
         img.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
       });
