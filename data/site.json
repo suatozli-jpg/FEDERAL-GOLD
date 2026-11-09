@@ -109,6 +109,12 @@
     "semdinliGaleri": [],
     "van": "/assets/store-van.webp",
     "vanGaleri": [],
+    "magaza": [
+      "/assets/magaza-1.webp",
+      "/assets/magaza-2.webp",
+      "/assets/magaza-3.webp",
+      "/assets/magaza-4.webp"
+    ],
     "bilezikler": "/assets/bracelets.webp",
     "yuzukler": "/assets/rings.webp",
     "kolyeler": "/assets/necklaces.webp",
@@ -168,6 +174,11 @@
       "vitrinTitle": "Mağazamızdan seçmeler",
       "vitrinText": "Kapalıçarşı’daki mağazamızın vitrininden.",
       "vitrinAskShort": "Bilgi al"
+    },
+    "magaza": {
+      "shopEyebrow": "Mağazamız",
+      "shopTitle": "Raflarımızdan",
+      "shopText": "Kapalıçarşı’daki mağazamızın raflarından birkaç kare. Fotoğrafa dokunun, yakından bakın."
     },
     "hizmetler": {
       "servicesEyebrow": "Hizmetlerimiz",
@@ -278,6 +289,11 @@
       "vitrinTitle": "Selected pieces from our store",
       "vitrinText": "Straight from our Grand Bazaar showcase.",
       "vitrinAskShort": "Enquire →"
+    },
+    "magaza": {
+      "shopEyebrow": "Our store",
+      "shopTitle": "From our shelves",
+      "shopText": "A few frames from the shelves of our Grand Bazaar store. Tap a photo for a closer look."
     },
     "hizmetler": {
       "servicesEyebrow": "Our services",

@@ -324,6 +324,20 @@
     /* Vitrin (products from data/products.json, managed in Pages CMS) */
     .vitrin { padding-block: 0 96px; }
     .vitrin[hidden] { display: none; }
+    /* Mağazamız: photos of the store's shelves; four photos make a mosaic, any other number a plain grid */
+    .shop { padding-block: 0 96px; }
+    .shop[hidden] { display: none; }
+    .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .shop-grid.is-4 { grid-template-columns: 1.25fr 1fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); height: min(78vh, 760px); }
+    .shop-grid.is-4 > :first-child { grid-row: span 2; }
+    .shop-grid.is-4 > :last-child { grid-column: span 2; }
+    .shop-photo { position: relative; display: block; width: 100%; min-height: 0; aspect-ratio: 3 / 4; padding: 0; border: 1px solid var(--line-strong); border-radius: 16px; overflow: hidden; background: #0d0b09; cursor: zoom-in; }
+    .shop-grid.is-4 .shop-photo { aspect-ratio: auto; height: 100%; }
+    .shop-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+    .shop-photo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(217,176,98,.18); background: linear-gradient(180deg, transparent 70%, rgba(11,10,9,.35)); pointer-events: none; }
+    .shop-photo:hover img, .shop-photo:focus-visible img { transform: scale(1.035); }
+    .shop-photo:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .shop-hint { display: none; margin: 12px 0 0; font-size: 13px; color: var(--muted); }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
     .chip { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text-soft); font-size: 14px; font-weight: 500; transition: background-color .16s var(--ease), border-color .16s var(--ease), color .16s var(--ease); }
     .chip:hover { border-color: #6b5631; color: var(--text); }
@@ -496,6 +510,11 @@
       .about, .visit { padding-block: 48px; }
       .services { padding-block: 0 48px; }
       .vitrin { padding-block: 0 48px; }
+      .shop { padding-block: 0 48px; }
+      .shop-grid, .shop-grid.is-4 { display: flex; height: auto; gap: 12px; margin-inline: -20px; padding: 0 20px 4px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+      .shop-grid::-webkit-scrollbar { display: none; }
+      .shop-photo, .shop-grid.is-4 .shop-photo { flex: 0 0 80%; height: auto; aspect-ratio: 4 / 5; scroll-snap-align: center; }
+      .shop-hint { display: block; }
       .chips { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
       .chips::-webkit-scrollbar { display: none; }
       .chip { flex: 0 0 auto; }
@@ -720,6 +739,20 @@
       </div>
     </section>
 
+    <section class="shop" id="magaza" aria-labelledby="shop-title" hidden>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-i18n="shopEyebrow">Mağazamız</p>
+            <h2 class="title" id="shop-title" data-i18n="shopTitle">Raflarımızdan</h2>
+          </div>
+          <p data-i18n="shopText">Kapalıçarşı’daki mağazamızın raflarından birkaç kare. Fotoğrafa dokunun, yakından bakın.</p>
+        </div>
+        <div class="shop-grid" id="shop-grid"></div>
+        <p class="shop-hint" data-i18n="shopHint">Kaydırarak gezin →</p>
+      </div>
+    </section>
+
     <section class="services" id="hizmetler" aria-labelledby="services-title">
       <div class="container">
         <p class="eyebrow" data-i18n="servicesEyebrow">Hizmetlerimiz</p>
@@ -896,7 +929,7 @@
           bracelets:"Bilezikler", braceletsSub:"Burma, kelepçe, hasır", rings:"Yüzükler", ringsSub:"Tektaş, alyans, günlük", necklaces:"Kolyeler", necklacesSub:"Zincir, damla, set", earrings:"Küpeler", earringsSub:"Halka, sallantı, taşlı",
           askShort:"Fiyat sor →", imageDisclaimer:"Görseller temsilîdir. Stok, gram ve güncel fiyat için iletişime geçiniz.",
           vitrinEyebrow:"Vitrin", vitrinTitle:"Mağazamızdan seçmeler", vitrinText:"Kapalıçarşı’daki mağazamızın vitrininden.",
-          vitrinAll:"Tümü", vitrinAsk:"WhatsApp’tan sor", vitrinAskShort:"Bilgi al →", lbZoom:"Fotoğrafı büyüt", lbZoomIn:"Yakınlaştır", lbZoomOut:"Uzaklaştır", lbHint:"Yakınlaştırmak için çift dokunun veya iki parmakla açın", lbHintMouse:"Yakınlaştırmak için çift tıklayın veya fare tekerleğini kullanın", lbPrev:"Önceki", lbNext:"Sonraki", lbClose:"Kapat", lbLabel:"Fotoğraf", vitrinNew:"YENİ", vitrinLive:"güncel kura göre", vitrinKarat:"{k} ayar", vitrinGram:"{g} gr",
+          vitrinAll:"Tümü", vitrinAsk:"WhatsApp’tan sor", vitrinAskShort:"Bilgi al →", lbZoom:"Fotoğrafı büyüt", lbZoomIn:"Yakınlaştır", lbZoomOut:"Uzaklaştır", lbHint:"Yakınlaştırmak için çift dokunun veya iki parmakla açın", lbHintMouse:"Yakınlaştırmak için çift tıklayın veya fare tekerleğini kullanın", lbPrev:"Önceki", lbNext:"Sonraki", lbClose:"Kapat", lbLabel:"Fotoğraf", vitrinNew:"YENİ", shopEyebrow:"Mağazamız", shopTitle:"Raflarımızdan", shopText:"Kapalıçarşı’daki mağazamızın raflarından birkaç kare. Fotoğrafa dokunun, yakından bakın.", shopHint:"Kaydırarak gezin →", shopPhoto:"Mağaza rafı {n}", vitrinLive:"güncel kura göre", vitrinKarat:"{k} ayar", vitrinGram:"{g} gr",
           catBracelets:"Bilezik", catRings:"Yüzük", catNecklaces:"Kolye", catEarrings:"Küpe", catWatches:"Saat", catOther:"Diğer",
           vitrinRequest:"Merhaba Federal Gold, vitrindeki “{name}”{details} hakkında bilgi alabilir miyim?",
           servicesEyebrow:"Hizmetlerimiz", servicesTitle:"Kapalıçarşı’dan kapınıza",
@@ -935,7 +968,7 @@
           bracelets:"Bracelets", braceletsSub:"Twisted, cuff, woven", rings:"Rings", ringsSub:"Solitaire, wedding, everyday", necklaces:"Necklaces", necklacesSub:"Chains, drops, sets", earrings:"Earrings", earringsSub:"Hoops, drops, stones",
           askShort:"Ask price →", imageDisclaimer:"Images are illustrative. Contact us for stock, weights and current prices.",
           vitrinEyebrow:"Showcase", vitrinTitle:"Selected pieces from our store", vitrinText:"Straight from our Grand Bazaar showcase.",
-          vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", vitrinAskShort:"Enquire →", lbZoom:"Enlarge photo", lbZoomIn:"Zoom in", lbZoomOut:"Zoom out", lbHint:"Double-tap or pinch to zoom", lbHintMouse:"Double-click or use the mouse wheel to zoom", lbPrev:"Previous", lbNext:"Next", lbClose:"Close", lbLabel:"Photo", vitrinNew:"NEW", vitrinLive:"at today’s rate", vitrinKarat:"{k}K", vitrinGram:"{g} g",
+          vitrinAll:"All", vitrinAsk:"Ask on WhatsApp", vitrinAskShort:"Enquire →", lbZoom:"Enlarge photo", lbZoomIn:"Zoom in", lbZoomOut:"Zoom out", lbHint:"Double-tap or pinch to zoom", lbHintMouse:"Double-click or use the mouse wheel to zoom", lbPrev:"Previous", lbNext:"Next", lbClose:"Close", lbLabel:"Photo", vitrinNew:"NEW", shopEyebrow:"Our store", shopTitle:"From our shelves", shopText:"A few frames from the shelves of our Grand Bazaar store. Tap a photo for a closer look.", shopHint:"Swipe to browse →", shopPhoto:"Store shelf {n}", vitrinLive:"at today’s rate", vitrinKarat:"{k}K", vitrinGram:"{g} g",
           catBracelets:"Bracelets", catRings:"Rings", catNecklaces:"Necklaces", catEarrings:"Earrings", catWatches:"Watches", catOther:"Other",
           vitrinRequest:"Hello Federal Gold, could you tell me more about “{name}”{details} from your showcase?",
           servicesEyebrow:"Our services", servicesTitle:"From the Grand Bazaar to your door",
@@ -1390,6 +1423,23 @@
       const catCards = $$('.category-card');
       const catItems = () => catCards.map(c => { const n = c.querySelector('.category-name').textContent; return { src: c.querySelector('img').src, alt: n, title: n }; });
       catCards.forEach((c, i) => c.addEventListener('click', () => openLightbox(catItems(), i)));
+      // Mağazamız: shelf photos from the panel (window.__SITE__.magaza), opened in the lightbox
+      const shopList = (window.__SITE__ && Array.isArray(window.__SITE__.magaza) ? window.__SITE__.magaza : []).filter(x => typeof x === 'string').slice(0, 24);
+      if (shopList.length) {
+        const grid = $('#shop-grid');
+        grid.classList.toggle('is-4', shopList.length === 4);
+        const items = () => { const d = t(); return shopList.map((src, n) => ({ src, alt: d.shopPhoto.replace('{n}', n + 1), title: d.shopTitle })); };
+        shopList.forEach((src, n) => {
+          const b = el('button', 'shop-photo');
+          b.type = 'button';
+          const img = el('img');
+          img.src = src; img.loading = 'lazy'; img.decoding = 'async'; img.alt = t().shopPhoto.replace('{n}', n + 1);
+          b.append(img);
+          b.addEventListener('click', () => openLightbox(items(), n));
+          grid.append(b);
+        });
+        $('#magaza').hidden = false;
+      }
       // Zoom: pinch, double-tap/double-click, mouse wheel, zoom button; drag to move
       const stage = $('#lb-stage'), zimg = $('#lb-img');
       const MAX = 4;

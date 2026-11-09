@@ -210,6 +210,12 @@ collections:
                 widget: image
                 multiple: true
                 required: false
+              - name: magaza
+                label: "Mağazamız – raf fotoğrafları"
+                hint: Vitrin'in altındaki "Raflarımızdan" bölümü. 4 fotoğraf olunca mozaik görünür; hepsini silersen bölüm gizlenir.
+                widget: image
+                multiple: true
+                required: false
               - { name: bilezikler, label: "Koleksiyon: 1. kart fotoğrafı", widget: image, required: false }
               - { name: yuzukler, label: "Koleksiyon: 2. kart fotoğrafı", widget: image, required: false }
               - { name: kolyeler, label: "Koleksiyon: 3. kart fotoğrafı", widget: image, required: false }
@@ -293,6 +299,14 @@ collections:
                   - { name: vitrinTitle, label: "Başlık", widget: string, required: false }
                   - { name: vitrinText, label: "Açıklama", widget: string, required: false }
                   - { name: vitrinAskShort, label: "Ürün altındaki link yazısı", widget: string, required: false }
+              - name: magaza
+                label: "Mağazamız (raf fotoğrafları)"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: shopEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: shopTitle, label: "Başlık", widget: string, required: false }
+                  - { name: shopText, label: "Açıklama", widget: string, required: false }
               - name: hizmetler
                 label: "Hizmetlerimiz"
                 widget: object
@@ -444,6 +458,14 @@ collections:
                   - { name: vitrinTitle, label: "Başlık", widget: string, required: false }
                   - { name: vitrinText, label: "Açıklama", widget: string, required: false }
                   - { name: vitrinAskShort, label: "Ürün altındaki link yazısı", widget: string, required: false }
+              - name: magaza
+                label: "Mağazamız (raf fotoğrafları)"
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: shopEyebrow, label: "Küçük başlık", widget: string, required: false }
+                  - { name: shopTitle, label: "Başlık", widget: string, required: false }
+                  - { name: shopText, label: "Açıklama", widget: string, required: false }
               - name: hizmetler
                 label: "Hizmetlerimiz"
                 widget: object
