@@ -1,0 +1,9 @@
+// Cloudflare Workers config: serves this repository as a static site.
+{
+  "name": "federal-gold",
+  "compatibility_date": "2026-11-07",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "404-page"
+  }
+}

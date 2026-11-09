@@ -1,0 +1,8 @@
+.git
+.github
+.pages.yml
+.assetsignore
+wrangler.jsonc
+README.md
+.wrangler
+node_modules
