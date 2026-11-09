@@ -73,6 +73,12 @@ collections:
               - name: image
                 label: Fotoğraf
                 widget: image
+              - name: images
+                label: Ek fotoğraflar (isteğe bağlı)
+                hint: Önden, yandan, takılı hali gibi. Sitede ürün kartında "+N" görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                widget: image
+                multiple: true
+                required: false
               - name: category
                 label: Kategori
                 widget: select
@@ -147,27 +153,24 @@ collections:
               - { name: kapalicarsi, label: "Kapalıçarşı şube fotoğrafı", widget: image, required: false }
               - name: kapalicarsiGaleri
                 label: "Kapalıçarşı şube – ek fotoğraflar"
-                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir.
-                widget: list
+                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                widget: image
+                multiple: true
                 required: false
-                add_to_top: false
-                field: { name: foto, label: Fotoğraf, widget: image }
               - { name: semdinli, label: "Şemdinli şube fotoğrafı", widget: image, required: false }
               - name: semdinliGaleri
                 label: "Şemdinli şube – ek fotoğraflar"
-                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir.
-                widget: list
+                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                widget: image
+                multiple: true
                 required: false
-                add_to_top: false
-                field: { name: foto, label: Fotoğraf, widget: image }
               - { name: van, label: "Van şube fotoğrafı", widget: image, required: false }
               - name: vanGaleri
                 label: "Van şube – ek fotoğraflar"
-                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir.
-                widget: list
+                hint: Şube kartında "+N fotoğraf" olarak görünür; fotoğrafa basınca hepsi kaydırarak gezilir. Birden fazla fotoğrafı aynı anda seçebilirsin.
+                widget: image
+                multiple: true
                 required: false
-                add_to_top: false
-                field: { name: foto, label: Fotoğraf, widget: image }
               - { name: bilezikler, label: "Koleksiyon: 1. kart fotoğrafı", widget: image, required: false }
               - { name: yuzukler, label: "Koleksiyon: 2. kart fotoğrafı", widget: image, required: false }
               - { name: kolyeler, label: "Koleksiyon: 3. kart fotoğrafı", widget: image, required: false }

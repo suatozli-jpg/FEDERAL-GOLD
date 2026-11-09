@@ -356,6 +356,7 @@
     .lb-title { margin: 0; font: 500 26px/1.2 var(--serif); }
     .lb-count { font-size: 13px; color: var(--muted); }
     .lb-ask { min-height: 48px; }
+    .product-more { position: absolute; right: 12px; bottom: 12px; padding: 4px 9px; border-radius: 999px; background: rgba(11,10,9,.8); border: 1px solid rgba(217,176,98,.5); color: var(--gold-light); font-size: 12px; font-weight: 600; pointer-events: none; }
     .badge { position: absolute; left: 12px; top: 12px; padding: 4px 8px; border-radius: 999px; background: rgba(11,10,9,.85); border: 1px solid #6b5631; color: var(--gold-light); font-size: 12px; font-weight: 600; }
     .product-body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
     .product-cat { font-size: 13px; color: var(--muted); font-weight: 500; }
@@ -1218,6 +1219,7 @@
           zoom.append(img);
           media.append(zoom);
           if (p.isNew) media.append(el('span', 'badge', d.vitrinNew));
+          if (p.extra.length) media.append(el('span', 'product-more', `+${p.extra.length}`));
           const body = el('div', 'product-body');
           if (CAT_KEYS[p.category]) body.append(el('span', 'product-cat', d[CAT_KEYS[p.category]]));
           body.append(el('h3', 'product-name', title));
@@ -1243,7 +1245,10 @@
           body.append(ask);
           const idx = lbItems.length;
           lbItems.push({ src: p.img, alt: title, title }); // photo only; WhatsApp link stays on the card
-          zoom.addEventListener('click', () => openLightbox(lbItems, idx));
+          // a product with extra photos opens its own photos; otherwise swipe through the vitrin
+          zoom.addEventListener('click', () => p.extra.length
+            ? openLightbox([p.img, ...p.extra].map(src => ({ src, alt: title, title })), 0)
+            : openLightbox(lbItems, idx));
           card.append(media, body);
           grid.append(card);
         });
@@ -1258,10 +1263,11 @@
             const nameEn = String(p.nameEn || '').trim().slice(0, 120);
             const img = safeImage(p.image);
             if (!name || !img) return null;
+            const extra = (Array.isArray(p.images) ? p.images : []).map(x => safeImage(x && typeof x === 'object' ? x.foto : x)).filter(x => x && x !== img).slice(0, 12);
             const priceNum = typeof p.price === 'number' && p.price > 0 ? p.price : null;
             const priceStr = typeof p.price === 'string' && p.price.trim() ? p.price.trim().slice(0, 40) : null;
             return {
-              name, nameEn, img, idx,
+              name, nameEn, img, extra, idx,
               category: String(p.category || ''),
               karat: String(p.karat || '').trim().slice(0, 10),
               weight: String(p.weight || '').trim().slice(0, 20),
