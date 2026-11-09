@@ -378,7 +378,7 @@
   const DEVICE = { mobile: 'Telefon', desktop: 'Bilgisayar', tablet: 'Tablet' };
 
   function Visitors() {
-    const [gun, setGun] = React.useState(7);
+    const [gun, setGun] = React.useState(0);
     const [data, setData] = React.useState(null);
     const [err, setErr] = React.useState('');
     React.useEffect(() => {
@@ -413,6 +413,33 @@
         h('p', { style: { margin: '8px 0 0', opacity: 0.8 } }, err === 'bad_token' ? 'Anahtarın "Account Analytics: Read" yetkisi olduğundan emin ol ya da yeni bir anahtar ekle.' : 'Biraz sonra tekrar dene.'));
     } else if (!data) {
       body = h('p', null, 'Yükleniyor…');
+    } else if (gun === 0) {
+      // today, hour by hour (Istanbul time)
+      const hours = data.hours || [];
+      const sum = hours.reduce((a, d) => ({ visits: a.visits + d.visits, views: a.views + d.views }), { visits: 0, views: 0 });
+      const now = hours[hours.length - 1] || { key: '', visits: 0, views: 0 };
+      const peak = hours.reduce((a, d) => (d.visits > a.visits ? d : a), { key: '', visits: 0 });
+      const max = Math.max(1, ...hours.map((d) => d.visits));
+      const stat = (label, big, small) => h('div', { style: { ...card, flex: '1 1 150px', marginBottom: 0 } },
+        h('div', { style: { fontSize: '13px', opacity: 0.7 } }, label),
+        h('div', { style: { fontSize: '30px', fontWeight: 700, color: GOLD, lineHeight: 1.2 } }, big),
+        h('div', { style: { fontSize: '13px', opacity: 0.7 } }, small));
+      const refs = (data.refs || []).filter((r) => r.visits > 0 && !/(^|\.)federalgold\.org$/.test(r.key));
+      body = [
+        h('div', { key: 'stats', style: { display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' } },
+          stat('Bugün', fmt(sum.visits), `ziyaret · ${fmt(sum.views)} sayfa görüntüleme`),
+          stat('Bu saat', fmt(now.visits), now.key ? `${now.key}:00'dan beri` : ''),
+          stat('En yoğun saat', peak.visits ? `${peak.key}:00` : '—', peak.visits ? `${fmt(peak.visits)} ziyaret` : 'henüz ziyaret yok')),
+        h('div', { key: 'chart', style: card }, title('Saat saat (Türkiye saati)'),
+          h('div', { style: { display: 'flex', alignItems: 'flex-end', gap: '3px', height: '150px' } }, hours.map((d, i) =>
+            h('div', { key: d.key, title: `${d.key}:00 — ${d.visits} ziyaret`, style: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%', gap: '4px', fontSize: '11px' } },
+              d.visits > 0 && h('span', { style: { opacity: 0.85, fontSize: '10px' } }, d.visits),
+              h('div', { style: { width: '100%', maxWidth: '26px', height: `${Math.max(2, d.visits / max * 105)}px`, borderRadius: '4px 4px 1px 1px', background: i === hours.length - 1 ? GOLD : 'rgba(217,176,98,.55)' } }),
+              h('span', { style: { opacity: 0.7, visibility: i % 3 === 0 || i === hours.length - 1 ? 'visible' : 'hidden' } }, d.key))))),
+        h('div', { key: 'countries', style: card }, title('Ülkeler'), (data.countries || []).length ? bars(data.countries, country) : h('p', { style: { margin: 0, opacity: 0.7 } }, 'Henüz veri yok.')),
+        h('div', { key: 'refs', style: card }, title('Nereden geldiler'), refs.length ? bars(refs, source) : h('p', { style: { margin: 0, opacity: 0.7 } }, 'Henüz veri yok.')),
+        h('div', { key: 'devices', style: card }, title('Cihaz'), (data.devices || []).length ? bars(data.devices, (k) => DEVICE[k] || k) : h('p', { style: { margin: 0, opacity: 0.7 } }, 'Henüz veri yok.')),
+      ];
     } else {
       const days = data.days || [];
       const today = days[days.length - 1] || { visits: 0, views: 0 };
@@ -444,6 +471,7 @@
       h('h2', { style: { margin: '0 0 6px', fontSize: '22px' } }, 'Ziyaretçiler'),
       h('p', { style: { margin: '0 0 14px', opacity: 0.75 } }, 'Siteyi gerçekten açan kişiler. Botlar ve panel sayılmaz; sayılar birkaç dakika gecikmeli gelir.'),
       h('div', { style: { display: 'flex', gap: '8px', marginBottom: '16px' } },
+        h('button', { style: tab(gun === 0), onClick: () => setGun(0) }, 'Bugün'),
         h('button', { style: tab(gun === 7), onClick: () => setGun(7) }, '7 gün'),
         h('button', { style: tab(gun === 30), onClick: () => setGun(30) }, '30 gün')),
       body);

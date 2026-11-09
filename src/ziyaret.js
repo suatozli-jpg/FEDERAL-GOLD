@@ -8,9 +8,9 @@ const headers = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosnif
 const groups = (name, limit, dims, order) =>
   `${name}: rumPageloadEventsAdaptiveGroups(limit: ${limit}, filter: $f, orderBy: [${order}]) { count sum { visits } dimensions { ${dims} } }`;
 
-const QUERY = `query ($a: String!, $f: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject) {
+const query = (byHour) => `query ($a: String!, $f: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject) {
   viewer { accounts(filter: { accountTag: $a }) {
-    ${groups('days', 100, 'date', 'date_ASC')}
+    ${byHour ? groups('hours', 48, 'datetimeHour', 'datetimeHour_ASC') : groups('days', 100, 'date', 'date_ASC')}
     ${groups('countries', 10, 'countryName', 'sum_visits_DESC')}
     ${groups('refs', 10, 'refererHost', 'sum_visits_DESC')}
     ${groups('devices', 5, 'deviceType', 'sum_visits_DESC')}
@@ -24,16 +24,22 @@ const row = (g, key) => ({ key: key(g.dimensions || {}), visits: (g.sum && g.sum
 export async function visitors(request, env) {
   if (!env.CF_ANALYTICS_TOKEN) return Response.json({ error: 'missing_token' }, { status: 503, headers });
   const url = new URL(request.url);
-  const n = Math.min(30, Math.max(1, parseInt(url.searchParams.get('gun') || '7', 10) || 7));
+  // gun=0: today in Istanbul (UTC+3), hour by hour; otherwise the last n days
+  const raw = parseInt(url.searchParams.get('gun') ?? '7', 10);
+  const n = raw === 0 ? 0 : Math.min(30, Math.max(1, raw || 7));
   const to = new Date();
-  const from = new Date(to.getTime() - (n - 1) * 864e5);
-  const filter = { siteTag: SITE_TAG, date_geq: day(from), date_leq: day(to), requestPath_notlike: '/admin%' };
+  const TR = 3 * 36e5;
+  const startToday = new Date(Math.floor((to.getTime() + TR) / 864e5) * 864e5 - TR);
+  const from = n ? new Date(to.getTime() - (n - 1) * 864e5) : startToday;
+  const filter = n
+    ? { siteTag: SITE_TAG, date_geq: day(from), date_leq: day(to), requestPath_notlike: '/admin%' }
+    : { siteTag: SITE_TAG, datetime_geq: startToday.toISOString(), datetime_leq: to.toISOString(), requestPath_notlike: '/admin%' };
   let res;
   try {
     res = await fetch('https://api.cloudflare.com/client/v4/graphql', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${env.CF_ANALYTICS_TOKEN}` },
-      body: JSON.stringify({ query: QUERY, variables: { a: ACCOUNT, f: filter } }),
+      body: JSON.stringify({ query: query(!n), variables: { a: ACCOUNT, f: filter } }),
     });
   } catch (e) {
     return Response.json({ error: 'unreachable', detail: String(e && e.message || e) }, { status: 502, headers });
@@ -44,15 +50,25 @@ export async function visitors(request, env) {
     const msg = (body && body.errors && body.errors[0] && body.errors[0].message) || `HTTP ${res.status}`;
     return Response.json({ error: /auth|permission|not authorized/i.test(msg) ? 'bad_token' : 'query_failed', detail: msg.slice(0, 200) }, { status: 502, headers });
   }
+  // today: every hour so far (Istanbul time), also the quiet ones
+  let hours;
+  if (!n) {
+    const byHour = new Map((acc.hours || []).map((g) => [new Date(g.dimensions.datetimeHour).getTime(), row(g, () => '')]));
+    hours = [];
+    for (let t = startToday.getTime(); t <= to.getTime(); t += 36e5) {
+      const r = byHour.get(t) || { visits: 0, views: 0 };
+      hours.push({ key: String(new Date(t + TR).getUTCHours()).padStart(2, '0'), visits: r.visits, views: r.views });
+    }
+  }
   // every day of the period, also the ones without visitors
   const byDay = new Map((acc.days || []).map((g) => [g.dimensions.date, row(g, (d) => d.date)]));
   const days = [];
-  for (let i = n - 1; i >= 0; i--) {
+  for (let i = n - 1; n && i >= 0; i--) {
     const d = day(new Date(to.getTime() - i * 864e5));
     days.push(byDay.get(d) || { key: d, visits: 0, views: 0 });
   }
   return Response.json({
-    from: day(from), to: day(to), days,
+    from: day(from), to: day(to), days, hours,
     countries: (acc.countries || []).map((g) => row(g, (d) => d.countryName)),
     refs: (acc.refs || []).map((g) => row(g, (d) => d.refererHost || '')),
     devices: (acc.devices || []).map((g) => row(g, (d) => d.deviceType)),
