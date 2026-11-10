@@ -51,10 +51,10 @@
     "images": [],
     "category": "necklaces",
     "karat": "",
-    "weight": "",
+    "weight": "30",
     "price": null,
-    "otomatikFiyat": false,
-    "iscilik": null,
+    "otomatikFiyat": true,
+    "iscilik": 20000,
     "iscilikTipi": "milyem",
     "isNew": true,
     "visible": true
