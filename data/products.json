@@ -8,6 +8,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": 0,
+    "iscilikTipi": "milyem",
     "isNew": true,
     "visible": true
   },
@@ -20,6 +23,9 @@
     "karat": "22",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": true
   },
@@ -32,6 +38,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": true
   },
@@ -44,7 +53,10 @@
     "karat": "",
     "weight": "",
     "price": null,
-    "isNew": false,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
+    "isNew": true,
     "visible": true
   },
   {
@@ -56,6 +68,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": true
   },
@@ -68,6 +83,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": true
   },
@@ -80,6 +98,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": true
   },
@@ -92,6 +113,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": true
   },
@@ -104,7 +128,10 @@
     "karat": "",
     "weight": "",
     "price": null,
-    "isNew": false,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
+    "isNew": true,
     "visible": true
   },
   {
@@ -116,6 +143,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": false
   },
@@ -128,6 +158,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": true
   },
@@ -140,6 +173,9 @@
     "karat": "",
     "weight": "",
     "price": null,
+    "otomatikFiyat": false,
+    "iscilik": null,
+    "iscilikTipi": "milyem",
     "isNew": false,
     "visible": false
   }
