@@ -54,8 +54,8 @@
     "weight": "30",
     "price": null,
     "otomatikFiyat": true,
-    "iscilik": 20000,
-    "iscilikTipi": "tl",
+    "iscilik": null,
+    "iscilikTipi": "tl_gram",
     "isNew": true,
     "visible": true
   },
