@@ -39,7 +39,7 @@
     "weight": "50",
     "price": 0,
     "otomatikFiyat": true,
-    "iscilik": 2000,
+    "iscilik": 20000,
     "iscilikTipi": "tl",
     "isNew": true,
     "visible": true
