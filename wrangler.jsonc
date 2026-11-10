@@ -15,6 +15,7 @@
     "directory": "./",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/", "/admin", "/admin/*"]
+    // the worker sees every request, so www.federalgold.org redirects for every address, not only the home page
+    "run_worker_first": true
   }
 }
