@@ -55,7 +55,7 @@
     "price": null,
     "otomatikFiyat": true,
     "iscilik": 20000,
-    "iscilikTipi": "milyem",
+    "iscilikTipi": "tl",
     "isNew": true,
     "visible": true
   },
