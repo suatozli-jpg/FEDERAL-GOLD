@@ -176,20 +176,27 @@ function allowedGitLabPath(path) {
 
 // For "abi": only what the Vitrin editor needs, and every name, e-mail or note from the repository history is hidden
 const ABI_FILES = /^(data\/(products|site)\.json|assets\/(products\/)?[^/]+\.(webp|jpe?g|png|gif|avif))$/i;
-const scrub = (v) => {
-  if (typeof v === 'string') {
-    return v.replace(/(^|\n)(Co-Authored-By|Claude-Session|Signed-off-by):[^\n]*/gi, '')
-      .replace(/https?:\/\/(claude\.ai|claude\.com|anthropic\.com)\S*/gi, '')
-      .replace(/[\w.+-]+@(anthropic\.com|users\.noreply\.gitlab\.com|gmail\.com|hotmail\.com)/gi, 'panel@federalgold.org')
-      .replace(/\b(Claude|Anthropic|Opus|Sonnet|Haiku)\b/gi, 'Federal Gold');
+// Only the fields that describe who saved and why are replaced. File contents (rawTextBlob, content, diffs) and every
+// other text pass through untouched, so what the panel loads and saves is exactly what is in the repository.
+const WHO = /^(author|committer)$/i, WHO_TEXT = /^(author|committer|authored_by|committed_by)_?(name|email|gravatar)?$/i;
+const NOTE = /^(message|full_?title|title(_?html)?|description(_?html)?|trailers|extended_trailers|signature(_?html)?)$/i;
+const scrubPerson = (o) => {
+  const out = {};
+  for (const [k, x] of Object.entries(o)) {
+    out[k] = /email/i.test(k) ? 'panel@federalgold.org' : /^(name|username|login)$/i.test(k) ? 'Federal Gold'
+      : /url|avatar/i.test(k) ? '' : (x && typeof x === 'object' ? scrubPerson(x) : x);
   }
+  return out;
+};
+const scrub = (v) => {
   if (Array.isArray(v)) return v.map(scrub);
   if (v && typeof v === 'object') {
     const out = {};
     for (const [k, x] of Object.entries(v)) {
-      out[k] = /^(author|committer)(_?name|_?email)?$/i.test(k) && typeof x === 'string' ? (/email/i.test(k) ? 'panel@federalgold.org' : 'Federal Gold')
-        : /^(message|full_?title|title|description|trailers|extended_trailers)$/i.test(k) && typeof x === 'string' ? 'Panel kaydı'
-        : scrub(x);
+      if (WHO.test(k) && x && typeof x === 'object' && !Array.isArray(x)) out[k] = scrubPerson(x);
+      else if (WHO_TEXT.test(k) && typeof x === 'string') out[k] = /email/i.test(k) ? 'panel@federalgold.org' : /gravatar/i.test(k) ? '' : 'Federal Gold';
+      else if (NOTE.test(k) && (typeof x === 'string' || (x && typeof x === 'object'))) out[k] = typeof x === 'string' ? 'Panel kaydı' : (Array.isArray(x) ? [] : {});
+      else out[k] = scrub(x);
     }
     return out;
   }
@@ -246,7 +253,7 @@ async function proxyGitLab(request, env, url, role = 'owner') {
       public_email: '', commit_email: 'panel@federalgold.org', avatar_url: `${url.origin}/assets/panel/icon-192.png`, web_url: `https://${LIVE_HOST}`, state: 'active' };
     return new Response(JSON.stringify(shown), { status: res.status, headers: out });
   }
-  if (role === 'abi' && (out.get('Content-Type') || '').includes('json')) {
+  if (role === 'abi' && res.ok && (out.get('Content-Type') || '').includes('json')) {
     const data = await res.json().catch(() => null);
     out.delete('Content-Length'); out.delete('Content-Encoding'); out.delete('ETag');
     return new Response(JSON.stringify(scrub(data)), { status: res.status, headers: out });
@@ -496,6 +503,16 @@ export default {
     if (p === '/admin/login') {
       if (!configured) return loginPage({ notConfigured: true });
       if (request.method === 'POST') {
+        // attempt limits that hold across Cloudflare's servers: 5 a minute per address, 30 a minute for everyone together
+        const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const limits = await Promise.all([
+          env.LOGIN_IP ? env.LOGIN_IP.limit({ key: ip }).catch(() => ({ success: true })) : { success: true },
+          env.LOGIN_ALL ? env.LOGIN_ALL.limit({ key: 'all' }).catch(() => ({ success: true })) : { success: true },
+        ]);
+        if (limits.some((l) => !l.success)) {
+          await new Promise((r) => setTimeout(r, 1500));
+          return loginPage({ error: 'Çok fazla deneme. 1 dakika bekleyip tekrar dene.', status: 429 });
+        }
         const tries = await failedTries(request);
         if (tries >= LOCK_TRIES) {
           await new Promise((r) => setTimeout(r, 1500));
