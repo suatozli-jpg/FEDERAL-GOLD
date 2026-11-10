@@ -37,9 +37,9 @@
     "category": "necklaces",
     "karat": "",
     "weight": "50",
-    "price": null,
+    "price": 0,
     "otomatikFiyat": true,
-    "iscilik": 20000,
+    "iscilik": 20006,
     "iscilikTipi": "milyem",
     "isNew": true,
     "visible": true
